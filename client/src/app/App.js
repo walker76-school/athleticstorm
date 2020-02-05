@@ -17,6 +17,7 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 
 import { Layout, notification } from 'antd';
+import Subscriptions from "../user/subscriptions/subscriptions";
 const { Content } = Layout;
 
 class App extends Component {
@@ -102,6 +103,7 @@ class App extends Component {
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup}/>
+                <Route path="/subscriptions" component={Subscriptions}/>
                 <Route component={NotFound}/>
               </Switch>
             </div>
