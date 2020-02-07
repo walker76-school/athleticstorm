@@ -18,9 +18,17 @@ class School extends Component {
         axios.get('https://api.collegefootballdata.com/coaches?team=' + window.location.pathname.substr(8) + '&minYear=2000')
             .then(res => {
                 const coachlist = res.data;
-                this.setState({coaches: coachlist});
+                this.setState({ coaches: coachlist });
                 console.log(this.state.coaches);
             })
+    }
+
+    getCoachYear(coach) {
+        if (coach.seasons.length == 1) {
+            return coach.seasons[0].year;
+        } else {
+            return coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year;
+        }
     }
 
     render() {
@@ -33,47 +41,30 @@ class School extends Component {
                 </div>
                 <div className="Coach_Table">
                     <h1>Coaches</h1>
-                    {/* <table className="table">
-                        <thead>
+                    <table>
+                        <tbody >
                             <tr>
-                                <th><a href="/">
-                                    <img src={logo} width="100" height="50" />
-                                </a></th>
-                                <th><a href="/">
-                                    <img src={logo} width="100" height="50" />
-                                </a></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Coach1</td>
-                                <td>Coach2</td>
-                            </tr>
-                        </tbody>
-                    </table> */}
-
-           <table>
-                    {this.state.coaches.map((coach) => (
-                        <div>
-               <thead>
-                            <tr>
-                                <th><a href="/">
-                                    <img src={logo} width="100" height="50" />
-                                </a></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{coach.first_name + " " + coach.last_name}</td>
+                                {/* Get Coaches Images */}
+                                {this.state.coaches.map((coach) => (
+                                    <th width="150"><a href="/">
+                                        <center><img src={logo} width="100" height="50" /></center>
+                                    </a></th>
+                                ))}
                             </tr>
                             <tr>
-                                <td>{}</td>
+                                {/* Get Coach Name & Year */}
+                                {this.state.coaches.map((coach) => (
+                                    <td width="150">
+                                        <a href="/">
+                                            <center>{coach.first_name + " " + coach.last_name}
+                                                <br></br>
+                                                {this.getCoachYear(coach)}</center>
+                                        </a>
+                                    </td>
+                                ))}
                             </tr>
                         </tbody>
-                        </div>
-                ))}
-
-</table>
+                    </table>
                 </div>
                 <div className="Player_Table">
                     <h1>Players</h1>
