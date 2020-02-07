@@ -11,6 +11,7 @@ import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
 import Coach from '../pages/Coach';
+import School from '../pages/School';
 
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
