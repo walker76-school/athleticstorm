@@ -10,6 +10,7 @@ import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
+import School from '../pages/School';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
@@ -100,6 +101,7 @@ class App extends Component {
             <div className="container">
               <Switch>      
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
+                <Route exact path="/School" render={(props) => <School isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup}/>
                 <Route component={NotFound}/>
