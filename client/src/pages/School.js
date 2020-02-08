@@ -11,7 +11,9 @@ class School extends Component {
     }
     state = {
         coaches: [],
-        players: []
+        players: [],
+        logo: '',
+        conference: 'B12'
     }
 
     componentDidMount() {
@@ -19,9 +21,22 @@ class School extends Component {
             .then(res => {
                 const coachlist = res.data;
                 this.setState({ coaches: coachlist });
-                console.log(this.state.coaches);
             })
-    }
+            axios.get('https://api.collegefootballdata.com/teams?conference='+ this.state.conference)
+            .then(res => {
+                const teams = res.data;
+                for(var x = 0; x < teams.length; x++){
+                    var team = teams[x];
+                    console.log(team);
+                    if(team.school.toUpperCase() === window.location.pathname.substr(8).toUpperCase()){
+                        this.setState({logo: team.logos[0]});
+                        console.log(this.state.logo);
+                        console.log(res.data)
+                    }
+                }
+            })
+        }
+    
 
     getCoachYear(coach) {
         if (coach.seasons.length == 1) {
@@ -31,13 +46,17 @@ class School extends Component {
         }
     }
 
+    getTeamLogo(){
+
+    }
+
     render() {
 
         return (
             <div>
                 <div className="School_Info">
-                    <h1>{window.location.pathname.substr(8)}</h1>
-                    <body>Their Computer Science Department Sucks</body>
+                    <h1>{window.location.pathname.substr(8).toUpperCase()}</h1>
+                    <img src={this.state.logo} width="100" height="100" />
                 </div>
                 <div className="Coach_Table">
                     <h1>Coaches</h1>
