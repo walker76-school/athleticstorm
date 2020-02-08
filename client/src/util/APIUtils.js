@@ -1,4 +1,4 @@
-import { API_BASE_URL, PAPER_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
