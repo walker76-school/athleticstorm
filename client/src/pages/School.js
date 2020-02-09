@@ -13,30 +13,42 @@ class School extends Component {
         coaches: [],
         players: [],
         logo: '',
-        conference: 'B12'
+        conference: 'B12',
+        primaryColor: '',
+        secondaryColor: '',
+        year: '2019'
     }
 
     componentDidMount() {
+        // Get List Of Coaches From API
         axios.get('https://api.collegefootballdata.com/coaches?team=' + window.location.pathname.substr(8) + '&minYear=2000')
             .then(res => {
                 const coachlist = res.data;
                 this.setState({ coaches: coachlist });
-            })
-            axios.get('https://api.collegefootballdata.com/teams?conference='+ this.state.conference)
+            });
+        // Get List Of Players From API
+        axios.get('https://api.collegefootballdata.com/roster?team=' + window.location.pathname.substr(8) + '&year=' + this.state.year)
+        .then(res => {
+            const playerlist = res.data;
+            this.setState({ players: playerlist });
+            console.log(this.state.players);
+        })
+        // Get Team Color Scheme And Name From API
+        axios.get('https://api.collegefootballdata.com/teams?conference=' + this.state.conference)
             .then(res => {
                 const teams = res.data;
-                for(var x = 0; x < teams.length; x++){
+                for (var x = 0; x < teams.length; x++) {
                     var team = teams[x];
-                    console.log(team);
-                    if(team.school.toUpperCase() === window.location.pathname.substr(8).toUpperCase()){
-                        this.setState({logo: team.logos[0]});
-                        console.log(this.state.logo);
-                        console.log(res.data)
+                    if (team.school.toUpperCase() === window.location.pathname.substr(8).toUpperCase()) {
+                        this.setState({ logo: team.logos[0] });
+                        this.setState({ primaryColor: team.color });
+                        this.setState({ secondaryColor: team.alt_color })
+                        console.log("background-color:" + this.state.primaryColor + ";")
                     }
                 }
             })
-        }
-    
+    }
+
 
     getCoachYear(coach) {
         if (coach.seasons.length == 1) {
@@ -46,20 +58,16 @@ class School extends Component {
         }
     }
 
-    getTeamLogo(){
-
-    }
-
     render() {
 
         return (
             <div>
                 <div className="School_Info">
-                    <h1>{window.location.pathname.substr(8).toUpperCase()}</h1>
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: this.state.secondaryColor }} >{window.location.pathname.substr(8).toUpperCase()}</h1>
                     <img src={this.state.logo} width="100" height="100" />
                 </div>
-                <div className="Coach_Table">
-                    <h1>Coaches</h1>
+                <div className="Coach_Table" >
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: this.state.secondaryColor }}>Coaches</h1>
                     <table>
                         <tbody >
                             <tr>
@@ -75,7 +83,7 @@ class School extends Component {
                                 {this.state.coaches.map((coach) => (
                                     <td width="150">
                                         <a href="/">
-                                            <center>{coach.first_name + " " + coach.last_name}
+                                            <center >{coach.first_name + " " + coach.last_name}
                                                 <br></br>
                                                 {this.getCoachYear(coach)}</center>
                                         </a>
@@ -86,7 +94,7 @@ class School extends Component {
                     </table>
                 </div>
                 <div className="Player_Table">
-                    <h1>Players</h1>
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: this.state.secondaryColor }}>Players</h1>
                     <table className="table">
                         <thead>
                             <tr>
@@ -100,8 +108,16 @@ class School extends Component {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Player1</td>
-                                <td>Player2</td>
+                                {/* Get Coach Name & Year */}
+                                {this.state.players.map((player) => (
+                                    <td width="150">
+                                        <a href="/">
+                                            <center >{player.first_name + " " + player.last_name}
+                                                <br></br>
+                                                {this.state.year}</center>
+                                        </a>
+                                    </td>
+                                ))}
                             </tr>
                         </tbody>
                     </table>
