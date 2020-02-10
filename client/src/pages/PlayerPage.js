@@ -13,12 +13,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
 class PlayerPage extends React.Component<Player> {
 
     constructor(props) {
@@ -26,38 +20,23 @@ class PlayerPage extends React.Component<Player> {
     }
 
     render() {
-        const classes = useStyles;
         return (
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="Season Statistics">
-                    <TableHead>
-                    <TableRow>
-                        <TableCell>Season Start Year</TableCell>
-                        <TableCell>Season End Year</TableCell>
-                        <TableCell align="right">School</TableCell>
-                        <TableCell align="right">Position</TableCell>
-                        <TableCell align="right">Start Ranking</TableCell>
-                        <TableCell align="right">End Ranking</TableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {this.props.history.map(row => (
-                        <TableRow key={row.startSeason}>
-                        <TableCell component="th" scope="row">
-                            {row.startSeason}
-                        </TableCell>
-                        <TableCell >{row.endSeason}</TableCell>
-                        <TableCell align="right">{row.school}</TableCell>
-                        <TableCell align="right">{row.position}</TableCell>
-                        <TableCell align="right">{row.protein}</TableCell>
-                        <TableCell align="right">{row.startRanking}</TableCell>
-                        <TableCell align="right">{row.endRanking}</TableCell>
-
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div class="stats">
+                <h1> Name</h1>
+                <p> {this.props.name}</p>
+                <h1> Weight</h1>
+                <p> {this.props.weight}</p>
+                <h1> height </h1>
+                <p> {this.props.height}</p>
+                <h1> Team </h1>
+                <p> {this.props.team}</p>
+                <h1> Position </h1>
+                <p> {this.props.position}</p>
+                <h1> Start Ranking </h1>
+                <p> {this.props.startRanking}</p>
+                <h1> Current Ranking </h1>
+                <p> {this.props.currentRanking}</p>
+            </div>
         );
     }
 }
