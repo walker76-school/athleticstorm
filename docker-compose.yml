@@ -8,8 +8,9 @@ services:
   app-server:
     # Configuration for building the docker image for the backend service
     build:
-      context: athleticstorm-server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      context: server # Use an image built from the specified dockerfile in the `server` directory.
       dockerfile: Dockerfile
+    image: athleticstorm/athleticstorm-server:1.0
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: always
@@ -26,10 +27,11 @@ services:
   # Frontend Service 
   app-client:
     build:
-      context: athleticstorm-client # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      context: client # Use an image built from the specified dockerfile in the `client` directory.
       dockerfile: Dockerfile
       args:
         REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api
+    image: athleticstorm/athleticstorm-client:1.0
     ports:
       - "9090:80" # Forward the exposed port 80 on the container to port 80 on the host machine
     restart: always
