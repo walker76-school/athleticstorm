@@ -28,15 +28,21 @@ class School extends Component {
             });
         // Get List Of Players From API
         axios.get('https://api.collegefootballdata.com/roster?team=' + window.location.pathname.substr(8) + '&year=' + this.state.year)
-        .then(res => {
-            const allplayerlist = res.data;
-            var playerlist =[];
-            for (var x = 0; x < 9; x++) {
-             playerlist[x] = allplayerlist[x];
-            }
-            this.setState({ players: playerlist });
-            console.log(this.state.players);
-        })
+            .then(res => {
+                const allplayerlist = res.data;
+                var playerlist = [];
+                console.log(allplayerlist);
+                if (allplayerlist.length <= 9) {
+                    this.setState({ players: res.data });
+                } else {
+                    for (var x = 0; x < 7; x++) {
+                        if(allplayerlist[x].first_name !== null){
+                            playerlist[x] = allplayerlist[x];
+                        }
+                    }
+                    this.setState({ players: playerlist });
+                }
+            })
         // Get Team Color Scheme And Name From API
         axios.get('https://api.collegefootballdata.com/teams?conference=' + this.state.conference)
             .then(res => {
@@ -86,7 +92,7 @@ class School extends Component {
                                 {/* Get Coach Name & Year */}
                                 {this.state.coaches.map((coach) => (
                                     <td width="150">
-                                        <a href="/">
+                                        <a style={{ color: this.state.primaryColor }} href="/">
                                             <center >{coach.first_name + " " + coach.last_name}
                                                 <br></br>
                                                 {this.getCoachYear(coach)}</center>
@@ -103,7 +109,7 @@ class School extends Component {
                         <thead>
                             <tr>
                                 {/* Player Images Here */}
-                            {this.state.players.map((player) => (
+                                {this.state.players.map((player) => (
                                     <th width="150"><a href="/">
                                         <center><img src={logo} width="100" height="50" /></center>
                                     </a></th>
@@ -115,7 +121,7 @@ class School extends Component {
                                 {/* Get Coach Name & Year */}
                                 {this.state.players.map((player) => (
                                     <td width="150">
-                                        <a href="/">
+                                        <a style={{ color: this.state.primaryColor }} href="/">
                                             <center >{player.first_name + " " + player.last_name}
                                                 <br></br>
                                                 {player.position + " " + this.state.year}</center>
