@@ -29,7 +29,11 @@ class School extends Component {
         // Get List Of Players From API
         axios.get('https://api.collegefootballdata.com/roster?team=' + window.location.pathname.substr(8) + '&year=' + this.state.year)
         .then(res => {
-            const playerlist = res.data;
+            const allplayerlist = res.data;
+            var playerlist =[];
+            for (var x = 0; x < 9; x++) {
+             playerlist[x] = allplayerlist[x];
+            }
             this.setState({ players: playerlist });
             console.log(this.state.players);
         })
@@ -98,12 +102,12 @@ class School extends Component {
                     <table className="table">
                         <thead>
                             <tr>
-                                <th><a href="/">
-                                    <img src={logo} width="100" height="50" />
-                                </a></th>
-                                <th><a href="/">
-                                    <img src={logo} width="100" height="50" />
-                                </a></th>
+                                {/* Player Images Here */}
+                            {this.state.players.map((player) => (
+                                    <th width="150"><a href="/">
+                                        <center><img src={logo} width="100" height="50" /></center>
+                                    </a></th>
+                                ))}
                             </tr>
                         </thead>
                         <tbody>
@@ -114,7 +118,7 @@ class School extends Component {
                                         <a href="/">
                                             <center >{player.first_name + " " + player.last_name}
                                                 <br></br>
-                                                {this.state.year}</center>
+                                                {player.position + " " + this.state.year}</center>
                                         </a>
                                     </td>
                                 ))}
