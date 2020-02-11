@@ -6,6 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import React from "react";
+import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles({
@@ -22,22 +23,22 @@ class Subscriptions extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            classes : useStyles()
+            tiers: [{image: '/client/src/images/Logo.png', title: 'hey'}]
         };
     }
 
     componentDidMount() {
-        this.loadCurrentUser();
+        // this.loadCurrentUser();
     }
 
-    render() {
-        return (
-            <Card className={this.state.classes.root}>
+    renderSubscriptions = () => {
+
+        return this.state.tiers.map((card) => (
+            <Card>
                 <CardActionArea>
                     <CardMedia
-                        className={this.state.classes.media}
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        title="Contemplative Reptile"
+                        image={card.image}
+                        title={card.title}
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
@@ -58,6 +59,15 @@ class Subscriptions extends React.Component {
                     </Button>
                 </CardActions>
             </Card>
+        ));
+    };
+
+    render() {
+        return (
+            <Grid.Row>
+                <br/><br/><br/><br/><br/><br/>
+                {this.renderSubscriptions()}
+            </Grid.Row>
         );
     }
 }
