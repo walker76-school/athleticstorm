@@ -1,0 +1,4 @@
+$ docker-compose build --force-rm
+$ docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+$ docker build -t gitlab.ecs.baylor.edu:5555/aars/20200143c9-athleticstorm .
+$ docker push gitlab.ecs.baylor.edu:5555/aars/20200143c9-athleticstorm
