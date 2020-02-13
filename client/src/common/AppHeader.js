@@ -4,13 +4,14 @@ import {
     withRouter
 } from 'react-router-dom';
 import './AppHeader.css';
+import logo from './AthleticStormLogo.png'
 import { Layout, Menu, Dropdown, Icon } from 'antd';
 const Header = Layout.Header;
     
 class AppHeader extends Component {
     constructor(props) {
         super(props);   
-        this.handleMenuClick = this.handleMenuClick.bind(this);   
+        this.handleMenuClick = this.handleMenuClick.bind(this);
     }
 
     handleMenuClick({ key }) {
@@ -52,7 +53,9 @@ class AppHeader extends Component {
             <Header className="app-header">
             <div className="container">
               <div className="app-title" >
-                <Link to="/">Athletic Storm</Link>
+                  <a href="/">
+                      <img src={logo}/>
+                  </a>
               </div>
               <Menu
                 className="app-menu"

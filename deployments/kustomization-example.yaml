@@ -1,0 +1,17 @@
+# The secrets file should not be checked into Git. It's published only for demonstration purpose.
+secretGenerator:
+- name: mysql-root-pass
+  literals:
+  - password=rootpazz
+- name: mysql-user-pass
+  literals:
+  - username=athleticstorm
+  - password=mysqlpazz
+- name: mysql-db-url
+  literals:
+  - database=polls
+  - url=jdbc:mysql://polling-app-mysql:3306/athleticstorm?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+resources:
+  - mysql-deployment.yaml
+  - athleticstorm-server.yaml
+  - athleticstorm-app-client.yaml
