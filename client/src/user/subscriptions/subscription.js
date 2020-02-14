@@ -1,4 +1,6 @@
 import React from 'react'
+import './subscription.css'
+
 
 class Subscription extends React.Component {
 
@@ -7,19 +9,21 @@ class Subscription extends React.Component {
     }
 
     render() {
+
+        console.log(this.props.image);
         return (
-        <div key={this.props.tier.id} className="col-sm-6 col-md-3">
+        <div key={this.props.id} className="col-sm-6 col-md-4">
             <div className="subscription">
-                <img src={this.props.tier.image} alt={this.props.tier.name}/>
+                <img src={this.props.image} alt={this.props.name}/>
                 <div className="image_overlay"/>
-                <div className="view_details" onClick={() => this.View_Subscription_Details(this.props.tier.id)}>
+                <div className="view_details" onClick={() => this.View_Subscription_Details(this.props.id)}>
                     Subscription Details
                 </div>
                 <div className="stats">
                     <div className="stats-container">
-                        <span className="product_price">{this.props.tier.price}</span>
-                        <span className="product_name">{this.props.tier.name}</span>
-                        <p>{this.props.tier.description}</p>
+                        <span className="tier_price">{this.props.price}</span>
+                        <span className="tier_name">{this.props.name}</span>
+                        <p>{this.props.description}</p>
                     </div>
                 </div>
             </div>
