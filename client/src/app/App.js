@@ -11,17 +11,15 @@ import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
 import Coach from '../pages/Coach';
-import School from '../pages/School';
-
 import Login from '../user/login/Login';
-import Player from "../pages/PlayerPage";
+import Player from "../pages/types/Player";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 
 import { Layout, notification } from 'antd';
-import Subscriptions from "../user/subscriptions/subscriptions";
+import Subscriptions_Page from "../user/subscriptions/subscriptions_page";
 const { Content } = Layout;
 
 class App extends Component {
@@ -105,13 +103,13 @@ class App extends Component {
             <div className="container">
               <Switch>      
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
-                <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup}/>
-                <Route path="/subscriptions" component={Subscriptions}/>
+                <Route path="/subscriptions" component={Subscriptions_Page}/>
                 <Route path="/coach" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated}
                   currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
-                <Route path="/player" render={(props) => <Player {...props} />}/>
+                <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} 
+                  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route component={NotFound}/>
               </Switch>
             </div>
