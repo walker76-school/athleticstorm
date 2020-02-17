@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
+import {withRouter, useParams} from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
 
 class Coach extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     state = {
         first_name: "",
