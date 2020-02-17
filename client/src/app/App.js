@@ -27,9 +27,11 @@ class App extends Component {
     this.state = {
       currentUser: null,
       isAuthenticated: false,
-      isLoading: false
+      isLoading: false,
+      clickedSchool: null
     };
 
+    this.setSchool = this.setSchool.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.loadCurrentUser = this.loadCurrentUser.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -88,6 +90,10 @@ class App extends Component {
     this.props.history.push("/");
   }
 
+  setSchool(school){
+    this.setState({ clickedSchool: school});
+  }
+
   render() {
     if(this.state.isLoading) {
       return <LoadingIndicator />
@@ -102,6 +108,7 @@ class App extends Component {
             <div className="container">
               <Switch>      
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
+                <Route path="/school/:schoolName" render={(props) => <School school={this.state.clickedSchool} isAuthenticated={this.state.isAuthenticated}  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup} />
                 <Route path="/coach" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} 
