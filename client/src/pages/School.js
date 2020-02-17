@@ -5,6 +5,7 @@ import {
 import '../common/AppHeader.css';
 import logo from './football.jpeg'
 import axios from 'axios';
+import { Link } from "react-router-dom";
 class School extends Component {
     constructor(props) {
         super(props);
@@ -60,11 +61,12 @@ class School extends Component {
     getCoaches() {
         return (this.state.coaches.map((coach) => (
             <td width="150">
-                <a style={{ color: this.state.primaryColor }} href="/">
-                    <center >{coach.first_name + " " + coach.last_name}
+                <Link to={"/coach/"+coach.first_name + "-" + coach.last_name} style={{ color: this.state.primaryColor }}  onClick={this.sendData}>
+                <center >{coach.first_name + " " + coach.last_name}
                         <br></br>
                         {this.getCoachYear(coach)}</center>
-                </a>
+                </Link>
+                
             </td>
         )));
     }
@@ -107,9 +109,10 @@ class School extends Component {
                             <tr>
                                 {/* Get Coaches Images */}
                                 {this.state.coaches.map((coach) => (
-                                    <th width="150"><a href="/">
+                                    <th width="150">
+                                        <Link to={"/coach/"+coach.first_name + "-" + coach.last_name} style={{ color: this.state.primaryColor }} >
                                         <center><img src={logo} width="100" height="50" /></center>
-                                    </a></th>
+                                        </Link></th>
                                 ))}
                             </tr>
                             <tr>
