@@ -91,7 +91,8 @@ class School extends Component {
 
     render() {
         if(!this.props.school || window.location.pathname.replace('%20', ' ').substr(8) !== this.props.school.school){
-            return(<Redirect to='/'/>)
+            {this.props.school}
+            //return(<Redirect to='/'/>)
         }
         return (
             <div>

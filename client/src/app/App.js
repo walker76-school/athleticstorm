@@ -13,6 +13,7 @@ import Home from '../pages/Home';
 import Coach from '../pages/Coach';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
+import School from "../pages/School";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
