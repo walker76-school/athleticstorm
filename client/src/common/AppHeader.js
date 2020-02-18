@@ -51,7 +51,7 @@ class AppHeader extends Component {
             <div className="container">
               <div className="app-title" >
                   <a href="/">
-                      <img src={logo}/>
+                      <img src={logo} alt=""/>
                   </a>
               </div>
               <Menu
