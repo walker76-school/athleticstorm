@@ -6,9 +6,6 @@ import '../common/AppHeader.css';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 class Home extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     state = {
         teams: [],
@@ -74,7 +71,6 @@ class SingleSchool extends Component {
 
     sendData(){
         if(this.props.changeSchool){
-            <Link></Link>
             this.props.changeSchool(this.props.singleTeam);
 
         }
@@ -86,7 +82,7 @@ class SingleSchool extends Component {
 
         return  (
             <th width="150" ><Link to={"/School/"+this.props.singleTeam.school} style={{ color: singleTeam.color }}  onClick={this.sendData}>
-                 <center><img src={singleTeam.logos[0]} width="100" height="100" /></center>
+                 <center><img src={singleTeam.logos[0]} width="100" height="100" alt="school logo" /></center>
                  <center>{singleTeam.school}</center>
              </Link></th>
         )

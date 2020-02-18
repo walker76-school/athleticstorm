@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter, useParams} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
 

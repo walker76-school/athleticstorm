@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    withRouter, Route, Redirect
+    withRouter, Redirect
 } from 'react-router-dom';
 import '../common/AppHeader.css';
 import logo from './football.jpeg'
@@ -51,7 +51,7 @@ class School extends Component {
 
 
     getCoachYear(coach) {
-        if (coach.seasons.length == 1) {
+        if (coach.seasons.length === 1) {
             return coach.seasons[0].year;
         } else {
             return coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year;
@@ -99,7 +99,7 @@ class School extends Component {
             <div>
                 <div className="School_Info">
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{window.location.pathname.replace('%20', ' ').substr(8).toUpperCase()}</h1>
-                    <img src={this.state.logo} width="100" height="100" />
+                    <img src={this.state.logo} width="100" height="100" alt="Logo" />
                 </div>
 
                 <div className="Coach_Table" >
@@ -111,7 +111,7 @@ class School extends Component {
                                 {this.state.coaches.map((coach) => (
                                     <th width="150">
                                         <Link to={"/coach/"+coach.first_name + "-" + coach.last_name} style={{ color: this.state.primaryColor }} >
-                                        <center><img src={logo} width="100" height="50" /></center>
+                                        <center><img src={logo} width="100" height="50" alt={`coach${coach.first_name} ${coach.last_name}`} /></center>
                                         </Link></th>
                                 ))}
                             </tr>
@@ -135,7 +135,7 @@ class School extends Component {
                                 {this.state.players.map((player) => (
                                     <th width="150">
                                         <Link to={`/player/${player.first_name}_${player.last_name}`} style={{ color: this.state.primaryColor }} >
-                                        <center><img src={logo} width="100" height="50" /></center>
+                                        <center><img src={logo} width="100" height="50" alt={`${player.first_name} ${player.last_name}`} /></center>
                                         </Link>
                                     </th>
                                 ))}

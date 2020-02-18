@@ -1,29 +1,24 @@
-import type {Person} from "Person";
 import React, {Component} from 'react';
-import {
-    withRouter,
-    useParams
-} from 'react-router-dom';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import axios from 'axios';
 
 
-type PlayerType = {
-    name: string,
-    weight: number,
-    height: number,
-    age: int,
-    school: string,
-    position: string,
-    startRanking: number,
-    currentRanking: number,
-    overall: number,
-    pass: number,
-    rush: number,
-    firstDown: number,
-    secondDown: number,
-    thirdDown: number,
-};
+// type PlayerType = {
+//     name: string,
+//     weight: number,
+//     height: number,
+//     age: int,
+//     school: string,
+//     position: string,
+//     startRanking: number,
+//     currentRanking: number,
+//     overall: number,
+//     pass: number,
+//     rush: number,
+//     firstDown: number,
+//     secondDown: number,
+//     thirdDown: number,
+// };
 
 export default class Player extends Component {
 
@@ -72,19 +67,21 @@ export default class Player extends Component {
                 })
                 axios.get(`https://api.collegefootballdata.com/player/usage?year=2019&playerId=${p.id}`)
                 .then(res => {
-                    const p = res.data[0];
-                    const usage = p.usage;
-                    this.setState({
-                        personData: {
-                            ...this.state.personData,
-                            overall: usage.overall,
-                            pass: usage.pass,
-                            rush: usage.rush,
-                            firstDown: usage.firstDown,
-                            secondDown: usage.secondDown,
-                            thirdDown: usage.thirdDown
-                        }
-                    })
+                    if(res.data.length > 0){
+                        const p = res.data[0];
+                        const usage = p.usage;
+                        this.setState({
+                            personData: {
+                                ...this.state.personData,
+                                overall: usage.overall,
+                                pass: usage.pass,
+                                rush: usage.rush,
+                                firstDown: usage.firstDown,
+                                secondDown: usage.secondDown,
+                                thirdDown: usage.thirdDown
+                            }
+                        })
+                    }
                     this.setState({complete: true})
                 })
                 })   
