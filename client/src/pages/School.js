@@ -131,11 +131,13 @@ class School extends Component {
                     <table className="table">
                         <thead>
                             <tr>
-                                {/* Player Images Here */}
+                                {/* Get Coaches Images */}
                                 {this.state.players.map((player) => (
-                                    <th width="150"><a href="/">
+                                    <th width="150">
+                                        <Link to={`/player/${player.first_name}_${player.last_name}`} style={{ color: this.state.primaryColor }} >
                                         <center><img src={logo} width="100" height="50" /></center>
-                                    </a></th>
+                                        </Link>
+                                    </th>
                                 ))}
                             </tr>
                         </thead>
@@ -144,11 +146,12 @@ class School extends Component {
                                 {/* Get Coach Name & Year */}
                                 {this.state.players.map((player) => (
                                     <td width="150">
-                                        <a style={{ color: this.state.primaryColor }} href="/">
+                                        <Link to={`/player/${player.first_name}_${player.last_name}`} style={{ color: this.state.primaryColor }} >
                                             <center >{player.first_name + " " + player.last_name}
                                                 <br></br>
-                                                {player.position ? player.position + " " + this.state.year : this.state.year}</center>
-                                        </a>
+                                                {player.position ? player.position + " " + this.state.year : this.state.year}
+                                            </center>
+                                        </Link>
                                     </td>
                                 ))}
                             </tr>
