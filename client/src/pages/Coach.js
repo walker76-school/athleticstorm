@@ -4,9 +4,6 @@ import '../common/AppHeader.css';
 import axios from 'axios';
 
 class Coach extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     state = {
         first_name: "",
