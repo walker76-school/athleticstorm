@@ -1,5 +1,5 @@
 import React from 'react'
-import './subscription.css'
+import './styles/subscription.css'
 
 
 class Subscription extends React.Component {
@@ -23,7 +23,6 @@ class Subscription extends React.Component {
                     <div className="stats-container">
                         <span className="tier_price">{this.props.price}</span>
                         <span className="tier_name">{this.props.name}</span>
-                        <p>{this.props.description}</p>
                     </div>
                 </div>
             </div>
