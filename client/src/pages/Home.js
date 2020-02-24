@@ -6,7 +6,6 @@ import '../common/AppHeader.css';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 class Home extends Component {
-
     state = {
         teams: [],
         numOfTeamsDiv5: 0
@@ -34,10 +33,10 @@ class Home extends Component {
             singleValueOfTeams = [];
         }
         // Return Images & Team Names
-        return (sortedTeams.map((oneVal) => (
-            <tr height="150">
-                {oneVal.map((singleTeam) =>
-                    <SingleSchool changeSchool={this.props.changeSchool}singleTeam={singleTeam}></SingleSchool>
+        return (sortedTeams.map((oneVal, i) => (
+            <tr height="150" key={i}>
+                {oneVal.map((singleTeam, i) =>
+                    <SingleSchool key={i} changeSchool={this.props.changeSchool}singleTeam={singleTeam}></SingleSchool>
                 )
                 }
             </tr>
