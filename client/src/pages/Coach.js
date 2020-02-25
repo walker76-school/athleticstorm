@@ -21,8 +21,11 @@ class Coach extends Component {
             schoolPrimaryColor: "",
             schoolSecondaryColor: "",
             schoolLogo: "",
-            startYear: "",
-            numYears: 0,
+            seasonList: [{
+                year: "",
+                wins: 0,
+                losses: 0
+            }]
         }]
 };
 
@@ -68,8 +71,12 @@ class Coach extends Component {
                     school: "",
                     schoolPrimaryColor: "",
                     schoolSecondaryColor: "",
-                    startYear: "",
-                    numYears: 0
+                    schoolLogo: "",
+                    seasonList: [{
+                        year: "",
+                        wins: 0,
+                        losses: 0
+                    }]
                 }];
 
                 let schoolPrimaryColorList = [];
@@ -84,47 +91,42 @@ class Coach extends Component {
                         }
                     }
                 }
+
                 terms[0].school = this.state.seasonList[0].school;
                 terms[0].schoolPrimaryColor = schoolPrimaryColorList[0];
                 terms[0].schoolSecondaryColor = schoolSecondaryColorList[0];
                 terms[0].schoolLogo = schoolLogoList[0];
-                terms[0].startYear = this.state.seasonList[0].year;
-                terms[0].numYears = 1;
+                terms[0].seasonList[0].year = this.state.seasonList[0].year;
+                terms[0].seasonList[0].wins = this.state.seasonList[0].wins;
+                terms[0].seasonList[0].losses = this.state.seasonList[0].losses;
                 for (let i = 1; i < this.state.seasonList.length; i++) {
-                    if (this.state.seasonList[i].school === terms[terms.length-1].school) {
-                        terms[terms.length-1].numYears++;
-                    } else {
+                    if (this.state.seasonList[i].school !== terms[terms.length-1].school) {
                         terms.push({
                             school: this.state.seasonList[i].school,
                             schoolPrimaryColor: schoolPrimaryColorList[i],
                             schoolSecondaryColor: schoolSecondaryColorList[i],
                             schoolLogo: schoolLogoList[i],
-                            startYear: this.state.seasonList[i].year,
-                            numYears: 1
+                            seasonList: [{
+                                year: this.state.seasonList[i].year,
+                                wins: this.state.seasonList[i].wins,
+                                losses: this.state.seasonList[i].losses
+                            }]
                         });
+                    } else {
+                        terms[terms.length - 1].seasonList.push({
+                            year: this.state.seasonList[i].year,
+                            wins: this.state.seasonList[i].wins,
+                            losses: this.state.seasonList[i].losses
+                        })
                     }
+                    console.log(terms);
                 }
                 this.setState({
                     termList: terms
                 });
-                console.log(terms);
 
             });
     }
-
-    // calculateTerms() {
-    //     return this.terms;
-    // }
-    //
-    // getSchoolColor(schoolName) {
-    //     axios.get('https://api.collegefootballdata.com/teams')
-    //         .then(res => {
-    //             const teams = res.data;
-    //             let ret = teams.filter(function (x) {return x.school === schoolName;});
-    //             // console.log(ret[0].color);
-    //             ret[0].color;
-    //         });
-    // }
 
     render() {
         if (this.state.first_name.length !== 0) {
@@ -140,14 +142,19 @@ class Coach extends Component {
                     </div>
                     <div className="Seasons">
                         <div className="Term_School_Name">
-                            {this.state.termList.map((term) => (
+                            {this.state.termList.map(term => (
                                 <div>
                                     <Link to={"/school/" + term.school}>
                                         <center>
                                             <h1 style={{  }}>
                                                 <img style={{ marginLeft: 10 }} src={term.schoolLogo} height="100" width="100" alt={term.school}/>
                                                 <span style={{ marginLeft: 30, color: term.schoolPrimaryColor}}>
-                                                    {term.school} ({term.startYear}{term.numYears > 1 && "-" + term.startYear - term.numYears+1})
+                                                    {term.school} ({term.seasonList[0].year}{term.seasonList.length > 1 && "-" + term.seasonList[0].year - term.seasonList.length+1})
+                                                    {term.seasonList.map(season => (
+                                                        <p>
+                                                            {season.year}: {season.wins}-{season.losses}
+                                                        </p>
+                                                    ))}
                                                 </span>
                                             </h1>
                                         </center>
