@@ -109,14 +109,14 @@ class Subscription_List extends React.Component {
                                 </td>
                             )}
                         </tr>
-                        <tr className="description">
-                            <th scope="row">Access to advanced metrics</th>
-                            {this.state.tiers.map(tier =>
-                                <td key={tier.id}>
-                                    {tier.adv && <CheckIcon color="primary"/>}
-                                </td>
-                            )}
-                        </tr>
+                        {/*<tr className="description">*/}
+                        {/*    <th scope="row">Access to advanced metrics</th>*/}
+                        {/*    {this.state.tiers.map(tier =>*/}
+                        {/*        <td key={tier.id}>*/}
+                        {/*            {tier.adv && <CheckIcon color="primary"/>}*/}
+                        {/*        </td>*/}
+                        {/*    )}*/}
+                        {/*</tr>*/}
                         </tbody>
                     </table>
                 </div>
