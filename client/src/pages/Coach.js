@@ -18,7 +18,8 @@ class Coach extends Component {
         }],
         termList: [{
             school: "",
-            schoolColor: "",
+            schoolPrimaryColor: "",
+            schoolSecondaryColor: "",
             schoolLogo: "",
             startYear: "",
             numYears: 0,
@@ -50,7 +51,7 @@ class Coach extends Component {
         // Get coach name from url
         let names = this.coachUrlExtractor();
         axios.all([
-            axios.get('https://api.collegefootballdata.com/coaches?firstName=' + names[0] + '&lastName=' + names[1] + '&minYear=2000'),
+            axios.get('https://api.collegefootballdata.com/coaches?firstName=' + names[0] + '&lastName=' + names[1]),
             axios.get('https://api.collegefootballdata.com/teams')
            ])
             .then(res => {
@@ -62,26 +63,30 @@ class Coach extends Component {
                         seasonList: res[0].data[0].seasons
                     });
                 }
+
                 let terms = [{
                     school: "",
-                    schoolColor: "",
+                    schoolPrimaryColor: "",
+                    schoolSecondaryColor: "",
                     startYear: "",
                     numYears: 0
                 }];
 
-                let schoolColorList = [];
+                let schoolPrimaryColorList = [];
+                let schoolSecondaryColorList = [];
                 let schoolLogoList = [];
                 for (let i = 0; i < this.state.seasonList.length; i++) {
                     for (let j = 0; j < res[1].data.length; j++) {
                         if (res[1].data[j].school === this.state.seasonList[i].school) {
-                            schoolColorList.push(res[1].data[j].alt_color);
+                            schoolPrimaryColorList.push(res[1].data[j].color);
+                            schoolSecondaryColorList.push(res[1].data[j].alt_color);
                             schoolLogoList.push(res[1].data[j].logos[0]);
                         }
                     }
                 }
-                console.log(schoolColorList);
                 terms[0].school = this.state.seasonList[0].school;
-                terms[0].schoolColor = schoolColorList[0];
+                terms[0].schoolPrimaryColor = schoolPrimaryColorList[0];
+                terms[0].schoolSecondaryColor = schoolSecondaryColorList[0];
                 terms[0].schoolLogo = schoolLogoList[0];
                 terms[0].startYear = this.state.seasonList[0].year;
                 terms[0].numYears = 1;
@@ -91,7 +96,8 @@ class Coach extends Component {
                     } else {
                         terms.push({
                             school: this.state.seasonList[i].school,
-                            schoolColor: schoolColorList[i],
+                            schoolPrimaryColor: schoolPrimaryColorList[i],
+                            schoolSecondaryColor: schoolSecondaryColorList[i],
                             schoolLogo: schoolLogoList[i],
                             startYear: this.state.seasonList[i].year,
                             numYears: 1
@@ -135,14 +141,18 @@ class Coach extends Component {
                     <div className="Seasons">
                         <div className="Term_School_Name">
                             {this.state.termList.map((term) => (
-                                <Link to={"/school/" + term.school}>
-                                    <h1 style={{ backgroundColor: term.schoolColor, color: "#ffffff" }}>
-                                        <img style={{ marginLeft: 10}} src={term.schoolLogo} height="100" width="100" alt=""/>
-                                        <span style={{ marginLeft: 30}}>
-                                            {term.school}: ({term.startYear}{term.numYears > 1 && "-" + term.startYear - term.numYears+1})
-                                        </span>
-                                    </h1>
-                                </Link>
+                                <div>
+                                    <Link to={"/school/" + term.school}>
+                                        <center>
+                                            <h1 style={{  }}>
+                                                <img style={{ marginLeft: 10 }} src={term.schoolLogo} height="100" width="100" alt={term.school}/>
+                                                <span style={{ marginLeft: 30, color: term.schoolPrimaryColor}}>
+                                                    {term.school} ({term.startYear}{term.numYears > 1 && "-" + term.startYear - term.numYears+1})
+                                                </span>
+                                            </h1>
+                                        </center>
+                                    </Link>
+                                </div>
                             ))}
                             {/*{this.state.seasonList.map((season) => (*/}
                             {/*    <p>*/}
