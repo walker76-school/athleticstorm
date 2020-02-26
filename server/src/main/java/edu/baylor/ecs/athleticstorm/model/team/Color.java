@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model;
+package edu.baylor.ecs.athleticstorm.model.team;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

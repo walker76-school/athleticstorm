@@ -1,6 +1,6 @@
 package edu.baylor.ecs.athleticstorm.repository;
 
-import edu.baylor.ecs.athleticstorm.model.Color;
+import edu.baylor.ecs.athleticstorm.model.team.Color;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

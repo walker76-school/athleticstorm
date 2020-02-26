@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model;
+package edu.baylor.ecs.athleticstorm.model.auth;
 
 import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;

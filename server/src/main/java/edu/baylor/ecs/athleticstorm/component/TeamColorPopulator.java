@@ -1,7 +1,7 @@
 package edu.baylor.ecs.athleticstorm.component;
 
 import edu.baylor.ecs.athleticstorm.DTO.APITeamColor;
-import edu.baylor.ecs.athleticstorm.model.Color;
+import edu.baylor.ecs.athleticstorm.model.team.Color;
 import edu.baylor.ecs.athleticstorm.repository.ColorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
