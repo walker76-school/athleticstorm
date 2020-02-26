@@ -9,7 +9,7 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
-import Home from '../pages/Home';
+import Home from '../pages/home/Home';
 import Coach from '../pages/Coach';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
@@ -107,11 +107,11 @@ class App extends Component {
 
           <Content className="app-content">
             <div className="container">
-              <Switch>      
-                <Route exact path="/" render={(props) => <Home changeSchool={this.setSchool} isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
-                <Route path="/school/:schoolName" render={(props) => <School school={this.state.clickedSchool} isAuthenticated={this.state.isAuthenticated}  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
+              <Switch>
+                <Route exact path="/" render={(props) => <Home setSchool={this.setSchool} isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/signup" component={Signup} />
+                <Route path="/school/:schoolName" render={(props) => <School school={this.state.clickedSchool} isAuthenticated={this.state.isAuthenticated}  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/coach" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} 
                   currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} 
