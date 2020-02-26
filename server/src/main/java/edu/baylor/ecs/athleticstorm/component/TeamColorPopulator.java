@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.service;
+package edu.baylor.ecs.athleticstorm.component;
 
 import edu.baylor.ecs.athleticstorm.DTO.APITeamColor;
 import edu.baylor.ecs.athleticstorm.model.Color;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class TeamColorPopulator implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static final String TEAM_URL = "https://api.collegefootballdata.com/teams";
+    private static final String TEAM_URL = "https://api.collegefootballdata.com/teams/fbs";
 
     // shows if the DB setup is done
     private static boolean setupComplete = false;
@@ -27,9 +27,13 @@ public class TeamColorPopulator implements ApplicationListener<ContextRefreshedE
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event){
-        if(setupComplete){
+
+        // see if already done or colors already exist in the DB
+        if(setupComplete || colorRepository.count() > 0){
+            setupComplete = true;
             return;
         }
+
         saveTeamColors();
         setupComplete = true;
     }
