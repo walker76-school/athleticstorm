@@ -17,7 +17,7 @@ class Subscription extends React.Component {
                 <img src={this.props.image} alt={this.props.name}/>
                 <div className="image_overlay"/>
                 <div className="view_details" onClick={() => this.View_Subscription_Details(this.props.id)}>
-                    Subscription Details
+                    Select
                 </div>
                 <div className="stats">
                     <div className="stats-container">
