@@ -5,5 +5,8 @@ package edu.baylor.ecs.athleticstorm.model;
  */
 public enum  RoleName {
     ROLE_USER,
+    ROLE_REDSHIRT,
+    ROLE_STARTER,
+    ROLE_MVP,
     ROLE_ADMIN
 }
