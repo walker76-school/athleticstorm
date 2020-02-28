@@ -23,6 +23,7 @@ class Subscription_List extends React.Component {
         };
 
         this.select = this.select.bind(this);
+        this.handleSubmitPress = this.handleSubmitPress.bind(this);
     }
 
     select(value) {
@@ -30,6 +31,7 @@ class Subscription_List extends React.Component {
     }
 
     handleSubmitPress() {
+        // console.log('hey');
         this.props.handleSubmit(this.state.selectedTier);
     }
 
@@ -37,68 +39,66 @@ class Subscription_List extends React.Component {
 
         return(
 
+        <div className="home mt-5">
+            <div className="row text-center">
+                <div className="col-12">
+                    <h2 className="mb-3">Compare Subscription Tiers</h2>
+                </div>
+            </div>
 
-        <Form onSubmit={this.handleSubmitPress}>
-            <div className="home mt-5">
-                <div className="row text-center">
-                    <div className="col-12">
-                        <h2 className="mb-3">Compare Subscription Tiers</h2>
+                <div className="row mt-3">
+                    {this.state.tiers.map(tier =>
+                        <Subscription key={tier.id} id={tier.id} image={tier.image} name={tier.name} price={tier.price}
+                                      description={tier.description} select={this.select} selected={this.state.selectedTier === tier.id}/>
+                    )}
+                    <div className="row product_comparisons">
+                        <div className="col-12 mt-5 text-center">
+                            <table className="table">
+                                <thead className="thead-default">
+                                <tr>
+                                    <th />
+                                    {this.state.tiers.map(tier =>
+                                        <th key={tier.id}>
+                                            {tier.name}
+                                        </th>
+                                    )}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr className="price">
+                                    <th scope="row">Price</th>
+                                    {this.state.tiers.map(tier =>
+                                        <td key={tier.id} className="text-center">{tier.price}</td>
+                                    )}
+                                </tr>
+                                <tr className="description">
+                                    <th scope="row">Number of Teams Accessible</th>
+                                    {this.state.tiers.map(tier =>
+                                        <td key={tier.id}>
+                                            {tier.numTeams}
+                                        </td>
+                                    )}
+                                </tr>
+                                {/*<tr className="description">*/}
+                                {/*    <th scope="row">Access to advanced metrics</th>*/}
+                                {/*    {this.state.tiers.map(tier =>*/}
+                                {/*        <td key={tier.id}>*/}
+                                {/*            {tier.adv && <CheckIcon color="primary"/>}*/}
+                                {/*        </td>*/}
+                                {/*    )}*/}
+                                {/*</tr>*/}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                    <div className="row mt-3">
-                        {this.state.tiers.map(tier =>
-                            <Subscription key={tier.id} id={tier.id} image={tier.image} name={tier.name} price={tier.price}
-                                          description={tier.description} select={this.select} selected={this.state.selectedTier === tier.id}/>
-                        )}
-                        <div className="row product_comparisons">
-                            <div className="col-12 mt-5 text-center">
-                                <table className="table">
-                                    <thead className="thead-default">
-                                    <tr>
-                                        <th />
-                                        {this.state.tiers.map(tier =>
-                                            <th key={tier.id}>
-                                                {tier.name}
-                                            </th>
-                                        )}
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr className="price">
-                                        <th scope="row">Price</th>
-                                        {this.state.tiers.map(tier =>
-                                            <td key={tier.id} className="text-center">{tier.price}</td>
-                                        )}
-                                    </tr>
-                                    <tr className="description">
-                                        <th scope="row">Number of Teams Accessible</th>
-                                        {this.state.tiers.map(tier =>
-                                            <td key={tier.id}>
-                                                {tier.numTeams}
-                                            </td>
-                                        )}
-                                    </tr>
-                                    {/*<tr className="description">*/}
-                                    {/*    <th scope="row">Access to advanced metrics</th>*/}
-                                    {/*    {this.state.tiers.map(tier =>*/}
-                                    {/*        <td key={tier.id}>*/}
-                                    {/*            {tier.adv && <CheckIcon color="primary"/>}*/}
-                                    {/*        </td>*/}
-                                    {/*    )}*/}
-                                    {/*</tr>*/}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-            </div>
             <Button type="primary"
-                    htmlType="submit"
                     size="large"
-                    className="signup-form-button">Submit</Button>
+                    className="signup-form-button"
+                    onClick={this.handleSubmitPress}>Submit</Button>
             <br/><br/><br/>
-        </Form>
+        </div>
         );
     }
 }

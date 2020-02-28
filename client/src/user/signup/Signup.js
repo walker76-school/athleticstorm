@@ -47,29 +47,28 @@ class Signup extends Component {
         });
     }
 
-    handleSubmit(event, roleVal) {
-        event.preventDefault();
+    handleSubmit(roleVal) {
 
         console.log(roleVal);
 
-        // const signupRequest = {
-        //     username: this.state.username.value,
-        //     password: this.state.password.value,
-        //     roleName: roleVal
-        // };
-        // signup(signupRequest)
-        // .then(response => {
-        //     notification.success({
-        //         message: 'Athletic Storm',
-        //         description: "Thank you! You're successfully registered. Please Login to continue!",
-        //     });
-        //     this.props.history.push("/login");
-        // }).catch(error => {
-        //     notification.error({
-        //         message: 'Athletic Storm',
-        //         description: error.message || 'Sorry! Something went wrong. Please try again!'
-        //     });
-        // });
+        const signupRequest = {
+            username: this.state.username.value,
+            password: this.state.password.value,
+            roleName: roleVal
+        };
+        signup(signupRequest)
+        .then(response => {
+            notification.success({
+                message: 'Athletic Storm',
+                description: "Thank you! You're successfully registered. Please Login to continue!",
+            });
+            this.props.history.push("/login");
+        }).catch(error => {
+            notification.error({
+                message: 'Athletic Storm',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
     }
 
     handleNext(event) {
