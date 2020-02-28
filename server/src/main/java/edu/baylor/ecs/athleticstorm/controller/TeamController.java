@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
+import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
 import edu.baylor.ecs.athleticstorm.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ public class TeamController {
     private TeamService teamService;
 
     @GetMapping("/color")
-    public String getColor(@RequestParam("team") String team){
+    public TeamResponse getColor(@RequestParam("team") String team){
         return teamService.getTeamColor(team);
     }
 }

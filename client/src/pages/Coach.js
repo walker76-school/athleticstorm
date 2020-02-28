@@ -2,12 +2,15 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
+import { ACCESS_TOKEN } from '../constants';
+
 
 const coachInfoStyle = {"text-align": "center"};;
 
 class Coach extends Component {
 
     state = {
+        loading: true,
         first_name: "",
         last_name: "",
         seasonList: [{
@@ -55,20 +58,8 @@ class Coach extends Component {
     componentDidMount() {
         // Get coach name from url
         let names = this.coachUrlExtractor();
-        axios.all([
-            axios.get('https://api.collegefootballdata.com/coaches?firstName=' + names[0] + '&lastName=' + names[1]),
-            axios.get('https://api.collegefootballdata.com/teams')
-           ])
+        axios.get('https://api.collegefootballdata.com/coaches?firstName=' + names[0] + '&lastName=' + names[1])
             .then(res => {
-                console.log(res[0].data[0]);
-                if (res[0].data[0].length !== 0) {
-                    this.setState({
-                        first_name: res[0].data[0].first_name,
-                        last_name: res[0].data[0].last_name,
-                        seasonList: res[0].data[0].seasons
-                    });
-                }
-
                 let terms = [{
                     school: "",
                     schoolPrimaryColor: "",
@@ -81,53 +72,72 @@ class Coach extends Component {
                     }]
                 }];
 
-                let schoolPrimaryColorList = [];
-                let schoolSecondaryColorList = [];
-                let schoolLogoList = [];
-                for (let i = 0; i < this.state.seasonList.length; i++) {
-                    for (let j = 0; j < res[1].data.length; j++) {
-                        if (res[1].data[j].school === this.state.seasonList[i].school) {
-                            schoolPrimaryColorList.push(res[1].data[j].color);
-                            schoolSecondaryColorList.push(res[1].data[j].alt_color);
-                            schoolLogoList.push(res[1].data[j].logos[0]);
+                const coachData = res.data[0];
+                if (coachData.length !== 0) {
+                    this.setState({
+                        first_name: coachData.first_name,
+                        last_name: coachData.last_name,
+                        seasonList: coachData.seasons
+                    });
+
+                    let urls = new Set()
+
+                    // get the teams
+                    for (let i = 0; i < this.state.seasonList.length; i++) {
+                        urls.add(this.state.seasonList[i].school)
+                    }
+
+                    let urlList = [...urls];
+
+                    // generate the axios get requests
+                    const promises = urlList.map(x => {
+                        return axios.get("http://localhost:8080/team/color", {headers: {Authorization: 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)},"params" : {"team" : x}});
+                    });
+
+                    console.log(promises);
+                    Promise.all(promises).then(d => {
+                        const mapping = new Map();
+                        console.log(d);
+                        for(let i = 0; i < urlList.length; i++){
+                            mapping.set(urlList[i], d[i].data);
                         }
-                    }
-                }
 
-                terms[0].school = this.state.seasonList[0].school;
-                terms[0].schoolPrimaryColor = schoolPrimaryColorList[0];
-                terms[0].schoolSecondaryColor = schoolSecondaryColorList[0];
-                terms[0].schoolLogo = schoolLogoList[0];
-                terms[0].seasonList[0].year = this.state.seasonList[0].year;
-                terms[0].seasonList[0].wins = this.state.seasonList[0].wins;
-                terms[0].seasonList[0].losses = this.state.seasonList[0].losses;
-                for (let i = 1; i < this.state.seasonList.length; i++) {
-                    if (this.state.seasonList[i].school !== terms[terms.length-1].school) {
-                        terms.push({
-                            school: this.state.seasonList[i].school,
-                            schoolPrimaryColor: schoolPrimaryColorList[i],
-                            schoolSecondaryColor: schoolSecondaryColorList[i],
-                            schoolLogo: schoolLogoList[i],
-                            seasonList: [{
-                                year: this.state.seasonList[i].year,
-                                wins: this.state.seasonList[i].wins,
-                                losses: this.state.seasonList[i].losses
-                            }]
-                        });
-                    } else {
-                        terms[terms.length - 1].seasonList.push({
-                            year: this.state.seasonList[i].year,
-                            wins: this.state.seasonList[i].wins,
-                            losses: this.state.seasonList[i].losses
+                        terms[0].school = this.state.seasonList[0].school;
+                        terms[0].schoolPrimaryColor = d[0].data.color;
+                        terms[0].schoolSecondaryColor = d[0].data.alt_color;
+                        terms[0].schoolLogo = d[0].data.logo;
+                        terms[0].seasonList[0].year = this.state.seasonList[0].year;
+                        terms[0].seasonList[0].wins = this.state.seasonList[0].wins;
+                        terms[0].seasonList[0].losses = this.state.seasonList[0].losses;
+                        for (let i = 1; i < this.state.seasonList.length; i++) {
+                            if (this.state.seasonList[i].school !== terms[terms.length - 1].school) {
+                                const color = mapping.get(this.state.seasonList[i].school);
+                                terms.push({
+                                    school: this.state.seasonList[i].school,
+                                    schoolPrimaryColor: color.color,
+                                    schoolSecondaryColor: color.alt_color,
+                                    schoolLogo: color.logo,
+                                    seasonList: [{
+                                        year: this.state.seasonList[i].year,
+                                        wins: this.state.seasonList[i].wins,
+                                        losses: this.state.seasonList[i].losses
+                                    }]
+                                });
+                            } else {
+                                terms[terms.length - 1].seasonList.push({
+                                    year: this.state.seasonList[i].year,
+                                    wins: this.state.seasonList[i].wins,
+                                    losses: this.state.seasonList[i].losses
+                                })
+                            }
+                        }
+                        console.log(terms);
+                        this.setState({
+                            termList: terms
                         })
-                    }
-                    console.log(terms);
+                })
                 }
-                this.setState({
-                    termList: terms
-                });
-
-            });
+            })
     }
 
     render() {
