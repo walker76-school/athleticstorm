@@ -42,9 +42,6 @@ class AppHeader extends Component {
             </Menu.Item>,
             <Menu.Item key="/signup">
               <Link to="/signup">Signup</Link>
-            </Menu.Item>,
-            <Menu.Item key="/subscriptions">
-                  <Link to="/subscriptions">Subscriptions</Link>
             </Menu.Item>
         ];
         }

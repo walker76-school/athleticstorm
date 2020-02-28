@@ -1,8 +1,6 @@
 import React from 'react'
 import Subscription from './subscription'
 import './styles/comparisons.css'
-import { makeStyles } from '@material-ui/core/styles';
-import CheckIcon from '@material-ui/icons/Check';
 import tier1 from './images/tier1.jpeg'
 import tier2 from './images/tier2.jpg'
 import tier3 from './images/tier3.jpg'
