@@ -47,31 +47,32 @@ class Signup extends Component {
         });
     }
 
-    handleSubmit(event) {
+    handleSubmit(event, roleVal) {
         event.preventDefault();
 
-        const signupRequest = {
-            username: this.state.username.value,
-            password: this.state.password.value,
-            roleName: this.state.roleName.value
-        };
-        signup(signupRequest)
-        .then(response => {
-            notification.success({
-                message: 'Athletic Storm',
-                description: "Thank you! You're successfully registered. Please Login to continue!",
-            });          
-            this.props.history.push("/login");
-        }).catch(error => {
-            notification.error({
-                message: 'Athletic Storm',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
-            });
-        });
+        console.log(roleVal);
+
+        // const signupRequest = {
+        //     username: this.state.username.value,
+        //     password: this.state.password.value,
+        //     roleName: roleVal
+        // };
+        // signup(signupRequest)
+        // .then(response => {
+        //     notification.success({
+        //         message: 'Athletic Storm',
+        //         description: "Thank you! You're successfully registered. Please Login to continue!",
+        //     });
+        //     this.props.history.push("/login");
+        // }).catch(error => {
+        //     notification.error({
+        //         message: 'Athletic Storm',
+        //         description: error.message || 'Sorry! Something went wrong. Please try again!'
+        //     });
+        // });
     }
 
     handleNext(event) {
-        console.log('hey');
         this.setState({renderSubscription: true})
     }
 
@@ -129,22 +130,8 @@ class Signup extends Component {
                 </div> }
 
                 {this.state.renderSubscription &&
-                    <Form onSubmit={this.handleSubmit}>
-                        <div className="home mt-5">
-                            <div className="row text-center">
-                                <div className="col-12">
-                                    <h2 className="mb-3">Compare Subscription Tiers</h2>
-                                </div>
-                            </div>
-                            <Subscription_List/>
-                        </div>
-                        <Button type="primary"
-                                htmlType="submit"
-                                size="large"
-                                className="signup-form-button"
-                                disabled={this.isFormInvalid()}>Submit</Button>
-                    </Form>
-                }
+                    <Subscription_List handleSubmit={this.handleSubmit}/>
+                        }
             </div>
         );
     }

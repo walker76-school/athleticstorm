@@ -54,8 +54,8 @@
     top: 112px;
     left: 50%;
     margin-left: -85px;
-    border: 2px solid #fff;
-    color: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.99);
+    color: #ffffff;
     font-size: 19px;
     text-align: center;
     text-transform: uppercase;
