@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class TeamColorPopulator implements ApplicationListener<ContextRefreshedEvent> {
 
-    private static final String TEAM_URL = "https://api.collegefootballdata.com/teams/fbs";
+    private static final String TEAM_URL = "https://api.collegefootballdata.com/teams";
 
     // shows if the DB setup is done
     private static boolean setupComplete = false;
