@@ -3,6 +3,8 @@ import {Link, withRouter} from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
 
+const coachInfoStyle = {"text-align": "center"};;
+
 class Coach extends Component {
 
     state = {
@@ -134,30 +136,26 @@ class Coach extends Component {
             // Name successfully found
             return (
                 <div className="container">
-                    <div className="Coach_Info">
-                        <center>
-                            <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.first_name} {this.state.last_name}</h1>
-                            <h2>All time record: {this.allTimeWins()}-{this.allTimeLosses()}</h2>
-                        </center>
+                    <div className="Coach_Info" style={coachInfoStyle}>
+                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.first_name} {this.state.last_name}</h1>
+                        <h2>All time record: {this.allTimeWins()}-{this.allTimeLosses()}</h2>
                     </div>
                     <div className="Seasons">
                         <div className="Term_School_Name">
                             {this.state.termList.map(term => (
                                 <div>
-                                    <Link to={"/school/" + term.school}>
-                                        <center>
-                                            <h1 style={{  }}>
-                                                <img style={{ marginLeft: 10 }} src={term.schoolLogo} height="100" width="100" alt={term.school}/>
-                                                <span style={{ marginLeft: 30, color: term.schoolPrimaryColor}}>
-                                                    {term.school} ({term.seasonList[0].year}{term.seasonList.length > 1 && "-" + term.seasonList[0].year - term.seasonList.length+1})
-                                                    {term.seasonList.map(season => (
-                                                        <p>
-                                                            {season.year}: {season.wins}-{season.losses}
-                                                        </p>
-                                                    ))}
-                                                </span>
-                                            </h1>
-                                        </center>
+                                    <Link to={"/school/" + term.school} style={coachInfoStyle}>
+                                        <h1 style={{  }}>
+                                            <img style={{ marginLeft: 10 }} src={term.schoolLogo} height="100" width="100" alt={term.school}/>
+                                            <span style={{ marginLeft: 30, color: term.schoolPrimaryColor}}>
+                                                {term.school} ({term.seasonList[0].year}{term.seasonList.length > 1 && "-" + term.seasonList[0].year - term.seasonList.length+1})
+                                                {term.seasonList.map(season => (
+                                                    <p>
+                                                        {season.year}: {season.wins}-{season.losses}
+                                                    </p>
+                                                ))}
+                                            </span>
+                                        </h1>
                                     </Link>
                                 </div>
                             ))}

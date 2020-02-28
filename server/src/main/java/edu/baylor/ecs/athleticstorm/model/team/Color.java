@@ -22,4 +22,10 @@ public class Color {
 
     @Column(name = "COLOR")
     private String color;
+
+    @Column(name = "ALT_COLOR")
+    private String altColor;
+
+    @Column(name = "LOGO")
+    private String logo;
 }

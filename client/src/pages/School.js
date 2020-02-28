@@ -7,9 +7,8 @@ import logo from './football.jpeg'
 import axios from 'axios';
 import { Link } from "react-router-dom";
 class School extends Component {
-    constructor(props) {
-        super(props);
-    }
+
+
     state = {
         coaches: [],
         players: [],

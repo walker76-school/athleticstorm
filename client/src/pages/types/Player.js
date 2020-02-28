@@ -19,6 +19,7 @@ import axios from 'axios';
 //     secondDown: number,
 //     thirdDown: number,
 // };
+const statsFormat = {"text-align": "center"};
 
 export default class Player extends Component {
 
@@ -93,24 +94,24 @@ export default class Player extends Component {
         const {name, weight, height, school, position, startRanking, currentRanking, overall, pass, rush, firstDown, secondDown, thirdDown} = this.state.personData
         if (this.state.completeBase){
             return  (
-            <div className="stats">    
+            <div className="stats" style={statsFormat}>
                 <div className="base stats">
-                    <h1> {name}</h1>
-                    <p> Weight: {weight} pounds</p>
-                    <p> Height: {height} inches</p>
-                    <p> Team: {school}</p>
-                    <p> Position: {position}</p>
+                    <h1 style={{marginTop: 14, fontSize: 80}} >{name}</h1>
+                    <h2> Weight: {weight} pounds</h2>
+                    <h2> Height: {height} inches</h2>
+                    <h2> Team: {school}</h2>
+                    <h2> Position: {position}</h2>
                 </div>
                 {this.state.completeAdvanced && 
                 (<div className="advanced stats">
-                    <p> Overall: {overall}</p>
-                    <p> Pass: {pass}</p>
-                    <p> Rush: {rush}</p>
-                    <p> First Down: {firstDown}</p>
-                    <p> Second Down: {secondDown}</p>
-                    <p> Third Down: {thirdDown}</p>
-                    <p> Start Ranking: {startRanking}</p>
-                    <p> Current Ranking: {currentRanking}</p>
+                    <h2> Overall: {overall}</h2>
+                    <h2> Pass: {pass}</h2>
+                    <h2> Rush: {rush}</h2>
+                    <h2> First Down: {firstDown}</h2>
+                    <h2> Second Down: {secondDown}</h2>
+                    <h2> Third Down: {thirdDown}</h2>
+                    <h2> Start Ranking: {startRanking}</h2>
+                    <h2> Current Ranking: {currentRanking}</h2>
                 </div>)
                 }
             </div>

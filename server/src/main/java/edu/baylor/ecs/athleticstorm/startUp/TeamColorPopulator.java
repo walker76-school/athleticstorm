@@ -1,6 +1,6 @@
-package edu.baylor.ecs.athleticstorm.component;
+package edu.baylor.ecs.athleticstorm.startUp;
 
-import edu.baylor.ecs.athleticstorm.DTO.APITeamColor;
+import edu.baylor.ecs.athleticstorm.DTO.TeamColorRequest;
 import edu.baylor.ecs.athleticstorm.model.team.Color;
 import edu.baylor.ecs.athleticstorm.repository.ColorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +41,9 @@ public class TeamColorPopulator implements ApplicationListener<ContextRefreshedE
     @Transactional
     public void saveTeamColors(){
         RestTemplate restTemplate = new RestTemplate();
-        APITeamColor [] result = restTemplate.getForObject(TEAM_URL, APITeamColor[].class);
-        for(APITeamColor color : result){
-            saveTeamColor(new Color(color.getSchool(), color.getColor()));
+        TeamColorRequest[] result = restTemplate.getForObject(TEAM_URL, TeamColorRequest[].class);
+        for(TeamColorRequest color : result){
+            saveTeamColor(new Color(color.getSchool(), color.getColor(), color.getAlt_color(), color.getLogos()[0]));
         }
     }
 
