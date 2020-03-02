@@ -87,7 +87,7 @@ class School extends Component {
             });
         }
         // Get List Of Coaches From API
-        axios.get('https://api.collegefootballdata.com/coaches?team=' + window.location.pathname.substr(8) + '&minYear=2017')
+        axios.get('https://api.collegefootballdata.com/coaches?team=' + window.location.pathname.substr(8) + '&minYear=2000')
             .then(res => {
                 const coachlist = res.data;
                 this.setState({ coaches: coachlist });
