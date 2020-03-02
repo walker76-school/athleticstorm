@@ -148,6 +148,7 @@ class School extends Component {
         // }
         return (
             <div>
+                <br></br>
                 <div className="School_Info">
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{window.location.pathname.replace('%20', ' ').substr(8).toUpperCase()}</h1>
                     <img src={this.state.logo} width="100" height="100" alt="Logo" />
