@@ -4,88 +4,123 @@ import {
 } from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import withStyles from "@material-ui/core/styles/withStyles";
+import {Avatar} from "@material-ui/core";
+
+const styles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    list: {
+        marginTop: theme.spacing(2),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: 80,
+        height: 80,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    logo: {
+        marginTop: theme.spacing(2),
+        paddingTop: theme.spacing(2)
+
+    }
+}));
+
 class Home extends Component {
-    state = {
-        teams: [],
-        numOfTeamsDiv5: 0
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            teams: []
+        };
+
+        this.onClick = this.onClick.bind(this);
     }
+
     componentDidMount() {
-        // Get List Of Coaches From API
+        // Get List Of FBS Teams From API
         axios.get('https://api.collegefootballdata.com/teams/fbs')
-            .then(res => {
-                const teamList = res.data;
-                this.setState({ teams: teamList });
-                this.setState({ numOfTeamsDiv5: teamList.length / 5 });
-            });
+        .then(res => {
+            this.setState({ teams: res.data });
+        });
     }
 
-    getTeams() {
-        var sortedTeams = [];
-        var singleValueOfTeams = [];
-        var count = 0;
-        for (var x = 0; x < this.state.teams.length / 5; x++) {
-            for (var y = 0; y < 5; y++) {
-                singleValueOfTeams.push(this.state.teams[count])
-                count = count + 1;
-            }
-            sortedTeams.push(singleValueOfTeams);
-            singleValueOfTeams = [];
-        }
-        // Return Images & Team Names
-        return (sortedTeams.map((oneVal, i) => (
-            <tr height="150" key={i}>
-                {oneVal.map((singleTeam, i) =>
-                    <SingleSchool key={i} changeSchool={this.props.changeSchool}singleTeam={singleTeam}></SingleSchool>
-                )
-                }
-            </tr>
-
-        ))
-        )
+    onClick(teamId){
+        this.props.history.push('/team/' + teamId);
     }
+
     render() {
+        const { classes } = this.props;
+
         return (
-            <div className="Home_Page" >
-                <h1>Home</h1>
-                <table>
-                    <tbody>
-                        {
-                            this.getTeams()
-                        }
-                    </tbody>
-                </table>
+            <div className={classes.root} >
+                <br/>
+                <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
+                    {
+                        this.state.teams.length > 0 ?
+                            this.state.teams.map((team, ndx) => {
+                                return (
+                                    <Grid item xs={3}>
+                                        <StyledPaper id={team.id} classes={classes} onClick={() => this.onClick(team.id)}>
+                                            <Avatar className={classes.logo} src={team.logos[0]}/>
+                                            <Typography>{team.school}</Typography>
+                                        </StyledPaper>
+                                    </Grid>
+                                );
+                            })
+                        :
+                            <Typography>
+                                No teams are available at this time. Please check in later.
+                            </Typography>
+                    }
+                </Grid>
             </div>
         );
     }
 }
 
-class SingleSchool extends Component {
+export default withStyles(styles)(withRouter(Home));
 
+class StyledPaper extends Component {
     constructor(props){
         super(props);
-        
-        this.sendData = this.sendData.bind(this);
+        this.state = {
+            elevation: 1
+        };
+
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
     }
 
-    sendData(){
-        if(this.props.changeSchool){
-            this.props.changeSchool(this.props.singleTeam);
+    onMouseOver(){
+        this.setState({ elevation: 5 });
+    }
 
-        }
-
+    onMouseOut(){
+        this.setState({ elevation: 1 });
     }
 
     render() {
-        let { singleTeam } = this.props;
-
-        return  (
-            <th width="150" ><Link to={"/School/"+this.props.singleTeam.school} style={{ color: singleTeam.color }}  onClick={this.sendData}>
-                 <center><img src={singleTeam.logos[0]} width="100" height="100" alt="school logo" /></center>
-                 <center>{singleTeam.school}</center>
-             </Link></th>
-        )
+        return (
+            <Paper
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
+                onClick={this.props.onClick}
+                elevation={this.state.elevation}
+                square={true}
+                className={this.props.classes.paper}
+            >
+                {this.props.children}
+            </Paper>
+        );
     }
 }
-//href={'School/' + this.props.school}
-export default withRouter(Home);
