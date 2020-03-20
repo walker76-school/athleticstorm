@@ -48,7 +48,7 @@ class Home extends Component {
 
     componentDidMount() {
         // Get List Of FBS Teams From API
-        axios.get('https://api.collegefootballdata.com/teams/fbs')
+        axios.get('http://localhost:8080/api/teams/fbs')
         .then(res => {
             this.setState({ teams: res.data });
         });
