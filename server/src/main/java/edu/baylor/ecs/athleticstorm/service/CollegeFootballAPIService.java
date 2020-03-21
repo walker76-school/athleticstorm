@@ -2,18 +2,15 @@ package edu.baylor.ecs.athleticstorm.service;
 
 import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.model.coach.Term;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.RosterPlayer;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.*;
+import edu.baylor.ecs.athleticstorm.model.player.CompositePlayer;
+import edu.baylor.ecs.athleticstorm.model.player.PlayerInfoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.AutoPopulatingList;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class CollegeFootballAPIService {
@@ -60,6 +57,19 @@ public class CollegeFootballAPIService {
         return new ArrayList<>();
     }
 
+    public List<RosterPlayer> getTeamRoster(int teamId) {
+        List<Team> allTeams = getAllTeams();
+        Optional<Team> teamOpt = allTeams.stream().filter(x -> x.getId() == teamId).findFirst();
+        if(teamOpt.isPresent()){
+            Team team = teamOpt.get();
+            ResponseEntity<RosterPlayer[]> response =  restTemplate.getForEntity(
+                    "https://api.collegefootballdata.com/roster?team=" + team.getSchool(),
+                    RosterPlayer[].class);
+            return Arrays.asList(Objects.requireNonNull(response.getBody()));
+        }
+        return new ArrayList<>();
+    }
+
     public List<RosterPlayer> getSeasonRoster(int teamId, int year) {
         List<Team> allTeams = getAllTeams();
         Optional<Team> teamOpt = allTeams.stream().filter(x -> x.getId() == teamId).findFirst();
@@ -100,5 +110,31 @@ public class CollegeFootballAPIService {
                 "https://api.collegefootballdata.com/coaches?firstName=" + firstName.toLowerCase() + "&lastName=" + lastName.toLowerCase(),
                 Coach[].class);
         return Arrays.stream(Objects.requireNonNull(response.getBody())).findFirst().orElse(null);
+    }
+
+    public CompositePlayer getPlayerStats(PlayerInfoRequest request) {
+        String searchTerm = request.getFirst_name() + " " + request.getLast_name();
+
+        ResponseEntity<Player[]> response =  restTemplate.getForEntity(
+                "https://api.collegefootballdata.com/player/search?searchTerm=" + searchTerm,
+                Player[].class);
+
+        Optional<Player> playerOpt = Arrays.stream(Objects.requireNonNull(response.getBody())).findFirst();
+        if(playerOpt.isPresent()){
+            CompositePlayer compPlayer = new CompositePlayer();
+            compPlayer.setPlayer(playerOpt.get());
+
+            AdvancedPlayer[] advancedResponse =  restTemplate.getForEntity(
+                    "https://api.collegefootballdata.com/player/usage?year=" + request.getYear() + "&playerId=" + request.getPlayerId(),
+                    AdvancedPlayer[].class).getBody();
+
+            if(advancedResponse != null && advancedResponse.length > 0){
+                AdvancedPlayer advancedPlayer = Arrays.stream(advancedResponse).findFirst().orElse(null);
+                compPlayer.setAdvancedPlayer(advancedPlayer);
+            }
+
+            return compPlayer;
+        }
+        return null;
     }
 }

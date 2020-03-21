@@ -188,7 +188,18 @@ class School extends Component {
                         this.state.players.map((player, ndx) => {
                             return (
                                 <Grid item xs={3}>
-                                    <Link to={`/player/${player.first_name}_${player.last_name}`} style={{ color: this.state.primaryColor }} >
+                                    <Link
+                                        to={{
+                                            pathname: `/player/${player.first_name} ${player.last_name}`,
+                                            state: {
+                                                teamdId: this.state.teamId,
+                                                playerId: player.id,
+                                                first_name: player.first_name,
+                                                last_name: player.last_name,
+                                                year: this.state.year,
+                                            }
+                                        }}
+                                        style={{ color: this.state.primaryColor }} >
                                         <StyledPaper classes={classes}>
                                             <Avatar className={classes.logo} src={logo}/>
                                             <Typography>
