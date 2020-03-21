@@ -5,12 +5,10 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
 import edu.baylor.ecs.athleticstorm.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -30,6 +28,14 @@ public class TeamController {
     @GetMapping("/fbs")
     public List<Team> getAllFBSTeams(){
         return collegeFootballAPIService.getAllFBSTeams();
+    }
+
+    @GetMapping("/{teamId}")
+    public Team getTeamByTeamId(@PathVariable("teamId") int teamId){
+        return collegeFootballAPIService.getAllTeams().stream()
+                                            .filter(x -> x.getId() == teamId)
+                                            .findFirst()
+                                            .orElse(null);
     }
 
     @GetMapping("/color")

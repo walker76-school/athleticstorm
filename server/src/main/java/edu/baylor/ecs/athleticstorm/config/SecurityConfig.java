@@ -94,6 +94,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/api/teams/**")
                         .permitAll()
+                    .antMatchers("/api/coaches/**")
+                        .permitAll()
+                    .antMatchers("/api/roster/**")
+                        .permitAll()
                     .anyRequest()
                         .authenticated();
 

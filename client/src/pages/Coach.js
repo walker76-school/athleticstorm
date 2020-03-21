@@ -9,35 +9,35 @@ const coachInfoStyle = {"text-align": "center"};;
 
 class Coach extends Component {
 
-    state = {
-        loading: true,
-        first_name: "",
-        last_name: "",
-        seasonList: [{
-            school: "",
-            year: "",
-            wins: 0,
-            losses: 0,
-            preseason_rank: null,
-            postseason_rank: null
-        }],
-        termList: [{
-            school: "",
-            schoolPrimaryColor: "",
-            schoolSecondaryColor: "",
-            schoolLogo: "",
+    constructor(props){
+        super(props);
+        this.state = {
+            loading: true,
+            first_name: "",
+            last_name: "",
             seasonList: [{
+                school: "",
                 year: "",
                 wins: 0,
-                losses: 0
+                losses: 0,
+                preseason_rank: null,
+                postseason_rank: null
+            }],
+            termList: [{
+                school: "",
+                schoolPrimaryColor: "",
+                schoolSecondaryColor: "",
+                schoolLogo: "",
+                seasonList: [{
+                    year: "",
+                    wins: 0,
+                    losses: 0
+                }]
             }]
-        }]
-};
-
-    coachUrlExtractor() {
-        let name = window.location.pathname.substr(7);
-        return name.split('-');
+        };
     }
+
+
 
     allTimeWins() {
         let wins = 0;
@@ -57,8 +57,7 @@ class Coach extends Component {
 
     componentDidMount() {
         // Get coach name from url
-        let names = this.coachUrlExtractor();
-        axios.get('https://api.collegefootballdata.com/coaches?firstName=' + names[0] + '&lastName=' + names[1])
+        axios.get('https://api.collegefootballdata.com/coaches?firstName=' + this.props.location.state.first_name + '&lastName=' + this.props.location.state.last_name)
             .then(res => {
                 let terms = [{
                     school: "",

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Link,
     withRouter
 } from 'react-router-dom';
 import '../common/AppHeader.css';
@@ -42,8 +43,6 @@ class Home extends Component {
         this.state = {
             teams: []
         };
-
-        this.onClick = this.onClick.bind(this);
     }
 
     componentDidMount() {
@@ -52,10 +51,6 @@ class Home extends Component {
         .then(res => {
             this.setState({ teams: res.data });
         });
-    }
-
-    onClick(teamId){
-        this.props.history.push('/team/' + teamId);
     }
 
     render() {
@@ -70,10 +65,20 @@ class Home extends Component {
                             this.state.teams.map((team, ndx) => {
                                 return (
                                     <Grid item xs={3}>
-                                        <StyledPaper id={team.id} classes={classes} onClick={() => this.onClick(team.id)}>
-                                            <Avatar className={classes.logo} src={team.logos[0]}/>
-                                            <Typography>{team.school}</Typography>
-                                        </StyledPaper>
+                                        <Link
+                                            to={{
+                                                pathname: '/school/' + team.school,
+                                                state: {
+                                                    teamId: team.id
+                                                }
+                                            }}
+                                            style={{ color: this.state.primaryColor }}
+                                        >
+                                            <StyledPaper classes={classes}>
+                                                <Avatar className={classes.logo} src={team.logos[0]}/>
+                                                <Typography>{team.school}</Typography>
+                                            </StyledPaper>
+                                        </Link>
                                     </Grid>
                                 );
                             })
@@ -114,7 +119,6 @@ class StyledPaper extends Component {
             <Paper
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
-                onClick={this.props.onClick}
                 elevation={this.state.elevation}
                 square={true}
                 className={this.props.classes.paper}
