@@ -1,8 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.coach;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +31,7 @@ public class CoachRecord {
 
     public void addTerm(Term term){
         this.terms.add(term);
+        this.terms.sort(Comparator.comparingInt(Term::getStart_year).reversed());
         this.wins += term.getWins();
         this.losses += term.getLosses();
         this.ties += term.getTies();
