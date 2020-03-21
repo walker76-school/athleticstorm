@@ -2,10 +2,6 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import '../common/AppHeader.css';
 import axios from 'axios';
-import { ACCESS_TOKEN } from '../constants';
-
-
-const coachInfoStyle = {"text-align": "center"};;
 
 class Coach extends Component {
 
@@ -15,150 +11,53 @@ class Coach extends Component {
             loading: true,
             first_name: "",
             last_name: "",
-            seasonList: [{
-                school: "",
-                year: "",
-                wins: 0,
-                losses: 0,
-                preseason_rank: null,
-                postseason_rank: null
-            }],
-            termList: [{
-                school: "",
-                schoolPrimaryColor: "",
-                schoolSecondaryColor: "",
-                schoolLogo: "",
-                seasonList: [{
-                    year: "",
-                    wins: 0,
-                    losses: 0
-                }]
-            }]
+            record: null
         };
-    }
-
-
-
-    allTimeWins() {
-        let wins = 0;
-        for (let i = 0; i < this.state.seasonList.length; i++) {
-            wins += this.state.seasonList[i].wins;
-        }
-        return wins;
-    }
-
-    allTimeLosses() {
-        let losses = 0;
-        for (let i = 0; i < this.state.seasonList.length; i++) {
-            losses += this.state.seasonList[i].losses;
-        }
-        return losses;
     }
 
     componentDidMount() {
         // Get coach name from url
-        axios.get('https://api.collegefootballdata.com/coaches?firstName=' + this.props.location.state.first_name + '&lastName=' + this.props.location.state.last_name)
-            .then(res => {
-                let terms = [{
-                    school: "",
-                    schoolPrimaryColor: "",
-                    schoolSecondaryColor: "",
-                    schoolLogo: "",
-                    seasonList: [{
-                        year: "",
-                        wins: 0,
-                        losses: 0
-                    }]
-                }];
-
-                const coachData = res.data[0];
-                if (coachData.length !== 0) {
-                    this.setState({
-                        first_name: coachData.first_name,
-                        last_name: coachData.last_name,
-                        seasonList: coachData.seasons
-                    });
-
-                    let urls = new Set()
-
-                    // get the teams
-                    for (let i = 0; i < this.state.seasonList.length; i++) {
-                        urls.add(this.state.seasonList[i].school)
-                    }
-
-                    let urlList = [...urls];
-
-                    // generate the axios get requests
-                    const promises = urlList.map(x => {
-                        return axios.get("http://localhost:8080/team/color", {headers: {Authorization: 'Bearer ' + localStorage.getItem(ACCESS_TOKEN)},"params" : {"team" : x}});
-                    });
-
-                    console.log(promises);
-                    Promise.all(promises).then(d => {
-                        const mapping = new Map();
-                        console.log(d);
-                        for(let i = 0; i < urlList.length; i++){
-                            mapping.set(urlList[i], d[i].data);
-                        }
-
-                        terms[0].school = this.state.seasonList[0].school;
-                        terms[0].schoolPrimaryColor = d[0].data.color;
-                        terms[0].schoolSecondaryColor = d[0].data.alt_color;
-                        terms[0].schoolLogo = d[0].data.logo;
-                        terms[0].seasonList[0].year = this.state.seasonList[0].year;
-                        terms[0].seasonList[0].wins = this.state.seasonList[0].wins;
-                        terms[0].seasonList[0].losses = this.state.seasonList[0].losses;
-                        for (let i = 1; i < this.state.seasonList.length; i++) {
-                            if (this.state.seasonList[i].school !== terms[terms.length - 1].school) {
-                                const color = mapping.get(this.state.seasonList[i].school);
-                                terms.push({
-                                    school: this.state.seasonList[i].school,
-                                    schoolPrimaryColor: color.color,
-                                    schoolSecondaryColor: color.alt_color,
-                                    schoolLogo: color.logo,
-                                    seasonList: [{
-                                        year: this.state.seasonList[i].year,
-                                        wins: this.state.seasonList[i].wins,
-                                        losses: this.state.seasonList[i].losses
-                                    }]
-                                });
-                            } else {
-                                terms[terms.length - 1].seasonList.push({
-                                    year: this.state.seasonList[i].year,
-                                    wins: this.state.seasonList[i].wins,
-                                    losses: this.state.seasonList[i].losses
-                                })
-                            }
-                        }
-                        console.log(terms);
-                        this.setState({
-                            termList: terms
-                        })
-                })
-                }
-            })
+        axios.get('http://localhost:8080/api/coaches/record/byName/' + this.props.location.state.first_name + '-' + this.props.location.state.last_name)
+        .then(result => {
+            console.log(result);
+            this.setState({
+                loading: false,
+                first_name: result.data.first_name,
+                last_name: result.data.last_name,
+                record: result.data
+            });
+        })
     }
 
     render() {
-        if (this.state.first_name.length !== 0) {
+        if (!this.state.loading) {
 
             // Name successfully found
             return (
                 <div className="container">
-                    <div className="Coach_Info" style={coachInfoStyle}>
+                    <div className="Coach_Info" style={{"text-align": "center"}}>
                         <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.first_name} {this.state.last_name}</h1>
-                        <h2>All time record: {this.allTimeWins()}-{this.allTimeLosses()}</h2>
+                        <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <div className="Seasons">
                         <div className="Term_School_Name">
-                            {this.state.termList.map(term => (
+                            {this.state.record.terms.map(term => (
                                 <div>
-                                    <Link to={"/school/" + term.school} style={coachInfoStyle}>
+                                    <Link
+                                        to={{
+                                            pathname: "/school/" + term.team.school,
+                                            state: {
+                                                teamId: term.team.id
+                                            }
+                                        }}
+                                        style={{"text-align": "center"}}
+                                    >
                                         <h1 style={{  }}>
-                                            <img style={{ marginLeft: 10 }} src={term.schoolLogo} height="100" width="100" alt={term.school}/>
-                                            <span style={{ marginLeft: 30, color: term.schoolPrimaryColor}}>
-                                                {term.school} ({term.seasonList[0].year}{term.seasonList.length > 1 && "-" + term.seasonList[0].year - term.seasonList.length+1})
-                                                {term.seasonList.map(season => (
+                                            <img style={{ marginLeft: 10 }} src={term.team.logos[0]} height="100" width="100" alt={term.team.school}/>
+                                            <span style={{ marginLeft: 30, color: term.team.color}}>
+                                                {term.team.school} ({term.start_year}{term.end_year !== -1 ? "-" + term.end_year : ""})
+
+                                                {term.seasons.map(season => (
                                                     <p>
                                                         {season.year}: {season.wins}-{season.losses}
                                                     </p>
@@ -168,22 +67,16 @@ class Coach extends Component {
                                     </Link>
                                 </div>
                             ))}
-                            {/*{this.state.seasonList.map((season) => (*/}
-                            {/*    <p>*/}
-                            {/*        <Link to={"/school/" + season.school}>{season.school}</Link> ({season.year}): {season.wins}-{season.losses}*/}
-                            {/*    </p>*/}
-                            {/*))}*/}
                         </div>
                     </div>
                 </div>
             )
         } else {
-
             // Error: name not found
             return (
                 <div>
                     <div className="Error_Header">
-                        <h1>Coach Not Found</h1>
+                        <h1>Loading Coach Info ... </h1>
                     </div>
                 </div>
             )

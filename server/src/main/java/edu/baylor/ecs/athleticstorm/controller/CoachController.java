@@ -1,10 +1,9 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
 import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
+import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
-import edu.baylor.ecs.athleticstorm.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +22,16 @@ public class CoachController {
     }
 
     @GetMapping("/byTeamId/{teamId}" )
-    public List<Coach> getAllFBSTeams(@PathVariable("teamId") int teamId){
+    public List<Coach> getCoachesByTeamId(@PathVariable("teamId") int teamId){
         return collegeFootballAPIService.getCoachesByTeamId(teamId);
+    }
+
+    @GetMapping("/record/byName/{name}" )
+    public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
+        String firstName = name.split("-")[0];
+        String lastName = name.split("-")[1];
+        Coach coach = collegeFootballAPIService.getCoachByName(firstName, lastName);
+        return collegeFootballAPIService.buildRecordFromCoach(coach);
     }
 
 }
