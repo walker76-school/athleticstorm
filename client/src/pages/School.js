@@ -135,8 +135,8 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Coaches
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.coachSort}>
-                            <option value="Ascending">Ascending</option>
                             <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
