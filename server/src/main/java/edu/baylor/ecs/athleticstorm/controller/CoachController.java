@@ -1,24 +1,37 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
-import edu.baylor.ecs.athleticstorm.DTO.RatingRequest;
-import edu.baylor.ecs.athleticstorm.service.CoachService;
+import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
+import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
+import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/coach")
+@RequestMapping("/api/coaches")
 public class CoachController {
 
     @Autowired
-    private CoachService coachService;
+    private CollegeFootballAPIService collegeFootballAPIService;
 
-    @GetMapping("/rating/all")
-    public void getCoachRatingAll(@RequestBody RatingRequest ratingRequest){
-        //return coachService.getAllRatings(ratingRequest);
+    @GetMapping("/all")
+    public List<Coach> getAllCoaches(){
+        return collegeFootballAPIService.getAllCoaches();
     }
 
-    @GetMapping("/rating/{year}")
-    public void getCoachRatingYear(@PathVariable Integer year, @RequestBody RatingRequest ratingRequest) {
-        //return coachService.getRatingYear(year, ratingRequest);
+    @GetMapping("/byTeamId/{teamId}" )
+    public List<Coach> getCoachesByTeamId(@PathVariable("teamId") int teamId){
+        return collegeFootballAPIService.getCoachesByTeamId(teamId);
     }
+
+    @GetMapping("/record/byName/{name}" )
+    public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
+        String firstName = name.split("-")[0];
+        String lastName = name.split("-")[1];
+        Coach coach = collegeFootballAPIService.getCoachByName(firstName, lastName);
+        return collegeFootballAPIService.buildRecordFromCoach(coach);
+    }
+
 }

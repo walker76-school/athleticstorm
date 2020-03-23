@@ -1,7 +1,7 @@
 package edu.baylor.ecs.athleticstorm.security;
 
 import edu.baylor.ecs.athleticstorm.exception.ResourceNotFoundException;
-import edu.baylor.ecs.athleticstorm.model.User;
+import edu.baylor.ecs.athleticstorm.model.auth.User;
 import edu.baylor.ecs.athleticstorm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

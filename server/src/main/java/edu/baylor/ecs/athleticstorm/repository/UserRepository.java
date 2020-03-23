@@ -1,6 +1,6 @@
 package edu.baylor.ecs.athleticstorm.repository;
 
-import edu.baylor.ecs.athleticstorm.model.User;
+import edu.baylor.ecs.athleticstorm.model.auth.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

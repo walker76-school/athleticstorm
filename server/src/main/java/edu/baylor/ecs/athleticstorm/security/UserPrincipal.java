@@ -1,6 +1,6 @@
 package edu.baylor.ecs.athleticstorm.security;
 
-import edu.baylor.ecs.athleticstorm.model.User;
+import edu.baylor.ecs.athleticstorm.model.auth.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

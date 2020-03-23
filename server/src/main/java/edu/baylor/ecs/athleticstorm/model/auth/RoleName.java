@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model;
+package edu.baylor.ecs.athleticstorm.model.auth;
 
 /**
  * Created by rajeevkumarsingh on 07/12/17.
