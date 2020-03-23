@@ -4,14 +4,20 @@ import edu.baylor.ecs.athleticstorm.DTO.RatingRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CoachService extends RatingInterface {
+public class RatingService {
 
-    @Override
-    public void getAllRatings(RatingRequest ratingRequest){
+    public void getAllRatings(Integer year){
 
     }
 
-    @Override
+    public void getAllPlayerRatings(Integer year){
+
+    }
+
+    public void getAllCoachratings(Integer year){
+
+    }
+
     public void getRatingYear(Integer year, RatingRequest ratingRequest){
 
     }

@@ -1,13 +1,14 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
 import edu.baylor.ecs.athleticstorm.model.RoleName;
+import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
 import edu.baylor.ecs.athleticstorm.payload.UserIdentityAvailability;
 import edu.baylor.ecs.athleticstorm.payload.UserProfile;
 import edu.baylor.ecs.athleticstorm.payload.UserSummary;
 import edu.baylor.ecs.athleticstorm.security.CurrentUser;
 import edu.baylor.ecs.athleticstorm.security.UserPrincipal;
 import edu.baylor.ecs.athleticstorm.exception.ResourceNotFoundException;
-import edu.baylor.ecs.athleticstorm.model.User;
+import edu.baylor.ecs.athleticstorm.model.auth.User;
 import edu.baylor.ecs.athleticstorm.repository.UserRepository;
 import org.assertj.core.internal.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;

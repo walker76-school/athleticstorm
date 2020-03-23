@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model;
+package edu.baylor.ecs.athleticstorm.model.auth;
 
 import edu.baylor.ecs.athleticstorm.model.audit.DateAudit;
 
