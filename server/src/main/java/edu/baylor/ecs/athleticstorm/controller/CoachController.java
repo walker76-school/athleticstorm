@@ -1,6 +1,5 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
-import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
 import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
