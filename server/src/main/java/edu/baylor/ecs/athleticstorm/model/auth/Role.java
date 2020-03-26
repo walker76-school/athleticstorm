@@ -1,7 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.auth;
 
 import org.hibernate.annotations.NaturalId;
-import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
 import javax.persistence.*;
 
 /**
