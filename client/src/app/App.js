@@ -10,6 +10,7 @@ import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
+import SchoolList from '../pages/SchoolList';
 import Coach from '../pages/Coach';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
@@ -107,10 +108,11 @@ class App extends Component {
 
           <Content className="app-content">
             <div className="container">
-              <Switch>      
-                <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+              <Switch>
+                <Route exact path="/" component={Home} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
