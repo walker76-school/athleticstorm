@@ -1,6 +1,6 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
-import edu.baylor.ecs.athleticstorm.model.RoleName;
+import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
 import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
 import edu.baylor.ecs.athleticstorm.payload.UserIdentityAvailability;
 import edu.baylor.ecs.athleticstorm.payload.UserProfile;
