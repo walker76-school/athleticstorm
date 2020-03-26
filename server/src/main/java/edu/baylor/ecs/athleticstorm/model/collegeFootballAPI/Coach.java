@@ -27,4 +27,8 @@ public class Coach {
             @JoinColumn(name = "SCHOOL_YEAR", referencedColumnName = "YEAR")
     })
     private List<Season> seasons;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "ID")
+    private Team team;
 }

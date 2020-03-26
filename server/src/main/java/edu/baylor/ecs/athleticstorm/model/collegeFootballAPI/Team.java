@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -51,4 +52,10 @@ public class Team {
 
     @ElementCollection
     private List<String> logos;
+
+    @OneToMany(mappedBy = "team")
+    private List<Coach> coaches;
+
+    @OneToMany(mappedBy = "team")
+    private List<RosterPlayer> rosterPlayers;
 }
