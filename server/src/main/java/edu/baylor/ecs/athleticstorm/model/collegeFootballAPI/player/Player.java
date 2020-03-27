@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -51,6 +52,6 @@ public class Player {
     @OneToOne(mappedBy = "player")
     private Usage usage;
 
-    @OneToOne(mappedBy = "player")
-    private AdvancedPlayer advancedPlayer;
+    @OneToMany(mappedBy = "player")
+    private List<RosterPlayer> rosterPlayerList;
 }

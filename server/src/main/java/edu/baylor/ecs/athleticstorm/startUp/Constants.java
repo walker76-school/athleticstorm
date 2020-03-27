@@ -22,6 +22,7 @@ public final class Constants {
     public static final String FBS_URL =    BASE_URL + "/teams/fbs";
     public static final String COACH_URL =  BASE_URL + "/coaches";
     public static final String PLAYER_URL = BASE_URL + "/players";
+
     public static String coachByTeamId(String teamName){
         return COACH_URL + "?team=" + teamName + "&minYear=2000";
     }

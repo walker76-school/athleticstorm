@@ -12,7 +12,7 @@
 
 package edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.AdvancedPlayer;
+import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdvancedPlayerRepository extends JpaRepository<AdvancedPlayer, Long > {

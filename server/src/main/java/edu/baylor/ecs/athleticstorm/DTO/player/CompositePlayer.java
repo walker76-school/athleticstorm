@@ -1,6 +1,5 @@
 package edu.baylor.ecs.athleticstorm.DTO.player;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.AdvancedPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
