@@ -11,21 +11,24 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 
-@Entity
+@Entity(name = "Coach")
 @Table(name = "COACH")
 public class Coach {
 
-    @Column(name = "FIRST_NAME")
-    private String first_name;
+    @Id
+    @Column(name = "NAME")
+    private String name;
 
-    @Column(name = "LAST_NAME")
-    private String last_name;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinColumns({
-            @JoinColumn(name = "SCHOOL_NAME", referencedColumnName = "SCHOOL"),
-            @JoinColumn(name = "SCHOOL_YEAR", referencedColumnName = "YEAR")
-    })
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "COACH_TO_SEASON",
+            joinColumns =
+            @JoinColumn(name = "COACH_NAME", referencedColumnName = "NAME"),
+            inverseJoinColumns = {
+                    @JoinColumn(name = "SCHOOL", referencedColumnName = "SCHOOL"),
+                    @JoinColumn(name = "YEAR", referencedColumnName = "YEAR")
+            }
+    )
     private List<Season> seasons;
 
     @ManyToOne

@@ -14,20 +14,21 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "ROSTER_PLAYER")
+@IdClass(RosterPlayer.RosterPlayerId.class)
 public class RosterPlayer {
 
-    @Embeddable
     public static class RosterPlayerId implements Serializable {
-        @Id
-        @Column(name = "PLAYER_ID")
         private Long id;
-
-        @Column(name = "YEAR")
         private int year;
     }
 
-    @EmbeddedId
-    private RosterPlayerId id;
+    @Id
+    @Column(name = "PLAYER_ID", insertable = false, updatable = false)
+    private Long id;
+
+    @Id
+    @Column(name = "YEAR", insertable = false, updatable = false)
+    private int year;
 
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")

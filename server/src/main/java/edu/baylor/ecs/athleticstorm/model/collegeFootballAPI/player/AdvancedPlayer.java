@@ -11,16 +11,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-@Column(name = "ADVANCED_PLAYER")
+@Table(name = "ADVANCED_PLAYER")
 public class AdvancedPlayer {
+
+    @Id
+    @Column(name = "PLAYER_ID")
+    private Long id;
 
     @OneToOne
     @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
     private Player player;
-
-    @Id
-    @Column(name = "ID")
-    private Long id;
 
     @Column(name = "SEASON")
     private int season;
@@ -38,6 +38,6 @@ public class AdvancedPlayer {
     private String conference;
 
     @OneToOne
-    @JoinColumn(name = "USAGE_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "USAGE_ID", referencedColumnName = "PLAYER_ID")
     private Usage usage;
 }

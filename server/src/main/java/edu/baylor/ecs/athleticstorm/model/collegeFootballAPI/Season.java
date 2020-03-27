@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -13,16 +14,24 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "SEASON")
+@IdClass(Season.SeasonID.class)
 public class Season {
 
-    @Embeddable
     public static class SeasonID implements Serializable {
-        @Column(name = "SCHOOL")
         private String school;
-
-        @Column(name = "YEAR")
         private int year;
     }
+
+    @Id
+    @Column(name = "SCHOOL", insertable = false, updatable = false)
+    private String school;
+
+    @Id
+    @Column(name = "YEAR", insertable = false, updatable = false)
+    private int year;
+
+    @ManyToMany(mappedBy = "seasons")
+    private List<Coach> coaches;
 
     @EmbeddedId
     private SeasonID seasonId;

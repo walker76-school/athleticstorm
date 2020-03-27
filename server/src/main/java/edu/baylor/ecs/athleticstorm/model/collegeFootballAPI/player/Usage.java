@@ -1,6 +1,5 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "USAGE")
+@Table(name = "PLAYER_USAGE")
 public class Usage {
 
     @Id
@@ -20,7 +19,7 @@ public class Usage {
     private Long id;
 
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
+    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "PLAYER_ID")
     private Player player;
 
     @Column(name = "OVERALL")

@@ -40,9 +40,7 @@ public class CoachService {
     }
 
     public Coach getCoachByName(String name) {
-        String firstName = name.split("-")[0];
-        String lastName = name.split("-")[1];
-        return coachRepository.findCoachByFirst_nameEqualsAndLast_nameEquals(firstName, lastName).get();
+        return coachRepository.findCoachByNameEquals(name).get();
     }
 
     //TODO this
