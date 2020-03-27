@@ -1,12 +1,12 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @Data

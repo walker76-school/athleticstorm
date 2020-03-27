@@ -21,7 +21,7 @@ public class Coach {
     @Column(name = "LAST_NAME")
     private String last_name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinColumns({
             @JoinColumn(name = "SCHOOL_NAME", referencedColumnName = "SCHOOL"),
             @JoinColumn(name = "SCHOOL_YEAR", referencedColumnName = "YEAR")
@@ -29,6 +29,6 @@ public class Coach {
     private List<Season> seasons;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "ID")
+    @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     private Team team;
 }

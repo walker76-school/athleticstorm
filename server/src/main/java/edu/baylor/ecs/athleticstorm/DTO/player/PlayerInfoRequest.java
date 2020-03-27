@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model.player;
+package edu.baylor.ecs.athleticstorm.DTO.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

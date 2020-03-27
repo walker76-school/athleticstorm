@@ -44,4 +44,9 @@ public class Season {
 
     @Column(name = "POSTSEASON_RANK")
     private int postseason_rank;
+
+    @Transient
+    public int getYear(){
+        return this.seasonId.year;
+    }
 }

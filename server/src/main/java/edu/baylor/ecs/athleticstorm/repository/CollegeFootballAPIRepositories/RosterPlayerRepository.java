@@ -12,7 +12,7 @@
 
 package edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.RosterPlayer;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RosterPlayerRepository extends JpaRepository<RosterPlayer, Long> {

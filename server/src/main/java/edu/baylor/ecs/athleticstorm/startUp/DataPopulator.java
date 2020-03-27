@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
  * populates initial data in the DB
  */
 @Component
-public class TeamColorPopulator implements ApplicationListener<ContextRefreshedEvent> {
+public class DataPopulator implements ApplicationListener<ContextRefreshedEvent> {
 
     private static final String TEAM_URL = "https://api.collegefootballdata.com/teams";
 

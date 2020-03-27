@@ -17,9 +17,11 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.CoachRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class CoachService {
 
     @Autowired
@@ -36,4 +38,35 @@ public class CoachService {
         Team team = teamRepository.getOne(teamId);
         return team.getCoaches();
     }
+
+    public Coach getCoachByName(String name) {
+        String firstName = name.split("-")[0];
+        String lastName = name.split("-")[1];
+        return coachRepository.findCoachByFirst_nameEqualsAndLast_nameEquals(firstName, lastName).get();
+    }
+
+    //TODO this
+    /*
+    public CoachRecord buildRecordFromCoach(Coach coach){
+        CoachRecord record = new CoachRecord(coach);
+
+        List<Season> allSeasons = coach.getSeasons();
+        Map<String, Set<Season>> schoolToSeasonsMap = new HashMap<>();
+        for(Season season : allSeasons){
+            Set<Season> seasons = schoolToSeasonsMap.getOrDefault(season.getSchool(), new HashSet<>());
+            seasons.add(season);
+            schoolToSeasonsMap.put(season.getSchool(), seasons);
+        }
+
+        for(Map.Entry<String, Set<Season>> entry : schoolToSeasonsMap.entrySet()){
+            Term schoolTerm = new Term();
+            Team team = getTeamByName(entry.getKey());
+            schoolTerm.setTeam(team);
+            schoolTerm.setSeasons(entry.getValue());
+            record.addTerm(schoolTerm);
+        }
+
+        return record;
+    }
+    */
 }

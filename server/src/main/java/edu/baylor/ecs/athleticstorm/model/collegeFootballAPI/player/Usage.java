@@ -1,5 +1,6 @@
-package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
+package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +16,12 @@ import javax.persistence.*;
 public class Usage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private long ID;
+    @Column(name = "PLAYER_ID")
+    private Long id;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
+    private Player player;
 
     @Column(name = "OVERALL")
     private float overall;

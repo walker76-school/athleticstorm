@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model.coach;
+package edu.baylor.ecs.athleticstorm.DTO.coach;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import lombok.AllArgsConstructor;

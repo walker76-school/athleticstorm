@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model.coach;
+package edu.baylor.ecs.athleticstorm.DTO.coach;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
@@ -15,6 +15,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 public class Term {
+
     Team team;
     private int wins;
     private int losses;

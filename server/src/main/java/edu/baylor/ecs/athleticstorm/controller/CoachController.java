@@ -1,8 +1,8 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
-import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
+import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
+import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,24 +13,25 @@ import java.util.List;
 public class CoachController {
 
     @Autowired
-    private CollegeFootballAPIService collegeFootballAPIService;
+    private CoachService coachService;
 
     @GetMapping("/all")
     public List<Coach> getAllCoaches(){
-        return collegeFootballAPIService.getAllCoaches();
+        return coachService.getAllCoaches();
     }
 
     @GetMapping("/byTeamId/{teamId}" )
-    public List<Coach> getCoachesByTeamId(@PathVariable("teamId") int teamId){
-        return collegeFootballAPIService.getCoachesByTeamId(teamId);
+    public List<Coach> getCoachesByTeamId(@PathVariable("teamId") Long teamId){
+        return coachService.getCoachesByTeamId(teamId);
     }
 
     @GetMapping("/record/byName/{name}" )
     public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
-        String firstName = name.split("-")[0];
-        String lastName = name.split("-")[1];
-        Coach coach = collegeFootballAPIService.getCoachByName(firstName, lastName);
-        return collegeFootballAPIService.buildRecordFromCoach(coach);
+        Coach coach = coachService.getCoachByName(name);
+        //TODO
+        //return coachService.buildRecordFromCoach(coach);
+
+        return null;
     }
 
 }

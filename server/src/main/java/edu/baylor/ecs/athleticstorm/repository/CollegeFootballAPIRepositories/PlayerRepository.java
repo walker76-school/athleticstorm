@@ -12,8 +12,11 @@
 
 package edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Player;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PlayerRepository extends JpaRepository<Player, Long> {
+    public Optional<Player> findPlayerByNameEquals(String name);
 }

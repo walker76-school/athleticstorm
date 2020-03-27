@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
+package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,10 @@ import javax.persistence.*;
 @Entity
 @Column(name = "ADVANCED_PLAYER")
 public class AdvancedPlayer {
+
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
+    private Player player;
 
     @Id
     @Column(name = "ID")
