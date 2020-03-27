@@ -17,6 +17,7 @@ import java.util.List;
 @IdClass(Season.SeasonID.class)
 public class Season {
 
+    @Data
     public static class SeasonID implements Serializable {
         private String school;
         private int year;
@@ -30,11 +31,12 @@ public class Season {
     @Column(name = "YEAR", insertable = false, updatable = false)
     private int year;
 
+    @EmbeddedId
+    private SeasonID seasonId;
+
     @ManyToMany(mappedBy = "seasons")
     private List<Coach> coaches;
 
-    @EmbeddedId
-    private SeasonID seasonId;
 
     @Column(name = "GAMES")
     private int games;

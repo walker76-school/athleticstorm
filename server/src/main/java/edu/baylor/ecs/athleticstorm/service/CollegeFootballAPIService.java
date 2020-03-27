@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CollegeFootballAPIService {
-    /*
 
+    /*
     @Autowired
     private RestTemplate restTemplate;
 
@@ -129,4 +129,5 @@ public class CollegeFootballAPIService {
         return null;
     }
     */
+
 }
