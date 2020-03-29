@@ -42,7 +42,7 @@ class App extends Component {
       placement: 'topRight',
       top: 70,
       duration: 3,
-    });    
+    });
   }
 
   loadCurrentUser() {
@@ -59,7 +59,7 @@ class App extends Component {
     }).catch(error => {
       this.setState({
         isLoading: false
-      });  
+      });
     });
   }
 
@@ -89,7 +89,7 @@ class App extends Component {
       description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
-    this.props.history.push("/");
+    this.props.history.push("/schoollist");
   }
 
   setSchool(school){
@@ -102,8 +102,8 @@ class App extends Component {
     }
     return (
         <Layout className="app-container">
-          <AppHeader isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
+          <AppHeader isAuthenticated={this.state.isAuthenticated}
+            currentUser={this.state.currentUser}
             onLogout={this.handleLogout} />
 
           <Content className="app-content">
