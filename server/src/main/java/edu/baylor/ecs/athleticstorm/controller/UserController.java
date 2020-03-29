@@ -25,6 +25,7 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+        System.out.println(currentUser.getAuthorities());
         // Gets first authority from UserPrincipal's list of authorities to use when creating userSummary
         return new UserSummary(currentUser.getId(), currentUser.getUsername(),
                 Enum.valueOf(RoleName.class, currentUser.getAuthorities().iterator().next().getAuthority()));

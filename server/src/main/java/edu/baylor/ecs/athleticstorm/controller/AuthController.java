@@ -64,7 +64,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        System.out.println("hey");
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
@@ -83,7 +82,18 @@ public class AuthController {
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
 
-        user.setRoles(Collections.singleton(new Role(signUpRequest.getRoleName())));
+
+
+        Role newRole = roleRepository.findByName(signUpRequest.getRoleName()).orElseThrow(() -> new AppException("User Role not set."));
+
+        System.out.println("hey");
+
+        //TODO: This is the basis for where the issue lies. If the line with userRole is not commented
+        // out it works fine to sign up and log in, but if newRole is in it doesn't work. The function should
+        // be the same but it just doesn't work. Getting closer....
+        user.setRoles(Collections.singleton(newRole));
+
+//        user.setRoles(Collections.singleton(userRole));
 
         User result = userRepository.save(user);
 
