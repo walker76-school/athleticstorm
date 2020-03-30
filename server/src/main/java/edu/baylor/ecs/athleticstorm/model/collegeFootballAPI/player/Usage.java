@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
+import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,4 +46,17 @@ public class Usage {
 
     @Column(name = "PASSING_DOWNS")
     private float passingDowns;
+
+    public Usage(AdvancedPlayer.UsageDTO usageDTO, Player p){
+        this.id = p.getId();
+        this.player = p;
+        this.overall = usageDTO.getOverall();
+        this.pass = usageDTO.getPass();
+        this.rush = usageDTO.getRush();
+        this.firstDown = usageDTO.getFirstDown();
+        this.secondDown = usageDTO.getSecondDown();
+        this.thirdDown = usageDTO.getThirdDown();
+        this.standardDowns = usageDTO.getStandardDowns();
+        this.passingDowns = usageDTO.getPassingDowns();
+    }
 }
