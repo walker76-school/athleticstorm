@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.controller;
+package edu.baylor.ecs.athleticstorm.controller.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.player.CompositePlayer;
 import edu.baylor.ecs.athleticstorm.DTO.player.PlayerInfoRequest;

@@ -12,7 +12,7 @@
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
 
-import edu.baylor.ecs.athleticstorm.DTO.TeamDTO;
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;

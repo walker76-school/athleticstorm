@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.DTO; /******************************************************************************
+package edu.baylor.ecs.athleticstorm.DTO.team; /******************************************************************************
  *
  * TeamDTO.java
  *
