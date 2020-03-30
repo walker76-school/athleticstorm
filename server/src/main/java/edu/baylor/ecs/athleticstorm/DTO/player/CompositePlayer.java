@@ -8,18 +8,13 @@ import lombok.Data;
 @Data
 public class CompositePlayer {
 
-    private Player player;
-    private AdvancedPlayer advancedPlayer;
+    private PlayerDTO player;
+    private AdvancedPlayerDTO advancedPlayer;
     private boolean hasAdvancedPlayer;
 
-    public CompositePlayer(){
-        this.player = null;
-        this.advancedPlayer = null;
-        this.hasAdvancedPlayer = false;
-    }
-
-    public void setAdvancedPlayer(AdvancedPlayer advancedPlayer){
-        this.advancedPlayer = advancedPlayer;
+    public CompositePlayer(Player p, AdvancedPlayerDTO advancedPlayerDTO){
+        this.player = new PlayerDTO(p);
+        this.advancedPlayer = advancedPlayerDTO;
         this.hasAdvancedPlayer = advancedPlayer != null;
     }
 }

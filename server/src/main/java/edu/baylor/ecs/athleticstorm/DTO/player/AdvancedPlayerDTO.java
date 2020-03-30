@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 
-public class AdvancedPlayer {
+public class AdvancedPlayerDTO {
 
     @Data
     public static class UsageDTO{
@@ -24,21 +24,34 @@ public class AdvancedPlayer {
         private float thirdDown;
         private float standardDowns;
         private float passingDowns;
+
+        public UsageDTO(Usage u){
+            this.overall = u.getOverall();
+            this.rush = u.getRush();
+            this.pass = u.getPass();
+            this.firstDown = u.getFirstDown();
+            this.secondDown = u.getSecondDown();
+            this.thirdDown = u.getThirdDown();
+            this.standardDowns = u.getStandardDowns();
+            this.passingDowns = u.getPassingDowns();
+        }
     }
 
     private Long id;
-
-    private Player player;
-
     private int season;
-
     private String name;
-
     private String position;
-
     private String team;
-
     private String conference;
-
     private UsageDTO usage;
+
+    public AdvancedPlayerDTO(Player p){
+        this.id = p.getId();
+        this.name = p.getName();
+        this.position = p.getPosition();
+        this.team = p.getTeam();
+        //this.conference
+        //this.season
+        this.usage = new UsageDTO(p.getUsage());
+    }
 }

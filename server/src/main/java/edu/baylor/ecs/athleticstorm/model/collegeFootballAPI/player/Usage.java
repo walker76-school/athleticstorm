@@ -1,8 +1,9 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
-import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayer;
+import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,41 +14,52 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PLAYER_USAGE")
+@EqualsAndHashCode
 public class Usage {
 
     @Id
     @Column(name = "PLAYER_ID")
+    @EqualsAndHashCode.Include
     private Long id;
 
     @OneToOne
     @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "PLAYER_ID")
+    @EqualsAndHashCode.Exclude
     private Player player;
 
     @Column(name = "OVERALL")
+    @EqualsAndHashCode.Exclude
     private float overall;
 
     @Column(name = "PASS")
+    @EqualsAndHashCode.Exclude
     private float pass;
 
     @Column(name = "RUSH")
+    @EqualsAndHashCode.Exclude
     private float rush;
 
     @Column(name = "FIRST_DOWN")
+    @EqualsAndHashCode.Exclude
     private float firstDown;
 
     @Column(name = "SECOND_DOWN")
+    @EqualsAndHashCode.Exclude
     private float secondDown;
 
     @Column(name = "THIRD_DOWN")
+    @EqualsAndHashCode.Exclude
     private float thirdDown;
 
     @Column(name = "STANDARD_DOWNS")
+    @EqualsAndHashCode.Exclude
     private float standardDowns;
 
     @Column(name = "PASSING_DOWNS")
+    @EqualsAndHashCode.Exclude
     private float passingDowns;
 
-    public Usage(AdvancedPlayer.UsageDTO usageDTO, Player p){
+    public Usage(AdvancedPlayerDTO.UsageDTO usageDTO, Player p){
         this.id = p.getId();
         this.player = p;
         this.overall = usageDTO.getOverall();

@@ -1,6 +1,6 @@
 package edu.baylor.ecs.athleticstorm.startUp;
 
-import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayer;
+import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.RosterPlayerDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
@@ -8,8 +8,6 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Usage;
-import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.CoachRepository;
-import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.PlayerRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -144,7 +142,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Transactional
     public void getPlayerUsage(){
         for(Player p: players) {
-            AdvancedPlayer[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayer[].class);
+            AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
             Usage u = new Usage(advancedPlayers[0].getUsage(), p);
             p.setUsage(u);
         }
