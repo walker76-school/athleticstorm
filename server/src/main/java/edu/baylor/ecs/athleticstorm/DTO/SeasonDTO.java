@@ -10,7 +10,7 @@
  *
  ******************************************************************************/
 
-package edu.baylor.ecs.athleticstorm.DTO.coach;
+package edu.baylor.ecs.athleticstorm.DTO;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import lombok.AllArgsConstructor;

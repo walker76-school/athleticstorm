@@ -12,6 +12,7 @@
 
 package edu.baylor.ecs.athleticstorm.DTO.coach;
 
+import edu.baylor.ecs.athleticstorm.DTO.SeasonDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import lombok.AllArgsConstructor;
 import lombok.Data;
