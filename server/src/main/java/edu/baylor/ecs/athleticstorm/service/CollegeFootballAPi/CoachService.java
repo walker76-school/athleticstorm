@@ -12,6 +12,7 @@
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
 
+import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.CoachRepository;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CoachService {
@@ -30,17 +32,24 @@ public class CoachService {
     @Autowired
     private TeamRepository teamRepository;
 
-    public List<Coach> getAllCoaches() {
-        return coachRepository.findAll();
+    public List<CoachDTO> getAllCoaches() {
+        return convertToDTO(coachRepository.findAll());
     }
 
-    public List<Coach> getCoachesByTeamId(Long teamId) {
+    public List<CoachDTO> getCoachesByTeamId(Long teamId) {
         Team team = teamRepository.getOne(teamId);
-        return team.getCoaches();
+        return convertToDTO(team.getCoaches());
     }
 
-    public Coach getCoachByName(String name) {
-        return coachRepository.findCoachByNameEquals(name).get();
+    public CoachDTO getCoachByName(String name) {
+        return new CoachDTO(coachRepository.findCoachByNameEquals(name).get());
+    }
+
+    private List<CoachDTO> convertToDTO(List<Coach> coaches){
+        return coaches
+                .stream()
+                .map(CoachDTO::new)
+                .collect(Collectors.toList());
     }
 
     //TODO this
