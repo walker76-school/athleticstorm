@@ -12,15 +12,15 @@
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
 
-import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
+import edu.baylor.ecs.athleticstorm.DTO.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
-import edu.baylor.ecs.athleticstorm.repository.ColorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -28,28 +28,25 @@ public class TeamService {
     @Autowired
     private TeamRepository teamRepository;
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+    public List<TeamDTO> getAllTeams() {
+        return convertToDTO(teamRepository.findAll());
     }
 
-    public Team getTeamByName(String name){
+    public TeamDTO getTeamByName(String name){
         Optional<Team> response = teamRepository.findTeamBySchool(name);
-        return response.isPresent() ? response.get() : null;
+        return response.isPresent() ? new TeamDTO(response.get()) : null;
     }
 
-    public List<Team> getAllFBSTeams() {
-        return teamRepository.findAllFBS();
+    public List<TeamDTO> getAllFBSTeams() {
+        return convertToDTO(teamRepository.findAllFBS());
     }
 
-    public Team getTeamById(Long id){
-        return teamRepository.getOne(id);
+    public TeamDTO getTeamById(Long id){
+        return new TeamDTO(teamRepository.getOne(id));
     }
 
-    @Autowired
-    private ColorRepository colorRepository;
-
-    public TeamResponse getTeamColor(String team){
-        return new TeamResponse(colorRepository.findByTeamName(team));
+    public List<TeamDTO> convertToDTO(List<Team> teams){
+        return teams.stream().map(TeamDTO::new).collect(Collectors.toList());
     }
 
 }
