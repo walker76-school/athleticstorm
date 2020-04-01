@@ -26,8 +26,8 @@ public class PlayerDTO {
     private String name;
     private String firstName;
     private String lastName;
-    private int height;
     private int weight;
+    private int height;
     private int jersey;
     private String position;
     private String hometown;
