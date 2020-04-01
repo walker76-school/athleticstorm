@@ -32,7 +32,7 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @Id
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
-    private Long year;
+    private Integer year;
 
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")

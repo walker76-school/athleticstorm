@@ -110,7 +110,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
             //find the team for this coach
             Season finalRecord = record;
-            Team t = teams.stream().filter(x -> x.equals(finalRecord.getSeasonId().getSchool())).findFirst().orElse(null);
+            Team t = teams.stream().filter(x -> x.equals(finalRecord.getSchool())).findFirst().orElse(null);
 
             c.setTeam(t);
             t.getCoaches().add(c);
@@ -129,7 +129,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             for(RosterPlayerDTO rosterPlayer : rosterPlayerList){
 
                 // get the correct player for this roster player
-                String fullName = rosterPlayer.getFirst_Name() + " " + rosterPlayer.getLast_Name();
+                String fullName = rosterPlayer.getFirst_name() + " " + rosterPlayer.getLast_name();
                 Player p = players.stream().filter(x -> x.getName().equals(fullName)).findAny().orElse(null);
                 RosterPlayer rp = new RosterPlayer(p.getId(), 2019, p, t);
                 t.getRosterPlayers().add(rp);

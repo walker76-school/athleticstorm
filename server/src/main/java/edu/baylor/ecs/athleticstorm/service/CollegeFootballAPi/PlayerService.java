@@ -59,7 +59,7 @@ public class PlayerService {
         return null;
     }
 
-    public static List<RosterPlayerDTO> convertToDTO(List<RosterPlayer> rosterPlayer){
+    public static List<RosterPlayerDTO> convertToDTO(Collection<RosterPlayer> rosterPlayer){
         return rosterPlayer.stream().map(RosterPlayerDTO::new).collect(Collectors.toList());
     }
 

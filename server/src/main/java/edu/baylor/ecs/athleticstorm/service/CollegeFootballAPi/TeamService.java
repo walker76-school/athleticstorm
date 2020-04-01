@@ -18,6 +18,7 @@ import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.Te
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class TeamService {
         return new TeamDTO(teamRepository.getOne(id));
     }
 
-    public List<TeamDTO> convertToDTO(List<Team> teams){
+    public List<TeamDTO> convertToDTO(Collection<Team> teams){
         return teams.stream().map(TeamDTO::new).collect(Collectors.toList());
     }
 

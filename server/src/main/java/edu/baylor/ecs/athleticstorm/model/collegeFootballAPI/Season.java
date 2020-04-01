@@ -33,7 +33,7 @@ public class Season implements Comparable<Season> {
     @Id
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
-    private Long year;
+    private Integer year;
 
     @ManyToMany(mappedBy = "seasons")
     @EqualsAndHashCode.Exclude

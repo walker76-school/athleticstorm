@@ -45,7 +45,7 @@ public class CoachService {
         return new CoachDTO(coachRepository.findCoachByNameEquals(name).get());
     }
 
-    private List<CoachDTO> convertToDTO(List<Coach> coaches){
+    private List<CoachDTO> convertToDTO(Collection<Coach> coaches){
         return coaches
                 .stream()
                 .map(CoachDTO::new)

@@ -26,7 +26,7 @@ public class Term {
 
     public void setSeasons(Set<Season> seasonSet){
         seasons = new ArrayList<>(seasonSet);
-        seasons.sort(Comparator.comparingInt(Season::getYear).reversed());
+        seasons.sort(Comparator.comparingLong(Season::getYear).reversed());
         wins = seasons.stream().map(Season::getWins).mapToInt(Integer::intValue).sum();
         losses = seasons.stream().map(Season::getLosses).mapToInt(Integer::intValue).sum();
         ties = seasons.stream().map(Season::getTies).mapToInt(Integer::intValue).sum();
