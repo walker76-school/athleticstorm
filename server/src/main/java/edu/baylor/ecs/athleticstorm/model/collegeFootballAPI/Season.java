@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "SEASON")
 @IdClass(Season.SeasonID.class)
 @EqualsAndHashCode
-public class Season {
+public class Season implements Comparable<Season> {
 
     @Data
     public static class SeasonID implements Serializable {
@@ -33,12 +33,11 @@ public class Season {
     @Id
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
-    private int year;
+    private Long year;
 
     @ManyToMany(mappedBy = "seasons")
     @EqualsAndHashCode.Exclude
-    private List<Coach> coaches;
-
+    private Set<Coach> coaches;
 
     @Column(name = "GAMES")
     @EqualsAndHashCode.Exclude
@@ -64,4 +63,9 @@ public class Season {
     @EqualsAndHashCode.Exclude
     private int postseason_rank;
 
+    @Override
+    public int compareTo(Season season) {
+        int schoolCompare = this.school.compareTo(season.getSchool());
+        return schoolCompare != 0 ? schoolCompare : this.year.compareTo(season.getYear());
+    }
 }

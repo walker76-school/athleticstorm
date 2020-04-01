@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -15,7 +15,7 @@ import java.util.List;
 @Entity(name = "Coach")
 @Table(name = "COACH")
 @EqualsAndHashCode
-public class Coach {
+public class Coach implements Comparable<Coach> {
 
     @Id
     @Column(name = "NAME")
@@ -33,10 +33,15 @@ public class Coach {
             }
     )
     @EqualsAndHashCode.Exclude
-    private List<Season> seasons;
+    private Set<Season> seasons;
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
     private Team team;
+
+    @Override
+    public int compareTo(Coach coach) {
+        return this.name.compareTo(coach.getName());
+    }
 }

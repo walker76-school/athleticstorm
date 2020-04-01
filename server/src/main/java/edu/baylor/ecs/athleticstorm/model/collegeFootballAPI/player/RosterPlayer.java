@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Table(name = "ROSTER_PLAYER")
 @IdClass(RosterPlayer.RosterPlayerId.class)
 @EqualsAndHashCode
-public class RosterPlayer {
+public class RosterPlayer implements Comparable<RosterPlayer> {
 
     public static class RosterPlayerId implements Serializable {
         private Long id;
@@ -32,7 +32,7 @@ public class RosterPlayer {
     @Id
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
-    private int year;
+    private Long year;
 
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
@@ -44,4 +44,9 @@ public class RosterPlayer {
     @EqualsAndHashCode.Exclude
     private Team team;
 
+    @Override
+    public int compareTo(RosterPlayer rosterPlayer) {
+        int idCompare = this.id.compareTo(rosterPlayer.getId());
+        return idCompare != 0 ? idCompare : this.year.compareTo(rosterPlayer.getYear());
+    }
 }
