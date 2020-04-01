@@ -49,7 +49,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void onApplicationEvent(ContextRefreshedEvent event){
 
         // see if already done or colors already exist in the DB
-        if(setupComplete || teamRepository.count() > 0){
+        if(setupComplete || teamRepository.count() > 0 ){
             setupComplete = true;
             return;
         }
@@ -96,8 +96,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public Set<Player> getPlayers(){
-        PlayerDTO[] players = restTemplate.getForObject(playerByFullName("%"), PlayerDTO[].class);
-        return new TreeSet<>(Arrays.stream(players).map(Player::new).collect(Collectors.toList()));
+        Set<Player> toReturn = new TreeSet<>();
+        for(Team t: teams){
+            PlayerDTO[] players = restTemplate.getForObject(playerByFullNameAndTeam("%", t.getSchool()), PlayerDTO[].class);
+            toReturn.addAll(Arrays.stream(players).map(Player::new).collect(Collectors.toList()));
+        }
+        return toReturn;
     }
 
     @Transactional

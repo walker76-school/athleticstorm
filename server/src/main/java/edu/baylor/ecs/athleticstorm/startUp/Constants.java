@@ -32,8 +32,8 @@ public final class Constants {
     public static String coachByName(String firstName, String lastName){
         return COACH_URL + "?firstName=" + firstName + "?lastName=" + lastName;
     }
-    public static String playerByFullName(String name){
-        return PLAYER_URL + "/search?searchTerm=" + name;
+    public static String playerByFullNameAndTeam(String name, String team){
+        return PLAYER_URL + "/search?searchTerm=" + name + "&team=" + team;
     }
     public static String playerUsage(String year, String playerId){
         return PLAYER_URL + "usage?year=" + year + "&playerId=" + playerId;

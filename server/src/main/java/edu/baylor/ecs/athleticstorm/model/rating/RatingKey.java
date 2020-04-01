@@ -12,11 +12,14 @@
 
 package edu.baylor.ecs.athleticstorm.model.rating;
 
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
+@EqualsAndHashCode
 public class RatingKey implements Serializable {
 
     @Column(name = "NAME")

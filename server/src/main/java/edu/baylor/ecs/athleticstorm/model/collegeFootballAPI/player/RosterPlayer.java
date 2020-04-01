@@ -19,6 +19,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class RosterPlayer implements Comparable<RosterPlayer> {
 
+    @Data
+    @EqualsAndHashCode
     public static class RosterPlayerId implements Serializable {
         private Long id;
         private int year;
