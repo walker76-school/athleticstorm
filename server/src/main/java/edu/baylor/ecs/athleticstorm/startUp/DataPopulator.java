@@ -1,7 +1,10 @@
 package edu.baylor.ecs.athleticstorm.startUp;
 
+import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
+import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.RosterPlayerDTO;
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static edu.baylor.ecs.athleticstorm.startUp.Constants.*;
 
@@ -80,20 +84,20 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public Set<Team> getTeams(){
-        Team[] teams = restTemplate.getForObject(TEAM_URL, Team[].class);
-        return new TreeSet<>(Arrays.asList(teams));
+        TeamDTO[] teams = restTemplate.getForObject(TEAM_URL, TeamDTO[].class);
+        return new TreeSet<>(Arrays.stream(teams).map(Team::new).collect(Collectors.toList()));
     }
 
     @Transactional
     public Set<Coach> getCoaches(){
-        Coach[] coaches = restTemplate.getForObject(COACH_URL, Coach[].class);
-        return new TreeSet<>(Arrays.asList(coaches));
+        CoachDTO[] coaches = restTemplate.getForObject(COACH_URL, CoachDTO[].class);
+        return new TreeSet<>(Arrays.stream(coaches).map(Coach::new).collect(Collectors.toList()));
     }
 
     @Transactional
     public Set<Player> getPlayers(){
-        Player[] players = restTemplate.getForObject(playerByFullName("%"), Player[].class);
-        return new TreeSet<>(Arrays.asList(players));
+        PlayerDTO[] players = restTemplate.getForObject(playerByFullName("%"), PlayerDTO[].class);
+        return new TreeSet<>(Arrays.stream(players).map(Player::new).collect(Collectors.toList()));
     }
 
     @Transactional

@@ -1,16 +1,16 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
+import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.TreeSet;
 
 @AllArgsConstructor
 @Data
-@NoArgsConstructor
 
 @Entity(name = "Coach")
 @Table(name = "COACH")
@@ -33,15 +33,19 @@ public class Coach implements Comparable<Coach> {
             }
     )
     @EqualsAndHashCode.Exclude
-    private Set<Season> seasons;
+    private Set<Season> seasons = new TreeSet<>();
 
     @ManyToOne
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
-    private Team team;
+    private Team team = null;
 
     @Override
     public int compareTo(Coach coach) {
         return this.name.compareTo(coach.getName());
+    }
+
+    public Coach(CoachDTO coach){
+        this.name = coach.getFirst_name() + " " + coach.getLast_name();
     }
 }

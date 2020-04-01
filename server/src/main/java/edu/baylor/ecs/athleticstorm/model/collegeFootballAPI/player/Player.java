@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
+import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.TreeSet;
 
 @AllArgsConstructor
 @Data
@@ -64,14 +66,28 @@ public class Player implements Comparable<Player>{
 
     @OneToOne(mappedBy = "player")
     @EqualsAndHashCode.Exclude
-    private Usage usage;
+    private Usage usage = null;
 
     @OneToMany(mappedBy = "player")
     @EqualsAndHashCode.Exclude
-    private Set<RosterPlayer> rosterPlayerList;
+    private Set<RosterPlayer> rosterPlayerList = new TreeSet<>();
 
     @Override
     public int compareTo(Player player) {
         return this.id.compareTo(player.getId());
+    }
+
+    public Player(PlayerDTO player){
+        this.id = player.getId();
+        this.team = player.getTeam();
+        this.name = player.getName();
+        this.firstName = player.getFirstName();
+        this.lastName = player.getLastName();
+        this.height = player.getHeight();
+        this.weight = player.getWeight();
+        this.jersey = player.getJersey();
+        this.position = player.getPosition();
+        this.hometown = player.getHometown();
+        this.teamColor = player.getTeamColor();
     }
 }

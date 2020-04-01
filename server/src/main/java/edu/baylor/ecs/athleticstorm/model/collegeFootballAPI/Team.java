@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -79,5 +81,20 @@ public class Team implements Comparable<Team>{
     @Override
     public int compareTo(Team team) {
         return this.id.compareTo(team.getId());
+    }
+
+    public Team(TeamDTO team){
+        this.id = team.getId();
+        this.school = team.getSchool();
+        this.mascot = team.getMascot();
+        this.abbreviation = team.getAbbreviation();
+        this.alt_name_1 = team.getAlt_name_1();
+        this.alt_name_2 = team.getAlt_name_2();
+        this.alt_name_3 = team.getAlt_name_3();
+        this.conference = team.getConference();
+        this.division = team.getDivision();
+        this.color = team.getColor();
+        this.alt_color = team.getAlt_color();
+        this.logos = team.getLogos();
     }
 }

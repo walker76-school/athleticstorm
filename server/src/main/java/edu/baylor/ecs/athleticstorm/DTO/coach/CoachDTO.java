@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,8 +27,12 @@ import java.util.List;
 @NoArgsConstructor
 public class CoachDTO {
 
+    @NotBlank
     private String first_name;
+
+    @NotBlank
     private String last_name;
+
     private List<SeasonDTO> seasons;
 
     public CoachDTO(Coach c){
