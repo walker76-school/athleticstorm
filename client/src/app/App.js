@@ -17,6 +17,7 @@ import Player from "../pages/types/Player";
 import School from "../pages/School";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
+import AppFooter from '../common/AppFooter';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 
@@ -120,6 +121,8 @@ class App extends Component {
               </Switch>
             </div>
           </Content>
+
+          <AppFooter/>
         </Layout>
     );
   }
