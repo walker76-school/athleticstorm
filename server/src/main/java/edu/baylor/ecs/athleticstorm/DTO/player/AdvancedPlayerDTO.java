@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 
 public class AdvancedPlayerDTO {
 
+    @AllArgsConstructor
     @Data
+    @NoArgsConstructor
     public static class UsageDTO{
         private float overall;
         private float pass;
