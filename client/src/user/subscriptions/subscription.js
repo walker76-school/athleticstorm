@@ -46,10 +46,6 @@ class Subscription extends React.Component {
 
     }
 
-    View_Subscription_Details = (id) => {
-        console.log(id);
-    }
-
 }
 
 export default Subscription;

@@ -29,7 +29,6 @@ class Subscription_List extends React.Component {
     }
 
     handleSubmitPress() {
-        // console.log('hey');
         this.props.handleSubmit(this.state.selectedTier);
     }
 

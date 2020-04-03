@@ -49,8 +49,6 @@ class Signup extends Component {
 
     handleSubmit(roleVal) {
 
-        console.log(roleVal);
-
         const signupRequest = {
             username: this.state.username.value,
             password: this.state.password.value,
