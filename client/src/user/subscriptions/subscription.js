@@ -15,7 +15,6 @@ class Subscription extends React.Component {
 
     selectSubscription() {
         this.props.select(this.props.id);
-        // this.setState({opacity: 0.7})
     }
 
     render() {
