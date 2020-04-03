@@ -10,6 +10,7 @@ import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
+import SchoolList from '../pages/SchoolList';
 import Coach from '../pages/Coach';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
@@ -42,7 +43,7 @@ class App extends Component {
       placement: 'topRight',
       top: 70,
       duration: 3,
-    });    
+    });
   }
 
   loadCurrentUser() {
@@ -59,7 +60,7 @@ class App extends Component {
     }).catch(error => {
       this.setState({
         isLoading: false
-      });  
+      });
     });
   }
 
@@ -89,7 +90,7 @@ class App extends Component {
       description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
-    this.props.history.push("/");
+    this.props.history.push("/schoollist");
   }
 
   setSchool(school){
@@ -102,16 +103,17 @@ class App extends Component {
     }
     return (
         <Layout className="app-container">
-          <AppHeader isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
+          <AppHeader isAuthenticated={this.state.isAuthenticated}
+            currentUser={this.state.currentUser}
             onLogout={this.handleLogout} />
 
           <Content className="app-content">
             <div className="container">
               <Switch>
-                <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+                <Route exact path="/" component={Home} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
