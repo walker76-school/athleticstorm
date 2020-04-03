@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @AllArgsConstructor
 @Data
@@ -72,11 +73,11 @@ public class Team implements Comparable<Team>{
 
     @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
-    private Set<Coach> coaches;
+    private Set<Coach> coaches = new TreeSet<>();
 
     @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
-    private Set<RosterPlayer> rosterPlayers;
+    private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
 
     @Override
     public int compareTo(Team team) {

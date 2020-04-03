@@ -138,7 +138,10 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
                 // get the correct player for this roster player
                 String fullName = rosterPlayer.getFirst_name() + " " + rosterPlayer.getLast_name();
-                Player p = players.stream().filter(x -> x.getName().equals(fullName)).findAny().orElse(null);
+                Player p = players.stream().filter(x -> x.getName().equalsIgnoreCase(fullName)).findAny().orElse(null);
+                if(Objects.isNull(p)){
+                    continue;
+                }
                 RosterPlayer rp = new RosterPlayer(p.getId(), 2019, p, t);
                 t.getRosterPlayers().add(rp);
                 p.getRosterPlayerList().add(rp);
@@ -151,6 +154,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void getPlayerUsage(){
         for(Player p: players) {
             AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
+            if(advancedPlayers.length == 0){
+                continue;
+            }
             Usage u = new Usage(advancedPlayers[0].getUsage(), p);
             p.setUsage(u);
         }
