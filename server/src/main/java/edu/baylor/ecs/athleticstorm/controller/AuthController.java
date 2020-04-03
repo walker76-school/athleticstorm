@@ -28,6 +28,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by rajeevkumarsingh on 02/08/17.
@@ -64,7 +66,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        System.out.println("hey");
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
@@ -83,7 +84,20 @@ public class AuthController {
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
 
-        user.setSubRole((signUpRequest.getRoleName().name()));
+
+        Role newRole = roleRepository.findByName(signUpRequest.getRoleName())
+                .orElseThrow(() -> new AppException("User Role not set."));
+
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(newRole);
+        roleSet.add(userRole);
+
+        //TODO: This is the basis for where the issue lies. If the line with userRole is not commented
+        // out it works fine to sign up and log in, but if newRole is in it doesn't work. The function should
+        // be the same but it just doesn't work. Getting closer....
+        user.setRoles(roleSet);
+
+//        user.setRoles(Collections.singleton(userRole));
 
         User result = userRepository.save(user);
 
