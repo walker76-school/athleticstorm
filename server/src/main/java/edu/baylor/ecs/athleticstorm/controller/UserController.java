@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -25,10 +29,10 @@ public class UserController {
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        System.out.println(currentUser.getAuthorities());
+
+        Set<RoleName> roleNameSet = currentUser.getAuthorities().stream().map(authority -> Enum.valueOf(RoleName.class, authority.getAuthority())).collect(Collectors.toSet());
         // Gets first authority from UserPrincipal's list of authorities to use when creating userSummary
-        return new UserSummary(currentUser.getId(), currentUser.getUsername(),
-                Enum.valueOf(RoleName.class, currentUser.getAuthorities().iterator().next().getAuthority()));
+        return new UserSummary(currentUser.getId(), currentUser.getUsername(), roleNameSet);
     }
 
     @GetMapping("/user/checkUsernameAvailability")
