@@ -21,6 +21,7 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 
 import { Layout, notification } from 'antd';
+import Subscriptions_Page from "../user/subscriptions/subscriptions_page";
 const { Content } = Layout;
 
 class App extends Component {
