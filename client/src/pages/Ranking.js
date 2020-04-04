@@ -29,6 +29,12 @@ const styles = makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    setFontSizeThree: {
+        fontSize: 25 
+    },
+    bold:{
+        fontWeight: 'fontWeightBold'
+    },
     logo: {
         marginTop: theme.spacing(2),
         paddingTop: theme.spacing(2)
@@ -47,11 +53,31 @@ class Ranking extends Component {
             tempCoachDataStorage: []
         };
         this.customCoachData = this.customCoachData.bind(this);
+        this.headcoachSort = this.headcoachSort.bind(this);
+    }
+
+    headcoachSort(event){
+        let sortBy = event.target.value;
+        console.log(event.target.value);
+        if("Alphabetical" === sortBy){
+            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => a.value.last_name > b.value.last_name ? 1 : -1);
+            this.setState({ tempCoachDataStorage: sortedCoaches });
+        }else if("Win %" === sortBy){
+            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => a.value.winPerc < b.value.winPerc ? 1 : -1);
+            this.setState({ tempCoachDataStorage: sortedCoaches });
+        }else if("Most Wins" === sortBy){
+            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => parseInt(a.value.wins,10) < parseInt(b.value.wins,10) ? 1 : -1);
+            this.setState({ tempCoachDataStorage: sortedCoaches });
+        }else if("Coach Grade" === sortBy){
+         
+        }else{
+            console.log("Invalid Option " + sortBy);
+        }
     }
 
     customCoachData() {
         var coachFinal = [];
-
+        //for (var i = 0; i < 10 && i < this.state.allCoaches.length; i++) {
         for (var i = 0; i < this.state.allCoaches.length; i++) {
             axios.get('http://localhost:8080/api/coaches/record/byName/' + this.state.allCoaches[i].first_name + '-' + this.state.allCoaches[i].last_name)
                 .then(result => {
@@ -67,14 +93,11 @@ class Ranking extends Component {
                     this.setState({ tempCoachDataStorage: tempCoaches });
                 })
         }
+        console.log(this.state.tempCoachDataStorage[0]);
     }
 
     componentDidMount() {
-        // Get List Of FBS Teams From API
-        axios.get('http://localhost:8080/api/teams/fbs')
-            .then(res => {
-                this.setState({ teams: res.data });
-            });
+        
         axios.get('http://localhost:8080/api/coaches/all')
             .then(res => {
                 this.setState({ allCoaches: res.data });
@@ -84,29 +107,29 @@ class Ranking extends Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state.tempCoachDataStorage);
         return (
             <div className={classes.root} >
                 <br />
+                <h1 style={{ backgroundColor: "#3773B0", color: "#ffffff" }}>&nbsp;Rankings
+                        <select style={{ float: 'right', color: "#3773B0" }} onChange={this.headcoachSort}>
+                            <option value="Alphabetical">Alphabetical</option>
+                            <option value="Win %">Win %</option>
+                            <option value="Most Wins">Most Wins</option>
+                            <option value="Coach Grade">Coach Grade</option>
+                        </select>
+                    </h1>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
                     {
                         this.state.tempCoachDataStorage.length > 0 ?
                             this.state.tempCoachDataStorage.map((coach, ndx) => {
                                 return (
-                                    <Grid item xs={3}>
-                                        <Link
-                                            to={{
-                                                pathname: "/coach/" + coach.first_name + " " + coach.last_name,
-                                                state: {}
-                                            }}
-                                            style={{ color: this.state.primaryColor }}
-                                        >
+                                    <Grid item xs={3} key={ndx}>
                                             <StyledPaper classes={classes}>
-                                                {/* <Avatar className={classes.logo} src={team.logos[0]} /> */}
-                                                <Typography>{coach.first_name}</Typography>
-                                                <Typography>{coach.last_name}</Typography>
+                                                {/* <Avatar className={classes.logo} src={team.logos[0]}/> */}
+                                                <Typography>#{ndx+1}</Typography>
+                                                <Typography><b>{coach.value.first_name} {coach.value.last_name}</b></Typography>
+                                                <Typography><b>Wins:</b> {coach.value.wins} <b>Losses:</b> {coach.value.losses}</Typography>
                                             </StyledPaper>
-                                        </Link>
                                     </Grid>
                                 );
                             })
