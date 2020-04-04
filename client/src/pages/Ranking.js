@@ -1,0 +1,158 @@
+import React, { Component } from 'react';
+import {
+    Link,
+    withRouter
+} from 'react-router-dom';
+import '../common/AppHeader.css';
+import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import withStyles from "@material-ui/core/styles/withStyles";
+import { Avatar } from "@material-ui/core";
+
+const styles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    list: {
+        marginTop: theme.spacing(2),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: 80,
+        height: 80,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    logo: {
+        marginTop: theme.spacing(2),
+        paddingTop: theme.spacing(2)
+
+    }
+}));
+
+class Ranking extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            teams: [],
+            allCoaches: [],
+            coachList: [],
+            tempCoachDataStorage: []
+        };
+        this.customCoachData = this.customCoachData.bind(this);
+    }
+
+    customCoachData() {
+        var coachFinal = [];
+
+        for (var i = 0; i < this.state.allCoaches.length; i++) {
+            axios.get('http://localhost:8080/api/coaches/record/byName/' + this.state.allCoaches[i].first_name + '-' + this.state.allCoaches[i].last_name)
+                .then(result => {
+                    // Create a new array based on current state:
+                    var tempCoaches = this.state.tempCoachDataStorage;
+                    // Get win percentage of the coach
+                    var editedCoach = result.data;
+                    editedCoach.winPerc = 100 * result.data.wins / (result.data.losses + result.data.wins + result.data.ties);
+                    // Add item to it
+                    tempCoaches.push({ value: editedCoach });
+
+                    // Set state
+                    this.setState({ tempCoachDataStorage: tempCoaches });
+                })
+        }
+    }
+
+    componentDidMount() {
+        // Get List Of FBS Teams From API
+        axios.get('http://localhost:8080/api/teams/fbs')
+            .then(res => {
+                this.setState({ teams: res.data });
+            });
+        axios.get('http://localhost:8080/api/coaches/all')
+            .then(res => {
+                this.setState({ allCoaches: res.data });
+                this.customCoachData();
+            });
+    }
+
+    render() {
+        const { classes } = this.props;
+        console.log(this.state.tempCoachDataStorage);
+        return (
+            <div className={classes.root} >
+                <br />
+                <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
+                    {
+                        this.state.tempCoachDataStorage.length > 0 ?
+                            this.state.tempCoachDataStorage.map((coach, ndx) => {
+                                return (
+                                    <Grid item xs={3}>
+                                        <Link
+                                            to={{
+                                                pathname: "/coach/" + coach.first_name + " " + coach.last_name,
+                                                state: {}
+                                            }}
+                                            style={{ color: this.state.primaryColor }}
+                                        >
+                                            <StyledPaper classes={classes}>
+                                                {/* <Avatar className={classes.logo} src={team.logos[0]} /> */}
+                                                <Typography>{coach.first_name}</Typography>
+                                                <Typography>{coach.last_name}</Typography>
+                                            </StyledPaper>
+                                        </Link>
+                                    </Grid>
+                                );
+                            })
+                            :
+                            <Typography>
+                               Please wait while we load the coach data.
+                            </Typography>
+                    }
+                </Grid>
+            </div>
+        );
+    }
+}
+
+export default withStyles(styles)(withRouter(Ranking));
+
+class StyledPaper extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            elevation: 1
+        };
+
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
+    }
+
+    onMouseOver() {
+        this.setState({ elevation: 5 });
+    }
+
+    onMouseOut() {
+        this.setState({ elevation: 1 });
+    }
+
+    render() {
+        return (
+            <Paper
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
+                elevation={this.state.elevation}
+                square={true}
+                className={this.props.classes.paper}
+            >
+                {this.props.children}
+            </Paper>
+        );
+    }
+}

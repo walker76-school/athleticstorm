@@ -51,7 +51,9 @@ class School extends Component {
 
         this.loadCoaches = this.loadCoaches.bind(this);
         this.loadPlayers = this.loadPlayers.bind(this);
-        this.coachSort = this.coachSort.bind(this);
+        this.headcoachSort = this.headcoachSort.bind(this);
+        this.OCSort = this.OCSort.bind(this);
+        this.DCSort = this.DCSort.bind(this);
     }
 
     componentDidMount() {
@@ -96,7 +98,7 @@ class School extends Component {
         });
     }
 
-    coachSort(event){
+    headcoachSort(event){
         let sortBy = event.target.value;
         console.log(event.target.value);
         if("Descending" === sortBy){
@@ -120,6 +122,14 @@ class School extends Component {
         }
     }
 
+    OCSort(event){
+        // fill in with headcoach stuff
+    }
+
+    DCSort(event){
+        // fill in with headcoachsort stuff
+    }
+
     render() {
 
         const {classes} = this.props;
@@ -133,8 +143,8 @@ class School extends Component {
                 </div>
 
                 <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Coaches
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.coachSort}>
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.headcoachSort}>
                             <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
@@ -171,6 +181,34 @@ class School extends Component {
                             })
                         }
                     </Grid>
+                </div>
+                <br/>
+                <div>
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.OCSort}>
+                            <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
+                            <option value="Most Recent">Most Recent</option>
+                            <option value="Oldest">Oldest</option>
+                            <option value="Best Score">Best Score</option>
+                            <option value="Worst Score">Worst Score</option>
+                        </select>
+                    </h1>
+                    {/* Grid for Offensive Coordinators */}
+                </div>
+                <br/>
+                <div>
+                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.DCSort}>
+                            <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
+                            <option value="Most Recent">Most Recent</option>
+                            <option value="Oldest">Oldest</option>
+                            <option value="Best Score">Best Score</option>
+                            <option value="Worst Score">Worst Score</option>
+                        </select>
+                    </h1>
+                    {/* Grid for Defensive Coordinators */}
                 </div>
                 <br/>
                 <div>

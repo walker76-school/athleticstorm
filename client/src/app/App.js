@@ -11,6 +11,7 @@ import { ACCESS_TOKEN } from '../constants';
 
 import Home from '../pages/Home';
 import Coach from '../pages/Coach';
+import Ranking from '../pages/Ranking';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
 import School from "../pages/School";
@@ -111,6 +112,7 @@ class App extends Component {
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
