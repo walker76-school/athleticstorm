@@ -12,6 +12,7 @@ import { ACCESS_TOKEN } from '../constants';
 import Home from '../pages/Home';
 import SchoolList from '../pages/SchoolList';
 import Coach from '../pages/Coach';
+import Ranking from '../pages/Ranking';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
 import School from "../pages/School";
@@ -23,6 +24,7 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 
 import { Layout, notification } from 'antd';
+import Subscriptions_Page from "../user/subscriptions/subscriptions_page";
 const { Content } = Layout;
 
 class App extends Component {
@@ -114,6 +116,7 @@ class App extends Component {
                 <Route exact path="/" component={Home} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
+                <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
