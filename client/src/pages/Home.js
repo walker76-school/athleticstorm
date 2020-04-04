@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
-import {
-    Link,
-    withRouter
-} from 'react-router-dom';
-import '../common/AppHeader.css';
-import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import React, {Component} from "react";
+import {Link, withRouter} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Avatar} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import BleachersPic from "./bleachers.jpg";
+import CoachPic from "./coachpic.jpg";
+import Button from "@material-ui/core/Button";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -41,90 +35,38 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teams: []
         };
     }
 
     componentDidMount() {
-        // Get List Of FBS Teams From API
-        axios.get('http://localhost:8080/api/teams/fbs')
-        .then(res => {
-            this.setState({ teams: res.data });
-        });
     }
 
     render() {
-        const { classes } = this.props;
-
         return (
-            <div className={classes.root} >
-                <br/>
-                <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
-                    {
-                        this.state.teams.length > 0 ?
-                            this.state.teams.map((team, ndx) => {
-                                return (
-                                    <Grid item xs={3}>
-                                        <Link
-                                            to={{
-                                                pathname: '/school/' + team.school,
-                                                state: {
-                                                    teamId: team.id
-                                                }
-                                            }}
-                                            style={{ color: this.state.primaryColor }}
-                                        >
-                                            <StyledPaper classes={classes}>
-                                                <Avatar className={classes.logo} src={team.logos[0]}/>
-                                                <Typography>{team.school}</Typography>
-                                            </StyledPaper>
-                                        </Link>
-                                    </Grid>
-                                );
-                            })
-                        :
-                            <Typography>
-                                No teams are available at this time. Please check in later.
-                            </Typography>
-                    }
-                </Grid>
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ marginTop: '50px', backgroundImage: `url(${BleachersPic})`, height: '500px', width: '100%' }}>
+                        <h1 style={{ marginTop: '100px', display: 'flex', justifyContent: 'center', color: 'white', fontSize: '80pt' }}>Athletic Storm</h1>
+                        <h2 style={{ display: 'flex', justifyContent: 'center', color: 'white' }}>Always make the best hire</h2>
+                        <h3 style={{ display: 'flex', justifyContent: 'center', color: 'white' }}>Filter through all of college football to find the right coach for you</h3>
+                    </div>
+                </div>
+                <h3 style={{ marginTop: '50px' }}>Athletic Storm is a college football coach rating system that uses our [name of rating system] algorithm to objectively determine the best coaches in the FBS.</h3>
+                <div style={{ margin: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <Link to={'/login'} style={{ margin: '20px', display: 'flex', justifyContent: 'center' }}>
+                        <Button variant='contained' color='primary'>Log In</Button>
+                    </Link>
+                    <Link to={'/signup'} style={{ margin: '20px', display: 'flex', justifyContent: 'center' }}>
+                        <Button variant='contained' color='primary'>Sign Up</Button>
+                    </Link>
+                </div>
+                <div>
+                    <h1 style={{ display: 'flex', justifyContent: 'center' }}>Coach rating system</h1>
+                    <h3>(Michael/Shaeffer can fill this part out more specifically than I can) - Make it sensational and buzzwordy</h3>
+                </div>
             </div>
         );
     }
 }
 
 export default withStyles(styles)(withRouter(Home));
-
-class StyledPaper extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            elevation: 1
-        };
-
-        this.onMouseOver = this.onMouseOver.bind(this);
-        this.onMouseOut = this.onMouseOut.bind(this);
-    }
-
-    onMouseOver(){
-        this.setState({ elevation: 5 });
-    }
-
-    onMouseOut(){
-        this.setState({ elevation: 1 });
-    }
-
-    render() {
-        return (
-            <Paper
-                onMouseOver={this.onMouseOver}
-                onMouseOut={this.onMouseOut}
-                elevation={this.state.elevation}
-                square={true}
-                className={this.props.classes.paper}
-            >
-                {this.props.children}
-            </Paper>
-        );
-    }
-}

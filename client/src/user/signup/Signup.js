@@ -8,6 +8,7 @@ import {
 } from '../../constants';
 
 import { Form, Input, Button, notification } from 'antd';
+import Subscription_List from "../subscriptions/subscription_list";
 const FormItem = Form.Item;
 
 class Signup extends Component {
@@ -19,13 +20,18 @@ class Signup extends Component {
             },
             password: {
                 value: ''
-            }
+            },
+            roleName: {
+                value: ''
+            },
+            renderSubscription: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateUsernameAvailability = this.validateUsernameAvailability.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
+        this.handleNext = this.handleNext.bind(this);
     }
 
     handleInputChange(event, validationFun) {
@@ -41,19 +47,19 @@ class Signup extends Component {
         });
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-    
+    handleSubmit(roleVal) {
+
         const signupRequest = {
             username: this.state.username.value,
-            password: this.state.password.value
+            password: this.state.password.value,
+            roleName: roleVal
         };
         signup(signupRequest)
         .then(response => {
             notification.success({
                 message: 'Athletic Storm',
                 description: "Thank you! You're successfully registered. Please Login to continue!",
-            });          
+            });
             this.props.history.push("/login");
         }).catch(error => {
             notification.error({
@@ -61,6 +67,10 @@ class Signup extends Component {
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
         });
+    }
+
+    handleNext(event) {
+        this.setState({renderSubscription: true})
     }
 
     isFormInvalid() {
@@ -72,46 +82,53 @@ class Signup extends Component {
 
     render() {
         return (
-            <div className="signup-container">
-                <h1 className="page-title">Sign Up</h1>
-                <div className="signup-content">
-                    <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <FormItem label="Username"
-                            hasFeedback
-                            validateStatus={this.state.username.validateStatus}
-                            help={this.state.username.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="username" 
-                                autoComplete="off"
-                                placeholder="A unique username"
-                                value={this.state.username.value} 
-                                onBlur={this.validateUsernameAvailability}
-                                onChange={(event) => this.handleInputChange(event, this.validateUsername)} />    
-                        </FormItem>
-                        <FormItem 
-                            label="Password"
-                            validateStatus={this.state.password.validateStatus}
-                            help={this.state.password.errorMsg}>
-                            <Input 
-                                size="large"
-                                name="password" 
-                                type="password"
-                                autoComplete="off"
-                                placeholder="A password between 6 to 20 characters" 
-                                value={this.state.password.value} 
-                                onChange={(event) => this.handleInputChange(event, this.validatePassword)} />    
-                        </FormItem>
-                        <FormItem>
-                            <Button type="primary" 
-                                htmlType="submit" 
-                                size="large" 
-                                className="signup-form-button"
-                                disabled={this.isFormInvalid()}>Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
-                        </FormItem>
-                    </Form>
-                </div>
+            <div>
+                {!this.state.renderSubscription &&  <div className="signup-container">
+                    <h1 className="page-title">Sign Up</h1>
+                    <div className="signup-content">
+                        <Form className="signup-form">
+                            <FormItem label="Username"
+                                hasFeedback
+                                validateStatus={this.state.username.validateStatus}
+                                help={this.state.username.errorMsg}>
+                                <Input
+                                    size="large"
+                                    name="username"
+                                    autoComplete="off"
+                                    placeholder="A unique username"
+                                    value={this.state.username.value}
+                                    onBlur={this.validateUsernameAvailability}
+                                    onChange={(event) => this.handleInputChange(event, this.validateUsername)} />
+                            </FormItem>
+                            <FormItem
+                                label="Password"
+                                validateStatus={this.state.password.validateStatus}
+                                help={this.state.password.errorMsg}>
+                                <Input
+                                    size="large"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="off"
+                                    placeholder="A password between 6 to 20 characters"
+                                    value={this.state.password.value}
+                                    onChange={(event) => this.handleInputChange(event, this.validatePassword)} />
+                            </FormItem>
+                            <FormItem>
+                                <Button type="primary"
+                                    htmlType="submit"
+                                    size="large"
+                                    className="signup-form-button"
+                                    disabled={this.isFormInvalid()}
+                                    onClick={this.handleNext}>Next</Button>
+                                Already registed? <Link to="/login">Login now!</Link>
+                            </FormItem>
+                        </Form>
+                    </div>
+                </div> }
+
+                {this.state.renderSubscription &&
+                    <Subscription_List handleSubmit={this.handleSubmit}/>
+                        }
             </div>
         );
     }

@@ -4,15 +4,21 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.1",
+    "@material-ui/icons": "^4.9.1",
     "antd": "^3.2.2",
     "axios": "^0.19.2",
+    "bootstrap": "^4.1.1",
+    "css-loader": "0.28.4",
+    "node-sass-chokidar": "0.0.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-minimal-pie-chart": "^6.0.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.5"
+    "react-scripts": "1.1.5",
+    "redux": "^4.0.5"
   },
   "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
@@ -21,6 +27,7 @@
   "devDependencies": {
     "babel-plugin-import": "^1.6.5",
     "react-app-rewire-less": "^2.1.0",
-    "react-app-rewired": "^1.4.1"
+    "react-app-rewired": "^1.4.1",
+    "react-redux": "^7.1.3"
   }
 }

@@ -36,6 +36,29 @@ public class TeamColorPopulator implements ApplicationListener<ContextRefreshedE
 //
 //        saveTeamColors();
 //        setupComplete = true;
+
+        // see if already done or colors already exist in the DB
+        if(setupComplete || colorRepository.count() > 0){
+            setupComplete = true;
+            return;
+        }
+
+//        saveTeamColors();
+        setupComplete = true;
+    }
+
+//    @Transactional
+//    public void saveTeamColors(){
+//        RestTemplate restTemplate = new RestTemplate();
+//        TeamColorRequest[] result = restTemplate.getForObject(TEAM_URL, TeamColorRequest[].class);
+//        for(TeamColorRequest color : result){
+//            saveTeamColor(new Color(color.getSchool(), color.getColor(), color.getAlt_color(), color.getLogos()[0]));
+//        }
+//    }
+
+    @Transactional
+    public void saveTeamColor(Color color){
+        colorRepository.save(color);
     }
 //
 //    @Transactional

@@ -1,10 +1,4 @@
 {
-<<<<<<< HEAD
-  "requires": true,
-  "lockfileVersion": 1,
-  "dependencies": {
-=======
-<<<<<<< HEAD
   "requires": true,
   "lockfileVersion": 1,
   "dependencies": {
@@ -163,14 +157,11 @@
       "resolved": "https://registry.npmjs.org/is-in-browser/-/is-in-browser-1.1.3.tgz",
       "integrity": "sha1-Vv9NtoOgeMYILrldrX3GLh0E+DU="
     },
->>>>>>> 9c411e692520796265947df9acc9c931ff349cbf
     "js-tokens": {
       "version": "4.0.0",
       "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
       "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
     },
-<<<<<<< HEAD
-=======
     "jss": {
       "version": "10.0.4",
       "resolved": "https://registry.npmjs.org/jss/-/jss-10.0.4.tgz",
@@ -248,7 +239,6 @@
         "jss": "10.0.4"
       }
     },
->>>>>>> 9c411e692520796265947df9acc9c931ff349cbf
     "loose-envify": {
       "version": "1.4.0",
       "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz",
@@ -257,27 +247,21 @@
         "js-tokens": "^3.0.0 || ^4.0.0"
       }
     },
-<<<<<<< HEAD
-=======
     "normalize-scroll-left": {
       "version": "0.2.0",
       "resolved": "https://registry.npmjs.org/normalize-scroll-left/-/normalize-scroll-left-0.2.0.tgz",
       "integrity": "sha512-t5oCENZJl8TGusJKoCJm7+asaSsPuNmK6+iEjrZ5TyBj2f02brCRsd4c83hwtu+e5d4LCSBZ0uoDlMjBo+A8yA=="
     },
->>>>>>> 9c411e692520796265947df9acc9c931ff349cbf
     "object-assign": {
       "version": "4.1.1",
       "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz",
       "integrity": "sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM="
     },
-<<<<<<< HEAD
-=======
     "popper.js": {
       "version": "1.16.1",
       "resolved": "https://registry.npmjs.org/popper.js/-/popper.js-1.16.1.tgz",
       "integrity": "sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ=="
     },
->>>>>>> 9c411e692520796265947df9acc9c931ff349cbf
     "prop-types": {
       "version": "15.7.2",
       "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz",
@@ -289,21 +273,6 @@
       }
     },
     "react-is": {
-<<<<<<< HEAD
-      "version": "16.13.1",
-      "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
-      "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
-    },
-    "react-minimal-pie-chart": {
-      "version": "6.0.1",
-      "resolved": "https://registry.npmjs.org/react-minimal-pie-chart/-/react-minimal-pie-chart-6.0.1.tgz",
-      "integrity": "sha512-AlnZn2TjgX7Rm9E4SlV4iZphJVx8r3cojhm/VAzxuJMOevizCAxbSKhBlYjmmRtCNAWBX6JlALaPkOpEaPBFMQ==",
-      "requires": {
-        "prop-types": "^15.5.7"
-      }
-    }
-  }
-=======
       "version": "16.12.0",
       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.12.0.tgz",
       "integrity": "sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q=="
@@ -330,8 +299,4 @@
       "integrity": "sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA=="
     }
   }
-=======
-  "lockfileVersion": 1
->>>>>>> master
->>>>>>> 9c411e692520796265947df9acc9c931ff349cbf
 }
