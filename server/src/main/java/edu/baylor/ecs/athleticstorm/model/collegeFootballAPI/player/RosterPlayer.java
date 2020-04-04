@@ -46,6 +46,11 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Exclude
     private Team team;
 
+    public RosterPlayer(Long id, Team t) {
+        this.id = new Long(id);
+        this.team = t;
+    }
+
     @Override
     public int compareTo(RosterPlayer rosterPlayer) {
         int idCompare = this.id.compareTo(rosterPlayer.getId());

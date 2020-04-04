@@ -4,6 +4,7 @@ import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.TreeSet;
 @Entity(name = "Coach")
 @Table(name = "COACH")
 @EqualsAndHashCode
+@NoArgsConstructor
 public class Coach implements Comparable<Coach> {
 
     @Id

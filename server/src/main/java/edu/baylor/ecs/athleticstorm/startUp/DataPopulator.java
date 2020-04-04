@@ -11,7 +11,12 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Usage;
+import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.CoachRepository;
+import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.PlayerRepository;
+import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.RosterPlayerRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -33,11 +38,22 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Autowired
     private RestTemplate restTemplate;
 
+    Logger logger = LoggerFactory.logger(DataPopulator.class);
+
     // shows if the DB setup is done
     private static boolean setupComplete = false;
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @Autowired
+    private CoachRepository coachRepository;
+
+    @Autowired
+    private RosterPlayerRepository rosterPlayerRepository;
 
     private Set<Team> teams = null;
     private Set<Player> players = null;
@@ -59,6 +75,8 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Transactional
     public void setup(){
 
+        logger.info("Beginning Setup");
+
         // get all of the teams
         teams = getTeams();
 
@@ -68,44 +86,67 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         // get all of the playres
         players = getPlayers();
 
-        // save each season
-        saveSeasons();
 
         // get all of the team rosters
         getTeamRosters();
 
         // get all of the usage stats for players
-        getPlayerUsage();
+        //getPlayerUsage();
 
-        persist();
+        logger.info("End Setup");
 
         setupComplete = true;
     }
 
     @Transactional
     public Set<Team> getTeams(){
-        TeamDTO[] teams = restTemplate.getForObject(TEAM_URL, TeamDTO[].class);
-        return new TreeSet<>(Arrays.stream(teams).map(Team::new).collect(Collectors.toList()));
+        logger.info("Getting teams");
+        if(teamRepository.count() == 0) {
+            TeamDTO[] teams = restTemplate.getForObject(TEAM_URL, TeamDTO[].class);
+            List<Team> t = Arrays.stream(teams).map(Team::new).collect(Collectors.toList());
+            teamRepository.saveAll(t);
+            teamRepository.flush();
+            return new TreeSet<>(t);
+        }else{
+            return new TreeSet<>(teamRepository.findAll());
+        }
     }
 
     @Transactional
     public Set<Coach> getCoaches(){
-        CoachDTO[] coaches = restTemplate.getForObject(COACH_URL, CoachDTO[].class);
-        return new TreeSet<>(Arrays.stream(coaches).map(Coach::new).collect(Collectors.toList()));
+        logger.info("Getting coaches");
+        if(coachRepository.count() == 0) {
+            CoachDTO[] coachDTOS = restTemplate.getForObject(COACH_URL, CoachDTO[].class);
+            List<Coach> c = Arrays.stream(coachDTOS).map(Coach::new).collect(Collectors.toList());
+            coaches = new TreeSet<Coach>(c);
+            saveSeasons();
+            coachRepository.saveAll(coaches);
+            coachRepository.flush();
+            return coaches;
+        }else{
+            return new TreeSet<>(coachRepository.findAll());
+        }
     }
 
     @Transactional
     public Set<Player> getPlayers(){
-        Set<Player> toReturn = new TreeSet<>();
-        for(Team t: teams){
-            PlayerDTO[] players = restTemplate.getForObject(playerByFullNameAndTeam("%", t.getSchool()), PlayerDTO[].class);
-            toReturn.addAll(Arrays.stream(players).map(Player::new).collect(Collectors.toList()));
+        logger.info("Getting players");
+        if(playerRepository.count() == 0) {
+            Set<Player> toReturn = new TreeSet<>();
+            for (Team t : teams) {
+                PlayerDTO[] players = restTemplate.getForObject(playerByFullNameAndTeam("%", t.getSchool()), PlayerDTO[].class);
+                toReturn.addAll(Arrays.stream(players).map(Player::new).collect(Collectors.toList()));
+            }
+            playerRepository.saveAll(toReturn);
+            playerRepository.flush();
+            return toReturn;
         }
-        return toReturn;
+        return new TreeSet<>(playerRepository.findAll());
     }
 
     @Transactional
     public void saveSeasons(){
+        logger.info("Getting seasons");
         for(Coach c: coaches){
             if(c.getSeasons().isEmpty()){
                 continue;
@@ -127,6 +168,11 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void getTeamRosters(){
+        logger.info("Getting rosters");
+        if(rosterPlayerRepository.count() > 0){
+            rosterPlayers = new TreeSet<>(rosterPlayerRepository.findAll());
+            return;
+        }
         for(Team t : teams){
             String url = Objects.requireNonNull(rosterByTeamAndYear(t.getSchool(), null));
             RosterPlayerDTO[] rosterPlayerDTOS = restTemplate.getForObject(url, RosterPlayerDTO[].class);
@@ -148,10 +194,13 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 rosterPlayers.add(rp);
             }
         }
+        rosterPlayerRepository.saveAll(rosterPlayers);
+        rosterPlayerRepository.flush();
     }
 
     @Transactional
     public void getPlayerUsage(){
+        logger.info("Getting player usage");
         for(Player p: players) {
             AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
             if(advancedPlayers.length == 0){
@@ -160,11 +209,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             Usage u = new Usage(advancedPlayers[0].getUsage(), p);
             p.setUsage(u);
         }
-    }
-
-    @Transactional
-    public void persist(){
-        teamRepository.saveAll(teams);
     }
 
 }
