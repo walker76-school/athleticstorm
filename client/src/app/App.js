@@ -15,6 +15,7 @@ import Coach from '../pages/Coach';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
 import School from "../pages/School";
+import Team from "../pages/Team";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import AppFooter from '../common/AppFooter';
@@ -117,6 +118,7 @@ class App extends Component {
                 <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+                <Route path="/team" component={Team}/>
                 <Route component={NotFound}/>
               </Switch>
             </div>
