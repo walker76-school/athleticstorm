@@ -38,13 +38,13 @@ public class TeamColorPopulator implements ApplicationListener<ContextRefreshedE
 //        setupComplete = true;
 
         // see if already done or colors already exist in the DB
-        if(setupComplete || colorRepository.count() > 0){
-            setupComplete = true;
-            return;
-        }
-
-//        saveTeamColors();
-        setupComplete = true;
+//        if(setupComplete || colorRepository.count() > 0){
+//            setupComplete = true;
+//            return;
+//        }
+//
+////        saveTeamColors();
+//        setupComplete = true;
     }
 
 //    @Transactional
@@ -56,10 +56,10 @@ public class TeamColorPopulator implements ApplicationListener<ContextRefreshedE
 //        }
 //    }
 
-    @Transactional
-    public void saveTeamColor(Color color){
-        colorRepository.save(color);
-    }
+//    @Transactional
+//    public void saveTeamColor(Color color){
+//        colorRepository.save(color);
+//    }
 //
 //    @Transactional
 //    public void saveTeamColors(){
