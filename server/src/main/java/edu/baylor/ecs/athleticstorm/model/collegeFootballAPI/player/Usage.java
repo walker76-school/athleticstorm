@@ -23,7 +23,7 @@ public class Usage {
     private Long id;
 
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "PLAYER_ID")
+    @MapsId
     @EqualsAndHashCode.Exclude
     private Player player;
 
@@ -62,6 +62,7 @@ public class Usage {
     public Usage(AdvancedPlayerDTO.UsageDTO usageDTO, Player p){
         this.id = p.getId();
         this.player = p;
+        p.setUsage(this);
         this.overall = usageDTO.getOverall();
         this.pass = usageDTO.getPass();
         this.rush = usageDTO.getRush();

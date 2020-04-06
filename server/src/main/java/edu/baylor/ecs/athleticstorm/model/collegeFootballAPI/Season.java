@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
+import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 @AllArgsConstructor
 @Data
@@ -37,7 +39,7 @@ public class Season implements Comparable<Season> {
 
     @ManyToMany(mappedBy = "seasons")
     @EqualsAndHashCode.Exclude
-    private Set<Coach> coaches;
+    private Set<Coach> coaches = new TreeSet<>();
 
     @Column(name = "GAMES")
     @EqualsAndHashCode.Exclude
@@ -67,5 +69,16 @@ public class Season implements Comparable<Season> {
     public int compareTo(Season season) {
         int schoolCompare = this.school.compareTo(season.getSchool());
         return schoolCompare != 0 ? schoolCompare : this.year.compareTo(season.getYear());
+    }
+
+    public Season(SeasonDTO s){
+        this.games = s.getGames();
+        this.wins = s.getWins();
+        this.losses = s.getLosses();
+        this.ties = s.getTies();
+        this.preseason_rank = s.getPreseason_rank();
+        this.postseason_rank = s.getPostseason_rank();
+        this.year = s.getYear();
+        this.school = s.getSchool();
     }
 }

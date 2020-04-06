@@ -37,7 +37,8 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     private Integer year;
 
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
+    @MapsId
     @EqualsAndHashCode.Exclude
     private Player player;
 

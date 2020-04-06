@@ -1,6 +1,7 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
+import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,7 +48,14 @@ public class Coach implements Comparable<Coach> {
         return this.name.compareTo(coach.getName());
     }
 
-    public Coach(CoachDTO coach){
+    public Coach(CoachDTO coach, Set<Season> seasons){
         this.name = coach.getFirst_name() + " " + coach.getLast_name();
+
+        for(SeasonDTO seasonDTO: coach.getSeasons()){
+            Season s = seasons.stream().filter(x -> x.getSchool().equalsIgnoreCase(seasonDTO.getSchool()) && x.getYear() == seasonDTO.getYear()).findAny().orElse(new Season(seasonDTO));
+            seasons.add(s);
+            s.getCoaches().add(this);
+            this.getSeasons().add(s);
+        }
     }
 }
