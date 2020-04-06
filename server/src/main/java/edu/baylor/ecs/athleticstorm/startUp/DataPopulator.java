@@ -145,20 +145,17 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void saveSeasons(){
         logger.info("Getting seasons");
         for(Coach c: coaches){
-            if(c.getSeasons().isEmpty()){
+            Season record = c.getSeasons().stream().filter(x -> x.getYear() == 2019).findAny().orElse(null);
+            if(Objects.isNull(record) || c.getSeasons().isEmpty()){
                 continue;
-            }
-            Season record = null;
-            for(Season s : c.getSeasons()){
-                record = s;
-                s.getCoaches().add(c);
             }
 
             //find the team for this coach
             Season finalRecord = record;
-            Team t = teams.stream().filter(x -> x.equals(finalRecord.getSchool())).findFirst().orElse(null);
+            Team t = teams.stream().filter(x -> x.getSchool().equals(finalRecord.getSchool())).findFirst().orElse(null);
 
             c.setTeam(t);
+            assert t != null;
             t.getCoaches().add(c);
         }
     }
@@ -217,11 +214,15 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         if(usageRepository.count() > 0){
             return;
         }
+        int count = 0;
         logger.info("Getting player usage");
         for(Player p: players) {
             AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
             if(advancedPlayers.length == 0){
                 continue;
+            }
+            if(count++ > 10){
+                break;
             }
             logger.info(Arrays.toString(advancedPlayers));
             Usage u = new Usage(advancedPlayers[0].getUsage(), p);
