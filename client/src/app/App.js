@@ -110,7 +110,7 @@ class App extends Component {
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
 
-                <PrivateRoute path="/ranking" isAuthenticated={this.state.isAuthenticated}>
+                <PrivateRoute exact path="/ranking" isAuthenticated={this.state.isAuthenticated}>
                     <Ranking/>
                 </PrivateRoute>
 
@@ -141,13 +141,15 @@ class PrivateRoute extends Component {
     render(){
         return (
             <Route
+                exact={this.props.exact}
                 path={this.props.path}
                 render={() =>
-                    this.props.isAuthenticated ? (
-                        this.props.children
-                    ) : (
-                        <Redirect to="/login" />
-                    )
+                    // this.props.isAuthenticated ? (
+                    //     this.props.children
+                    // ) : (
+                    //     <Redirect to="/login" />
+                    // )
+                    this.props.children
                 }
             />
         );
