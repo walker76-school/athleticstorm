@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import {
-  Route,
-  withRouter,
-  Switch
+    Route,
+    withRouter,
+    Switch, Redirect
 } from 'react-router-dom';
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
@@ -109,11 +109,23 @@ class App extends Component {
                 <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated}  {...props} />} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-                <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
-                <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
-                <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
-                <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
-                <Route component={NotFound}/>
+
+                <PrivateRoute path="/ranking" isAuthenticated={this.state.isAuthenticated}>
+                    <Ranking/>
+                </PrivateRoute>
+
+                <PrivateRoute path="/school/:schoolName" isAuthenticated={this.state.isAuthenticated}>
+                    <School/>
+                </PrivateRoute>
+
+                <PrivateRoute path="/coach/:coachName" isAuthenticated={this.state.isAuthenticated}>
+                    <Coach/>
+                </PrivateRoute>
+
+                <PrivateRoute path="/player/:id" isAuthenticated={this.state.isAuthenticated}>
+                    <Player/>
+                </PrivateRoute>
+                  <Route component={NotFound}/>
               </Switch>
             </div>
           </Content>
@@ -123,3 +135,21 @@ class App extends Component {
 }
 
 export default withRouter(App);
+
+class PrivateRoute extends Component {
+
+    render(){
+        return (
+            <Route
+                path={this.props.path}
+                render={() =>
+                    this.props.isAuthenticated ? (
+                        this.props.children
+                    ) : (
+                        <Redirect to="/login" />
+                    )
+                }
+            />
+        );
+    }
+}
