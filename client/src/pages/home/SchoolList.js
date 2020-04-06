@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import {
-    Link,
-    withRouter
-} from 'react-router-dom';
-import '../common/AppHeader.css';
+import {Link} from 'react-router-dom';
+import '../../common/AppHeader.css';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -93,7 +90,7 @@ class SchoolList extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(SchoolList));
+export default withStyles(styles)(SchoolList);
 
 class StyledPaper extends Component {
     constructor(props){
