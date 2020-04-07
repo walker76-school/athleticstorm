@@ -11,11 +11,13 @@
     "css-loader": "0.28.4",
     "node-sass-chokidar": "0.0.3",
     "react": "^16.5.2",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.5.2",
     "react-minimal-pie-chart": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

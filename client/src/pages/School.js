@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import Cookies from 'universal-cookie';
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
+import SubscriptionError from "./Subscription_Error";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -34,6 +36,10 @@ const styles = makeStyles(theme => ({
 
     }
 }));
+
+let unlocked = true;
+
+const cookies = new Cookies();
 
 class School extends Component {
 
@@ -70,6 +76,18 @@ class School extends Component {
                 this.loadCoaches();
                 this.loadPlayers(this.state.year);
             });
+            // Add team to teams_visited if it's not already there and decrease teams available to visit.
+            // If team has already been visited by user, no change is necessary
+            if(!cookies.get('Teams_visited').find(element => element === result.data.school)) {
+                if(cookies.get('Num_teams') > 0) {
+                    cookies.set('Num_teams', cookies.get('Num_teams') - 1);
+                    let teamsVisited = cookies.get('Teams_visited');
+                    teamsVisited.push(result.data.school);
+                    cookies.set('Teams_visited', teamsVisited);
+                } else{
+                    unlocked = false;
+                }
+            }
         });
     }
 
@@ -136,43 +154,124 @@ class School extends Component {
 
         return (
             <div>
-                <br/>
+                { unlocked &&
                 <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{this.state.schoolName}</h1>
-                    <img src={this.state.logo} width="100" height="100" alt="Logo" />
-                </div>
+                    <br/>
+                    <div>
+                        <h1 style={{
+                            backgroundColor: this.state.primaryColor,
+                            color: "#ffffff"
+                        }}>&nbsp;{this.state.schoolName}</h1>
+                        <img src={this.state.logo} width="100" height="100" alt="Logo"/>
+                    </div>
 
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.headcoachSort}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Head Coaches
+                            <select style={{float: 'right', color: this.state.primaryColor}}
+                                    onChange={this.headcoachSort}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        <Grid container align="center" justify="left" spacing={3} className={classes.list}>
+                            {
+                                this.state.coaches.map((coach, ndx) => {
+                                    return (
+                                        <Grid item xs={3}>
+                                            <Link
+                                                to={{
+                                                    pathname: "/coach/" + coach.first_name + " " + coach.last_name,
+                                                    state: {
+                                                        first_name: coach.first_name,
+                                                        last_name: coach.last_name,
+                                                    }
+                                                }}
+                                                style={{color: this.state.primaryColor}}
+                                            >
+                                                <StyledPaper classes={classes}>
+                                                    <Avatar className={classes.logo} src={logo}/>
+                                                    <Typography>
+                                                        {coach.first_name + " " + coach.last_name} <br/>
+                                                        {coach.seasons.length === 1 ? coach.seasons[0].year : coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year}
+                                                    </Typography>
+                                                </StyledPaper>
+                                            </Link>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                        </Grid>
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Offensive
+                            Coordinators
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={this.OCSort}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        {/* Grid for Offensive Coordinators */}
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Defensive
+                            Coordinators
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={this.DCSort}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        {/* Grid for Defensive Coordinators */}
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Players
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
+                                this.loadPlayers(event.target.value)
+                            }}>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                            </select>
+                        </h1>
+                    </div>
                     <Grid container align="center" justify="left" spacing={3} className={classes.list}>
                         {
-                            this.state.coaches.map((coach, ndx) => {
+                            // Limit number of players based on subscription tier
+                            this.state.players.slice(0, cookies.get('Num_players')).map((player, ndx) => {
                                 return (
                                     <Grid item xs={3}>
                                         <Link
                                             to={{
-                                                pathname: "/coach/" + coach.first_name + " " + coach.last_name,
+                                                pathname: `/player/${player.first_name} ${player.last_name}`,
                                                 state: {
-                                                    first_name: coach.first_name,
-                                                    last_name: coach.last_name,
+                                                    teamdId: this.state.teamId,
+                                                    playerId: player.id,
+                                                    first_name: player.first_name,
+                                                    last_name: player.last_name,
+                                                    year: this.state.year,
                                                 }
                                             }}
-                                            style={{ color: this.state.primaryColor }}
-                                        >
+                                            style={{color: this.state.primaryColor}}>
                                             <StyledPaper classes={classes}>
                                                 <Avatar className={classes.logo} src={logo}/>
                                                 <Typography>
-                                                    {coach.first_name + " " + coach.last_name} <br/>
-                                                    {coach.seasons.length === 1 ? coach.seasons[0].year : coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year}
+                                                    {player.first_name + " " + player.last_name} <br/>
+                                                    {player.position ? player.position + " " + this.state.year : this.state.year}
                                                 </Typography>
                                             </StyledPaper>
                                         </Link>
@@ -182,75 +281,8 @@ class School extends Component {
                         }
                     </Grid>
                 </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.OCSort}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
-                    {/* Grid for Offensive Coordinators */}
-                </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.DCSort}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
-                    {/* Grid for Defensive Coordinators */}
-                </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Players
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.loadPlayers(event.target.value)}}>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                        </select>
-                    </h1>
-                </div>
-                <Grid container align="center" justify="left" spacing={3} className={classes.list}>
-                    {
-                        this.state.players.map((player, ndx) => {
-                            return (
-                                <Grid item xs={3}>
-                                    <Link
-                                        to={{
-                                            pathname: `/player/${player.first_name} ${player.last_name}`,
-                                            state: {
-                                                teamdId: this.state.teamId,
-                                                playerId: player.id,
-                                                first_name: player.first_name,
-                                                last_name: player.last_name,
-                                                year: this.state.year,
-                                            }
-                                        }}
-                                        style={{ color: this.state.primaryColor }} >
-                                        <StyledPaper classes={classes}>
-                                            <Avatar className={classes.logo} src={logo}/>
-                                            <Typography>
-                                                {player.first_name + " " + player.last_name} <br/>
-                                                {player.position ? player.position + " " + this.state.year : this.state.year}
-                                            </Typography>
-                                        </StyledPaper>
-                                    </Link>
-                                </Grid>
-                            );
-                        })
-                    }
-                </Grid>
+                }
+                {!unlocked && <SubscriptionError/>}
             </div>
         );
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Cookies from 'universal-cookie';
 import './App.css';
 import {
   Route,
@@ -7,7 +8,7 @@ import {
 } from 'react-router-dom';
 
 import { getCurrentUser } from '../util/APIUtils';
-import { ACCESS_TOKEN } from '../constants';
+import {ACCESS_TOKEN, SUBSCRIPTION_TEAM_MAPPING, SUBSCRIPTION_PLAYER_MAPPING} from '../constants';
 
 import Home from '../pages/Home';
 import SchoolList from '../pages/SchoolList';
@@ -19,11 +20,14 @@ import School from "../pages/School";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
+import SubscriptionError from "../pages/Subscription_Error";
 import LoadingIndicator from '../common/LoadingIndicator';
 
 import { Layout, notification } from 'antd';
 import Subscriptions_Page from "../user/subscriptions/subscriptions_page";
+import Subscription_List from "../user/subscriptions/subscription_list";
 const { Content } = Layout;
+const cookies = new Cookies();
 
 class App extends Component {
   constructor(props) {
@@ -90,7 +94,34 @@ class App extends Component {
       message: 'Athletic Storm',
       description: "You're successfully logged in.",
     });
-    this.loadCurrentUser();
+
+    // Accomplishes the same task as loadCurrentUser, but only sets cookies when first logging in.
+    // Otherwise, cookies would reload every time page is refreshed.
+    this.setState({
+      isLoading: true
+    });
+    getCurrentUser()
+        .then(response => {
+          this.setState({
+            currentUser: response,
+            isAuthenticated: true,
+            isLoading: false
+          });
+          let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
+          let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
+          if(!numTeams) {
+            numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
+            numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
+          }
+          console.log(numTeams);
+          cookies.set('Num_teams', 1);
+          cookies.set('Teams_visited', []);
+          cookies.set('Num_players', numPlayers);
+        }).catch(error => {
+      this.setState({
+        isLoading: false
+      });
+    });
     this.props.history.push("/schoollist");
   }
 
@@ -116,7 +147,8 @@ class App extends Component {
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
-                <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
+                  <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
+                <Route path="/SubscriptionError" render={(props) => <SubscriptionError {...props}/>}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route component={NotFound}/>

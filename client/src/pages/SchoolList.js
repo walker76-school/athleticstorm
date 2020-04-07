@@ -11,6 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Avatar} from "@material-ui/core";
+import Cookies from 'universal-cookie';
+import LockIcon from '../common/LockIcon.png';
+import {notification} from "antd";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -31,10 +34,12 @@ const styles = makeStyles(theme => ({
     },
     logo: {
         marginTop: theme.spacing(2),
-        paddingTop: theme.spacing(2)
-
+        paddingTop: theme.spacing(2),
+        opacity: 0.1
     }
 }));
+
+const cookies = new Cookies();
 
 class SchoolList extends Component {
 
@@ -53,6 +58,13 @@ class SchoolList extends Component {
         });
     }
 
+    onClickLock() {
+        notification.error({
+            message: 'Athletic Storm',
+            description: 'You must upgrade your subscription to access more teams.'
+        });
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -63,22 +75,36 @@ class SchoolList extends Component {
                     {
                         this.state.teams.length > 0 ?
                             this.state.teams.map((team, ndx) => {
+
+                                let unlocked = (cookies.get('Num_teams') > 0 || cookies.get('Teams_visited').find(element => element === team.school));
                                 return (
                                     <Grid item xs={3}>
-                                        <Link
-                                            to={{
-                                                pathname: '/school/' + team.school,
-                                                state: {
-                                                    teamId: team.id
-                                                }
-                                            }}
-                                            style={{ color: this.state.primaryColor }}
-                                        >
-                                            <StyledPaper classes={classes}>
-                                                <Avatar className={classes.logo} src={team.logos[0]}/>
-                                                <Typography>{team.school}</Typography>
-                                            </StyledPaper>
-                                        </Link>
+                                        { unlocked &&
+                                            <Link
+                                                to={{
+                                                    pathname: '/school/' + team.school,
+                                                    state: {
+                                                        teamId: team.id
+                                                    }
+                                                }}
+                                                style={{color: this.state.primaryColor}}
+                                            >
+                                                <StyledPaper classes={classes}>
+                                                    { unlocked && <Avatar className={classes.logo} src={team.logos[0]}/>}
+                                                    { !unlocked && <Avatar className={classes.logo} src={LockIcon}/>}
+                                                    <Typography>{team.school}</Typography>
+                                                </StyledPaper>
+                                            </Link>
+                                        }
+                                        {!unlocked &&
+                                            <div style={{cursor:'pointer'}} onClick={this.onClickLock}>
+                                                <StyledPaper classes={classes}>
+                                                    <Avatar className={classes.logo} src={LockIcon}/>
+                                                    <Typography>{team.school}</Typography>
+                                                </StyledPaper>
+                                            </div>
+                                        }
+
                                     </Grid>
                                 );
                             })
