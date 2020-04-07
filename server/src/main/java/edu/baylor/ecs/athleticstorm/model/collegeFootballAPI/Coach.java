@@ -36,7 +36,7 @@ public class Coach implements Comparable<Coach> {
     @EqualsAndHashCode.Exclude
     private Set<Season> seasons = new TreeSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
     private Team team = null;

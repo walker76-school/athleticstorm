@@ -64,11 +64,11 @@ public class Player implements Comparable<Player>{
     @EqualsAndHashCode.Exclude
     private String teamColor;
 
-    @OneToOne(mappedBy = "player")
+    @OneToOne(mappedBy = "player", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Usage usage = null;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayerList = new TreeSet<>();
 

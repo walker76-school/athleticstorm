@@ -36,13 +36,13 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Include
     private Integer year;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
     @MapsId
     @EqualsAndHashCode.Exclude
     private Player player;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
     private Team team;
