@@ -39,7 +39,7 @@ public class Season implements Comparable<Season> {
     @EqualsAndHashCode.Include
     private Integer year;
 
-    @ManyToMany(mappedBy = "seasons")
+    @ManyToMany(mappedBy = "seasons", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude
     private Set<Coach> coaches = new TreeSet<>();
 

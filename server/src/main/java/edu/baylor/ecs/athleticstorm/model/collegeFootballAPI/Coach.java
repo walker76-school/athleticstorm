@@ -23,7 +23,7 @@ public class Coach implements Comparable<Coach> {
     @EqualsAndHashCode.Include
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "COACH_TO_SEASON",
             joinColumns =

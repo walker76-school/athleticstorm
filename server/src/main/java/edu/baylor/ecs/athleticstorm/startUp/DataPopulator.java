@@ -79,7 +79,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void onApplicationEvent(ContextRefreshedEvent event){
 
         // see if already done or colors already exist in the DB
-        if(setupComplete || (teamRepository.count() > 0)){
+        if(setupComplete || (usageRepository.count() > 0)){
             setupComplete = true;
             return;
         }
@@ -214,15 +214,11 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         if(usageRepository.count() > 0){
             return;
         }
-        int count = 0;
         logger.info("Getting player usage");
         for(Player p: players) {
             AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
             if(advancedPlayers.length == 0){
                 continue;
-            }
-            if(count++ > 10){
-                break;
             }
             logger.info(Arrays.toString(advancedPlayers));
             Usage u = new Usage(advancedPlayers[0].getUsage(), p);
