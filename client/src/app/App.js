@@ -9,8 +9,8 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
-import Home from '../pages/Home';
-import SchoolList from '../pages/SchoolList';
+import Home from '../pages/home/Home';
+import SchoolList from '../pages/home/SchoolList';
 import Coach from '../pages/Coach';
 import Ranking from '../pages/Ranking';
 import Login from '../user/login/Login';

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -109,4 +109,4 @@ class Team extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(Team));
+export default withStyles(styles)(Team);

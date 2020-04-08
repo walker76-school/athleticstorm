@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {makeStyles} from "@material-ui/core/styles";
-import BleachersPic from "./bleachers.jpg";
-import CoachPic from "./coachpic.jpg";
+import BleachersPic from "../bleachers.jpg";
+import CoachPic from "../coachpic.jpg";
 import Button from "@material-ui/core/Button";
 
 const styles = makeStyles(theme => ({
@@ -30,7 +30,7 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-class Home extends Component {
+class WelcomePage extends Component {
 
     constructor(props) {
         super(props);
@@ -69,4 +69,4 @@ class Home extends Component {
     }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(WelcomePage);
