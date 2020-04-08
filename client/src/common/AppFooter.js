@@ -65,10 +65,8 @@ class AppFooter extends Component {
                 <div className="container">
                     <div>
                         <Link to={'/team'} style={{ padding: '20px' }}>Meet the Team</Link>
-                        <a target="_blank" rel="noopener noreferrer" href={'https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm'} style={{ padding: '20px' }}>GitLab Page</a>
                         <Link to={'/'} style={{ padding: '20px' }}><img src={Football} alt="Athletic Storm alt logo"/></Link>
-                        <Link to={'/'} style={{ padding: '20px' }}>Placeholder</Link>
-                        <Link to={'/'} style={{ padding: '20px' }}>Placeholder</Link>
+                        <a target="_blank" rel="noopener noreferrer" href={'https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm'} style={{ padding: '20px' }}>GitLab Page</a>
                     </div>
                 </div>
             </Footer>

@@ -69,4 +69,4 @@ class Home extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(Home));
+export default withStyles(styles)(Home);

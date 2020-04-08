@@ -55,50 +55,50 @@ class Team extends Component {
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Andrew} style={{ width: 100, height: 100 }}/>
-                                <h1>Andrew Walker</h1>
-                                <h2>Liaison</h2>
+                                <h3>Andrew Walker</h3>
+                                <h4>Liaison</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Josh} style={{ width: 100, height: 100 }}/>
-                                <h1>Josh Pane</h1>
-                                <h2>Deputy</h2>
+                                <h3>Josh Pane</h3>
+                                <h4>Deputy</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Evan} style={{ width: 100, height: 100 }}/>
-                                <h1>Evan Baker</h1>
-                                <h2>Member</h2>
+                                <h3>Evan Baker</h3>
+                                <h4>Member</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Michael} style={{ width: 100, height: 100 }}/>
-                                <h1>Michael Coffey</h1>
-                                <h2>Member</h2>
+                                <h3>Michael Coffey</h3>
+                                <h4>Member</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Schaeffer} style={{ width: 100, height: 100 }}/>
-                                <h1>Schaeffer Duncan</h1>
-                                <h2>Member</h2>
+                                <h3>Schaeffer Duncan</h3>
+                                <h4>Member</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={John} style={{ width: 100, height: 100 }}/>
-                                <h1>John Eyre</h1>
-                                <h2>Member</h2>
+                                <h3>John Eyre</h3>
+                                <h4>Member</h4>
                             </Paper>
                         </Grid>
                         <Grid item xs={3}>
                             <Paper className={classes.paper}>
                                 <Avatar src={Ian} style={{ width: 100, height: 100 }}/>
-                                <h1>Ian Laird</h1>
-                                <h2>Member</h2>
+                                <h3>Ian Laird</h3>
+                                <h4>Member</h4>
                             </Paper>
                         </Grid>
                     </Grid>

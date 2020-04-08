@@ -93,7 +93,7 @@ class SchoolList extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(SchoolList));
+export default withStyles(styles)(SchoolList);
 
 class StyledPaper extends Component {
     constructor(props){
