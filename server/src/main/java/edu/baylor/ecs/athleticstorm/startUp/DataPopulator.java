@@ -25,6 +25,8 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Usage;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,22 +211,32 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         rosterPlayerRepository.flush();
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class PairThing{
+        private Player p;
+        private AdvancedPlayerDTO[] dtos;
+    }
+
     @Transactional
     public void getPlayerUsage(){
         if(usageRepository.count() > 0){
             return;
         }
         logger.info("Getting player usage");
-        for(Player p: players) {
-            AdvancedPlayerDTO[] advancedPlayers = restTemplate.getForObject(playerUsage("2019", p.getId().toString()), AdvancedPlayerDTO[].class);
-            if(advancedPlayers.length == 0){
-                continue;
-            }
-            logger.info(Arrays.toString(advancedPlayers));
-            Usage u = new Usage(advancedPlayers[0].getUsage(), p);
-            playerRepository.save(p);
-            usageRepository.save(u);
-        }
+        Set<Usage> usages = Collections.synchronizedSortedSet(new TreeSet<>());
+        players
+                .parallelStream()
+                .map(x -> new PairThing(x, restTemplate.getForObject(playerUsage("2019", x.getId().toString()), AdvancedPlayerDTO[].class)))
+                .filter(x -> x.getDtos().length > 0)
+                .forEach(
+                    x -> {
+                        logger.info(Arrays.toString(x.getDtos()));
+                        Usage u = new Usage(x.getDtos()[0].getUsage(), x.getP());
+                        usages.add(u);
+                    }
+        );
+        usageRepository.saveAll(usages);
         usageRepository.flush();;
     }
 

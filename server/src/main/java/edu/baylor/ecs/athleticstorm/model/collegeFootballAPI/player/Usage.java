@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PLAYER_USAGE")
 @EqualsAndHashCode
-public class Usage {
+public class Usage implements Comparable<Usage>{
 
     @Id
     @Column(name = "PLAYER_ID")
@@ -71,5 +71,10 @@ public class Usage {
         this.thirdDown = usageDTO.getThirdDown();
         this.standardDowns = usageDTO.getStandardDowns();
         this.passingDowns = usageDTO.getPassingDowns();
+    }
+
+    @Override
+    public int compareTo(Usage usage) {
+        return this.id.compareTo(usage.getId());
     }
 }

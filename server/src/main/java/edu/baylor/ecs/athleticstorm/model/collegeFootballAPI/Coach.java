@@ -1,3 +1,15 @@
+/******************************************************************************
+ *
+ * Coach.java
+ *
+ * author: Ian laird
+ *
+ * Created 3/24/20
+ *
+ * © 2020
+ *
+ ******************************************************************************/
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
@@ -9,20 +21,26 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Coach
+ *
+ * Represents a Coach of a Team
+ */
 @AllArgsConstructor
 @Data
-
 @Entity(name = "Coach")
 @Table(name = "COACH")
 @EqualsAndHashCode
 @NoArgsConstructor
 public class Coach implements Comparable<Coach> {
 
+    // the name of the coach
     @Id
     @Column(name = "NAME")
     @EqualsAndHashCode.Include
     private String name;
 
+    // all of the seasons that this coach has coached
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "COACH_TO_SEASON",
@@ -36,8 +54,10 @@ public class Coach implements Comparable<Coach> {
     @EqualsAndHashCode.Exclude
     private Set<Season> seasons = new TreeSet<>();
 
+    // the team the coach is currently coaching
+    // will be null if the coach is not coaching a team in the last year
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID", nullable = true)
     @EqualsAndHashCode.Exclude
     private Team team = null;
 
@@ -46,10 +66,19 @@ public class Coach implements Comparable<Coach> {
         return this.name.compareTo(coach.getName());
     }
 
+    /**
+     * creates a coach of a given name
+     * @param name the name of the coach
+     */
     public Coach(String name){
         this.name = name;
     }
 
+    /**
+     * creates a coach from a DTO
+     * @param coach the data to create the coach from
+     * @param seasons the set of existing seasons for ALL coaches (this is used so that seasons are not duplicated)
+     */
     public Coach(CoachDTO coach, Set<Season> seasons){
         this.name = coach.getFirst_name() + " " + coach.getLast_name();
 

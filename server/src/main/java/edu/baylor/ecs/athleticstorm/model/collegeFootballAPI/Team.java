@@ -1,3 +1,15 @@
+/******************************************************************************
+ *
+ * Team.java
+ *
+ * author: Ian laird
+ *
+ * Created 3/24/20
+ *
+ * © 2020
+ *
+ ******************************************************************************/
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
@@ -12,6 +24,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Team
+ *
+ * represents a College Football Team
+ */
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -21,19 +39,23 @@ import java.util.TreeSet;
 @EqualsAndHashCode
 public class Team implements Comparable<Team>{
 
+    // the id of the team
     @Id
     @Column(name = "ID")
     @EqualsAndHashCode.Include
     private Long id;
 
+    // the name of the school
     @Column(name = "SCHOOL")
     @EqualsAndHashCode.Exclude
     private String school;
 
+    // the mascot
     @Column(name = "MASCOT")
     @EqualsAndHashCode.Exclude
     private String mascot;
 
+    // the abbreviation for the team
     @Column(name = "ABBREVIATION")
     @EqualsAndHashCode.Exclude
     private String abbreviation;
@@ -66,14 +88,17 @@ public class Team implements Comparable<Team>{
     @EqualsAndHashCode.Exclude
     private String alt_color;
 
+    // url of the logos
     @ElementCollection
     @EqualsAndHashCode.Exclude
     private List<String> logos;
 
+    // the current coaches of the team
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     private Set<Coach> coaches = new TreeSet<>();
 
+    // the players for the current season of the team
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
@@ -83,6 +108,10 @@ public class Team implements Comparable<Team>{
         return this.id.compareTo(team.getId());
     }
 
+    /**
+     * Creates a Team from a DTO
+     * @param team the data
+     */
     public Team(TeamDTO team){
         this.id = team.getId();
         this.school = team.getSchool();
