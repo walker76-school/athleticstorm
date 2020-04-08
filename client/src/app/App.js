@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import './App.css';
 import {
-    Route,
-    withRouter,
-    Switch, Redirect
+  Route,
+  withRouter,
+  Switch
 } from 'react-router-dom';
+
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
-import Home from '../pages/home/Home';
+
+import Home from '../pages/Home';
+import SchoolList from '../pages/SchoolList';
 import Coach from '../pages/Coach';
 import Ranking from '../pages/Ranking';
 import Login from '../user/login/Login';
 import Player from "../pages/types/Player";
 import School from "../pages/School";
+import Team from "../pages/Team";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
+import AppFooter from '../common/AppFooter';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
+
 import { Layout, notification } from 'antd';
+import Subscriptions_Page from "../user/subscriptions/subscriptions_page";
 const { Content } = Layout;
 
 class App extends Component {
@@ -80,13 +87,13 @@ class App extends Component {
     });
   }
 
-  handleLogin(redirectTo="/") {
+  handleLogin() {
     notification.success({
       message: 'Athletic Storm',
       description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
-    this.props.history.push(redirectTo);
+    this.props.history.push("/schoollist");
   }
 
   setSchool(school){
@@ -106,52 +113,24 @@ class App extends Component {
           <Content className="app-content">
             <div className="container">
               <Switch>
-                <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated}  {...props} />} />
+                <Route exact path="/" component={Home} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
-
-                <PrivateRoute exact path="/ranking">
-                    <Ranking/>
-                </PrivateRoute>
-
-                <PrivateRoute exact path="/school/:schoolName">
-                    <School/>
-                </PrivateRoute>
-
-                <PrivateRoute exact path="/coach/:coachName">
-                    <Coach/>
-                </PrivateRoute>
-
-                <PrivateRoute exact path="/player/:id">
-                    <Player/>
-                </PrivateRoute>
-                  <Route component={NotFound}/>
+                <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
+                <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+                <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
+                <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+                <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>
+                <Route path="/team" component={Team}/>
+                <Route component={NotFound}/>
               </Switch>
             </div>
           </Content>
+
+          <AppFooter/>
         </Layout>
     );
   }
 }
 
 export default withRouter(App);
-
-class PrivateRoute extends Component {
-
-    render(){
-        return (
-            <Route
-                {...this.props}
-                render={() => {
-                        return localStorage.getItem(ACCESS_TOKEN) !== null ? (
-                            this.props.children
-                        ) : (
-                            <Redirect to="/login"/>
-                        )
-                        // this.props.children
-                    }
-                }
-            />
-        );
-    }
-}

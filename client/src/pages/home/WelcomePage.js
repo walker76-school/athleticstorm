@@ -1,9 +1,45 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
-import BleachersPic from "../bleachers.jpg";
+import {Link, withRouter} from "react-router-dom";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {makeStyles} from "@material-ui/core/styles";
+import BleachersPic from "./bleachers.jpg";
+import CoachPic from "./coachpic.jpg";
 import Button from "@material-ui/core/Button";
 
-export default class WelcomePage extends Component {
+const styles = makeStyles(theme => ({
+    root: {
+        flexGrow: 1,
+    },
+    list: {
+        marginTop: theme.spacing(2),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        width: 80,
+        height: 80,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    logo: {
+        marginTop: theme.spacing(2),
+        paddingTop: theme.spacing(2)
+
+    }
+}));
+
+class Home extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
+
+    componentDidMount() {
+    }
 
     render() {
         return (
@@ -32,3 +68,5 @@ export default class WelcomePage extends Component {
         );
     }
 }
+
+export default withStyles(styles)(Home);
