@@ -12,6 +12,7 @@ import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import SubscriptionError from "./Subscription_Error";
+import {notification} from "antd";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -44,6 +45,7 @@ const cookies = new Cookies();
 class School extends Component {
 
     constructor(props){
+        unlocked = true;
         super(props);
         this.state = {
             teamId: this.props.location.state.teamId,
@@ -65,7 +67,6 @@ class School extends Component {
     componentDidMount() {
         axios.get('http://localhost:8080/api/teams/' + this.props.location.state.teamId)
         .then(result => {
-            console.log(result);
             this.setState({
                 teamId: result.data.id,
                 schoolName: result.data.school,
@@ -80,10 +81,10 @@ class School extends Component {
             // If team has already been visited by user, no change is necessary
             if(!cookies.get('Teams_visited').find(element => element === result.data.school)) {
                 if(cookies.get('Num_teams') > 0) {
-                    cookies.set('Num_teams', cookies.get('Num_teams') - 1);
+                    cookies.set('Num_teams', cookies.get('Num_teams') - 1,{path: '/'});
                     let teamsVisited = cookies.get('Teams_visited');
                     teamsVisited.push(result.data.school);
-                    cookies.set('Teams_visited', teamsVisited);
+                    cookies.set('Teams_visited', teamsVisited,{path: '/'});
                 } else{
                     unlocked = false;
                 }
@@ -95,7 +96,6 @@ class School extends Component {
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
         .then(result => {
-            console.log(result);
             this.setState({
                 coaches: result.data
             });
@@ -103,17 +103,24 @@ class School extends Component {
     }
 
     loadPlayers(newYear){
-        this.setState({
-            year: newYear
-        }, () => {
-            // Get List Of Players From API
-            axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
-            .then(result => {
-                this.setState({
-                    players: result.data
-                });
-            })
-        });
+        if(cookies.get('Role') !== 'ROLE_REDSHIRT' || newYear === this.state.year) {
+            this.setState({
+                year: newYear
+            }, () => {
+                // Get List Of Players From API
+                axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
+                    .then(result => {
+                        this.setState({
+                            players: result.data
+                        });
+                    })
+            });
+        } else{
+            notification.error({
+                message: 'Athletic Storm',
+                description: 'Upgrade your subscription to access other years.'
+            });
+        }
     }
 
     headcoachSort(event){
@@ -247,6 +254,7 @@ class School extends Component {
                                 <option value="2017">2017</option>
                                 <option value="2016">2016</option>
                             </select>
+                            {/*<div style={{float: 'right', backgroundColor: this.state.primaryColor, color: "#ffffff"}}>2019</div>*/}
                         </h1>
                     </div>
                     <Grid container align="center" justify="left" spacing={3} className={classes.list}>

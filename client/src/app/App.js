@@ -76,6 +76,11 @@ class App extends Component {
   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
+    cookies.set('Num_teams', 0,{path: '/'});
+    cookies.set('Teams_visited', [],{path: '/'});
+    cookies.set('Num_players', 0,{path: '/'});
+    cookies.set('Role', '',{path: '/'});
+
     this.setState({
       currentUser: null,
       isAuthenticated: false
@@ -109,14 +114,17 @@ class App extends Component {
           });
           let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
           let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
+          let role = this.state.currentUser.roleName[0];
           if(!numTeams) {
             numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
             numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
+            role = this.state.currentUser.roleName[1];
           }
           console.log(numTeams);
-          cookies.set('Num_teams', 1);
-          cookies.set('Teams_visited', []);
-          cookies.set('Num_players', numPlayers);
+          cookies.set('Num_teams', numTeams, {path: '/'});
+          cookies.set('Teams_visited', [], {path: '/'});
+          cookies.set('Num_players', numPlayers,{path: '/'});
+          cookies.set('Role', role,{path: '/'});
         }).catch(error => {
       this.setState({
         isLoading: false
@@ -147,7 +155,7 @@ class App extends Component {
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                 <Route path="/ranking" render={(props) => <Ranking isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/schoollist" render={(props) => <SchoolList isAuthenticated={this.state.isAuthenticated} {...props} />}/>
-                  <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
+                <Route path="/school/:schoolName" render={(props) => <School isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                 <Route path="/SubscriptionError" render={(props) => <SubscriptionError {...props}/>}/>
                 <Route path="/coach/:coachName" render={(props) => <Coach isAuthenticated={this.state.isAuthenticated} {...props} />}/>
                 <Route path="/player/:id" render={(props) => <Player isAuthenticated={this.state.isAuthenticated} {...props} />}/>

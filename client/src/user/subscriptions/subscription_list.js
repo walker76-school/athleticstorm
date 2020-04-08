@@ -5,6 +5,7 @@ import tier1 from './images/tier1.jpeg'
 import tier2 from './images/tier2.jpg'
 import tier3 from './images/tier3.jpg'
 import {Button, Form} from "antd";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 class Subscription_List extends React.Component {
 
@@ -14,10 +15,10 @@ class Subscription_List extends React.Component {
         super(props);
 
         this.state = {
-            tiers: [{image: tier1, name: 'Redshirt', price: '$4.99/month', id: 'ROLE_REDSHIRT', numTeams: 10, adv: false},
-                {image: tier2, name: 'Starter', price: '$9.99/month', id: 'ROLE_STARTER', numTeams: 20, adv: true},
-                {image: tier3, name: 'MVP', price: '$14.99/month', id: 'ROLE_MVP', numTeams: 'All', adv: true}],
-            selectedTier: ''
+            tiers: [{image: tier1, name: 'Redshirt', price: '$4.99/month', id: 'ROLE_REDSHIRT', numTeams: 10, numPlayers: 5, years: 'Current Year', adv: false},
+                {image: tier2, name: 'Starter', price: '$7.49/month', id: 'ROLE_STARTER', numTeams: 20, numPlayers: 10, years: 'All', adv: true},
+                {image: tier3, name: 'MVP', price: '$9.99/month', id: 'ROLE_MVP', numTeams: 'All', numPlayers: 'All', years: 'All', adv: true}],
+            selectedTier: 'None'
         };
 
         this.select = this.select.bind(this);
@@ -69,6 +70,14 @@ class Subscription_List extends React.Component {
                                     )}
                                 </tr>
                                 <tr className="description">
+                                    <th scope="row">Access to coach rating</th>
+                                    {this.state.tiers.map(tier =>
+                                        <td key={tier.id}>
+                                            {tier.adv && <CheckCircleIcon color="primary"/>}
+                                        </td>
+                                    )}
+                                </tr>
+                                <tr className="description">
                                     <th scope="row">Number of Teams Accessible</th>
                                     {this.state.tiers.map(tier =>
                                         <td key={tier.id}>
@@ -76,14 +85,22 @@ class Subscription_List extends React.Component {
                                         </td>
                                     )}
                                 </tr>
-                                {/*<tr className="description">*/}
-                                {/*    <th scope="row">Access to advanced metrics</th>*/}
-                                {/*    {this.state.tiers.map(tier =>*/}
-                                {/*        <td key={tier.id}>*/}
-                                {/*            {tier.adv && <CheckIcon color="primary"/>}*/}
-                                {/*        </td>*/}
-                                {/*    )}*/}
-                                {/*</tr>*/}
+                                <tr className="description">
+                                    <th scope="row">Number of Players Accessible per Team</th>
+                                    {this.state.tiers.map(tier =>
+                                        <td key={tier.id}>
+                                            {tier.numPlayers}
+                                        </td>
+                                    )}
+                                </tr>
+                                <tr className="description">
+                                    <th scope="row">Years viewable for players</th>
+                                    {this.state.tiers.map(tier =>
+                                        <td key={tier.id}>
+                                            {tier.years}
+                                        </td>
+                                    )}
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

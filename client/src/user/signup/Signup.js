@@ -49,24 +49,33 @@ class Signup extends Component {
 
     handleSubmit(roleVal) {
 
-        const signupRequest = {
-            username: this.state.username.value,
-            password: this.state.password.value,
-            roleName: roleVal
-        };
-        signup(signupRequest)
-        .then(response => {
-            notification.success({
-                message: 'Athletic Storm',
-                description: "Thank you! You're successfully registered. Please Login to continue!",
-            });
-            this.props.history.push("/login");
-        }).catch(error => {
+        if(roleVal === 'None') {
             notification.error({
                 message: 'Athletic Storm',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
+                description: 'Please select a subscription tier.'
             });
-        });
+        }
+        else {
+
+            const signupRequest = {
+                username: this.state.username.value,
+                password: this.state.password.value,
+                roleName: roleVal
+            };
+            signup(signupRequest)
+                .then(response => {
+                    notification.success({
+                        message: 'Athletic Storm',
+                        description: "Thank you! You're successfully registered. Please Login to continue!",
+                    });
+                    this.props.history.push("/login");
+                }).catch(error => {
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });
+            });
+        }
     }
 
     handleNext(event) {
