@@ -36,6 +36,6 @@ public final class Constants {
         return PLAYER_URL + "/search?searchTerm=" + name + "&team=" + team;
     }
     public static String playerUsage(String year, String playerId){
-        return PLAYER_URL + "/usage?year=" + year + "&playerId=" + playerId;
+        return PLAYER_URL + "/usage?year=" + year + (Objects.nonNull(playerId) ? ("&playerId=" + playerId) : "");
     }
 }

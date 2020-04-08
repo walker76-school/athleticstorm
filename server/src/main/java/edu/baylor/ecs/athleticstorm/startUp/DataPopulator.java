@@ -211,32 +211,22 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         rosterPlayerRepository.flush();
     }
 
-    @Data
-    @AllArgsConstructor
-    public static class PairThing{
-        private Player p;
-        private AdvancedPlayerDTO[] dtos;
-    }
+
 
     @Transactional
     public void getPlayerUsage(){
         if(usageRepository.count() > 0){
             return;
         }
-        logger.info("Getting player usage");
-        Set<Usage> usages = Collections.synchronizedSortedSet(new TreeSet<>());
-        players
-                .parallelStream()
-                .map(x -> new PairThing(x, restTemplate.getForObject(playerUsage("2019", x.getId().toString()), AdvancedPlayerDTO[].class)))
-                .filter(x -> x.getDtos().length > 0)
-                .forEach(
-                    x -> {
-                        logger.info(Arrays.toString(x.getDtos()));
-                        Usage u = new Usage(x.getDtos()[0].getUsage(), x.getP());
-                        usages.add(u);
-                    }
-        );
-        usageRepository.saveAll(usages);
+        AdvancedPlayerDTO [] usages = restTemplate.getForObject(playerUsage("2019", null), AdvancedPlayerDTO[].class);
+
+        List<Usage> u =
+        Arrays.stream(usages).map(x -> {
+            Optional<Player> temp = playerRepository.findById(x.getId());
+            return temp.isPresent() ? new Usage(x.getUsage(), temp.get()) : null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+
+        usageRepository.saveAll(u);
         usageRepository.flush();;
     }
 
