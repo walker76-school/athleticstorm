@@ -80,13 +80,13 @@ class App extends Component {
     });
   }
 
-  handleLogin() {
+  handleLogin(redirectTo="/") {
     notification.success({
       message: 'Athletic Storm',
       description: "You're successfully logged in.",
     });
     this.loadCurrentUser();
-    this.props.history.push("/");
+    this.props.history.push(redirectTo);
   }
 
   setSchool(school){
@@ -110,19 +110,19 @@ class App extends Component {
                 <Route path="/signup" component={Signup} />
                 <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
 
-                <PrivateRoute exact path="/ranking" isAuthenticated={this.state.isAuthenticated}>
+                <PrivateRoute exact path="/ranking">
                     <Ranking/>
                 </PrivateRoute>
 
-                <PrivateRoute path="/school/:schoolName" isAuthenticated={this.state.isAuthenticated}>
+                <PrivateRoute exact path="/school/:schoolName">
                     <School/>
                 </PrivateRoute>
 
-                <PrivateRoute path="/coach/:coachName" isAuthenticated={this.state.isAuthenticated}>
+                <PrivateRoute exact path="/coach/:coachName">
                     <Coach/>
                 </PrivateRoute>
 
-                <PrivateRoute path="/player/:id" isAuthenticated={this.state.isAuthenticated}>
+                <PrivateRoute exact path="/player/:id">
                     <Player/>
                 </PrivateRoute>
                   <Route component={NotFound}/>
@@ -141,15 +141,15 @@ class PrivateRoute extends Component {
     render(){
         return (
             <Route
-                exact={this.props.exact}
-                path={this.props.path}
-                render={() =>
-                    // this.props.isAuthenticated ? (
-                    //     this.props.children
-                    // ) : (
-                    //     <Redirect to="/login" />
-                    // )
-                    this.props.children
+                {...this.props}
+                render={() => {
+                        return localStorage.getItem(ACCESS_TOKEN) !== null ? (
+                            this.props.children
+                        ) : (
+                            <Redirect to="/login"/>
+                        )
+                        // this.props.children
+                    }
                 }
             />
         );
