@@ -1,3 +1,15 @@
+/******************************************************************************
+ *
+ * Usage.java
+ *
+ * author: Ian laird
+ *
+ * Created 3/24/20
+ *
+ * © 2020
+ *
+ ******************************************************************************/
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
 import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;

@@ -1,3 +1,15 @@
+/******************************************************************************
+ *
+ * Player.java
+ *
+ * author: Ian laird
+ *
+ * Created 3/24/20
+ *
+ * © 2020
+ *
+ ******************************************************************************/
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
 import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
@@ -10,6 +22,12 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Player
+ *
+ * Represents a Player on a College Football Team
+ */
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -19,6 +37,7 @@ import java.util.TreeSet;
 @EqualsAndHashCode
 public class Player implements Comparable<Player>{
 
+    // the id of the player
     @Id
     @Column(name = "ID")
     @EqualsAndHashCode.Include
@@ -77,6 +96,10 @@ public class Player implements Comparable<Player>{
         return this.id.compareTo(player.getId());
     }
 
+    /**
+     * constructs a player from a DTO
+     * @param player the data
+     */
     public Player(PlayerDTO player){
         this.id = player.getId();
         this.team = player.getTeam();
