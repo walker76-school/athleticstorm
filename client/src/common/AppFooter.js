@@ -15,17 +15,6 @@ const style = {
 };
 
 export default class AppFooter extends Component {
-    constructor(props) {
-        super(props);
-        this.handleMenuClick = this.handleMenuClick.bind(this);
-    }
-
-    handleMenuClick({ key }) {
-        if(key === "logout") {
-            this.props.onLogout();
-        }
-    }
-
     render() {
         return (
             <Footer className="app-header" style={style}>
