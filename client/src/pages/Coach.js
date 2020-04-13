@@ -2,35 +2,10 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import axios from 'axios';
 import Grid from "@material-ui/core/Grid";
-import {makeStyles} from "@material-ui/core/styles";
-import withStyles from "@material-ui/core/styles/withStyles";
 import {Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import ReactMinimalPieChart from "react-minimal-pie-chart";
-
-const styles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    list: {
-        marginTop: theme.spacing(2),
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-        width: 80,
-        height: 80,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logo: {
-        marginTop: theme.spacing(2),
-        paddingTop: theme.spacing(2)
-
-    }
-}));
+import LoadingIndicator from "../common/LoadingIndicator";
 
 class Coach extends Component {
 
@@ -59,9 +34,6 @@ class Coach extends Component {
     }
 
     render() {
-
-        const {classes} = this.props;
-
         if (!this.state.loading) {
 
             // Name successfully found
@@ -75,7 +47,7 @@ class Coach extends Component {
                     {this.state.record.terms.map(term => (
                     <div>
                     <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>
-                        <Grid container align="center" justify="left" spacing={3} className={classes.list}>
+                        <Grid container align="center" justify="left" spacing={3}>
                             <Grid item xs={2}>
                                 <Link
                                     to={{
@@ -95,7 +67,7 @@ class Coach extends Component {
                                 </span>
                             </Grid>
                             <Grid item xs={7}>
-                                <Grid container align="center" justify="left" spacing={3} className={classes.list}>
+                                <Grid container align="center" justify="left" spacing={3}>
                                     {term.seasons.map(season => (
                                         <Grid item xs={3}>
                                             <Paper>
@@ -140,14 +112,10 @@ class Coach extends Component {
         } else {
             // Error: name not found
             return (
-                <div>
-                    <div className="Error_Header">
-                        <h1>Loading Coach Info ... </h1>
-                    </div>
-                </div>
+                <LoadingIndicator />
             )
         }
     }
 }
 
-export default withStyles(styles)(withRouter(Coach));
+export default withRouter(Coach);
