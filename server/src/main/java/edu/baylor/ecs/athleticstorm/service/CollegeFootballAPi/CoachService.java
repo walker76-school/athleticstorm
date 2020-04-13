@@ -16,6 +16,7 @@ import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.DTO.coach.Term;
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
@@ -72,7 +73,7 @@ public class CoachService {
             Optional<Team> teamOpt = teamRepository.findTeamBySchool(entry.getKey());
             if(teamOpt.isPresent()){
                 Team team = teamOpt.get();
-                schoolTerm.setTeam(team);
+                schoolTerm.setTeam(new TeamDTO(team));
                 schoolTerm.setSeasons(entry.getValue());
                 record.addTerm(schoolTerm);
             }

@@ -1,6 +1,7 @@
 package edu.baylor.ecs.athleticstorm.DTO.coach;
 
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Term {
 
-    Team team;
+    TeamDTO team;
     private int wins;
     private int losses;
     private int ties;
