@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Popup from "./player/Popup";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -46,7 +47,8 @@ class School extends Component {
             schoolName: '',
             logo: '',
             primaryColor: '',
-            year: '2019'
+            year: '2019',
+            selectedPlayer: null
         };
 
         this.loadCoaches = this.loadCoaches.bind(this);
@@ -54,6 +56,8 @@ class School extends Component {
         this.headcoachSort = this.headcoachSort.bind(this);
         this.OCSort = this.OCSort.bind(this);
         this.DCSort = this.DCSort.bind(this);
+        this.onModalClose = this.onModalClose.bind(this);
+        this.setSelectedPlayer = this.setSelectedPlayer.bind(this);
     }
 
     componentDidMount() {
@@ -98,6 +102,18 @@ class School extends Component {
         });
     }
 
+    onModalClose(){
+        this.setState({
+            selectedPlayer: null
+        });
+    }
+
+    setSelectedPlayer(player){
+        this.setState({
+            selectedPlayer: player
+        })
+    }
+
     headcoachSort(event){
         let sortBy = event.target.value;
         console.log(event.target.value);
@@ -136,6 +152,7 @@ class School extends Component {
 
         return (
             <div>
+                <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
                 <br/>
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{this.state.schoolName}</h1>
@@ -226,16 +243,15 @@ class School extends Component {
                         this.state.players.map((player, ndx) => {
                             return (
                                 <Grid item xs={3}>
-                                    <Link
-                                        to={{
-                                            pathname: `/player/${player.first_name} ${player.last_name}`,
-                                            state: {
+                                    <a
+                                        onClick={() => {
+                                            this.setSelectedPlayer({
                                                 teamdId: this.state.teamId,
                                                 playerId: player.id,
                                                 first_name: player.first_name,
                                                 last_name: player.last_name,
                                                 year: this.state.year,
-                                            }
+                                            })
                                         }}
                                         style={{ color: this.state.primaryColor }} >
                                         <StyledPaper classes={classes}>
@@ -245,7 +261,7 @@ class School extends Component {
                                                 {player.position ? player.position + " " + this.state.year : this.state.year}
                                             </Typography>
                                         </StyledPaper>
-                                    </Link>
+                                    </a>
                                 </Grid>
                             );
                         })

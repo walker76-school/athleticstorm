@@ -11,7 +11,7 @@ import Home from '../pages/home/Home';
 import Coach from '../pages/Coach';
 import Ranking from '../pages/Ranking';
 import Login from '../user/login/Login';
-import Player from "../pages/types/Player";
+import Player from "../pages/player/Player";
 import School from "../pages/School";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
