@@ -34,7 +34,7 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     public List<RosterPlayerDTO> getTeamRoster(Long teamId) {
-        return roster(teamId, new Long(2020));
+        return roster(teamId, new Long(2019));
     }
 
     public List<RosterPlayerDTO> roster(Long teamId, Long year){
@@ -42,18 +42,16 @@ public class PlayerService {
         return convertToDTO(team.getRosterPlayers());
     }
 
-    public List<RosterPlayerDTO> getSeasonRoster(Long teamId, Long year) {
-        return roster(teamId, year);
-    }
+    //public List<RosterPlayerDTO> getSeasonRoster(Long teamId, Long year) {
+    //    return roster(teamId, year);
+    //}
 
-    public CompositePlayer getPlayerStats(PlayerInfoRequest request) {
-        String searchTerm = request.getFirst_name() + " " + request.getLast_name();
+    public CompositePlayer getPlayerStats(String firstName, String lastName) {
 
-        Optional<Player> playerOpt = playerRepository.findPlayerByNameEquals(searchTerm);
+        Optional<Player> playerOpt = playerRepository.findPlayerByFirstAndLastName(firstName, lastName);
 
         if(playerOpt.isPresent()){
-            CompositePlayer compPlayer = new CompositePlayer(playerOpt.get(), new AdvancedPlayerDTO());
-            compPlayer.setAdvancedPlayer(compPlayer.getAdvancedPlayer());
+            CompositePlayer compPlayer = new CompositePlayer(playerOpt.get());
             return compPlayer;
         }
         return null;

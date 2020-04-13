@@ -12,9 +12,9 @@ public class CompositePlayer {
     private AdvancedPlayerDTO advancedPlayer;
     private boolean hasAdvancedPlayer;
 
-    public CompositePlayer(Player p, AdvancedPlayerDTO advancedPlayerDTO){
+    public CompositePlayer(Player p){
         this.player = new PlayerDTO(p);
-        this.advancedPlayer = advancedPlayerDTO;
-        this.hasAdvancedPlayer = advancedPlayer != null;
+        this.advancedPlayer = new AdvancedPlayerDTO(p);
+        this.hasAdvancedPlayer = true;
     }
 }
