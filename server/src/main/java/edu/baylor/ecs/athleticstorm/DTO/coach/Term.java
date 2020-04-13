@@ -1,5 +1,6 @@
 package edu.baylor.ecs.athleticstorm.DTO.coach;
 
+import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
@@ -22,15 +23,15 @@ public class Term {
     private int ties;
     private int start_year;
     private int end_year;
-    private List<Season> seasons;
+    private List<SeasonDTO> seasons;
 
-    public void setSeasons(Set<Season> seasonSet){
+    public void setSeasons(Set<SeasonDTO> seasonSet){
         seasons = new ArrayList<>(seasonSet);
-        seasons.sort(Comparator.comparingLong(Season::getYear).reversed());
-        wins = seasons.stream().map(Season::getWins).mapToInt(Integer::intValue).sum();
-        losses = seasons.stream().map(Season::getLosses).mapToInt(Integer::intValue).sum();
-        ties = seasons.stream().map(Season::getTies).mapToInt(Integer::intValue).sum();
-        start_year = seasons.stream().map(Season::getYear).mapToInt(Integer::intValue).min().orElse(-1);
-        end_year = seasons.stream().map(Season::getYear).mapToInt(Integer::intValue).max().orElse(-1);
+        seasons.sort(Comparator.comparingLong(SeasonDTO::getYear).reversed());
+        wins = seasons.stream().map(SeasonDTO::getWins).mapToInt(Integer::intValue).sum();
+        losses = seasons.stream().map(SeasonDTO::getLosses).mapToInt(Integer::intValue).sum();
+        ties = seasons.stream().map(SeasonDTO::getTies).mapToInt(Integer::intValue).sum();
+        start_year = seasons.stream().map(SeasonDTO::getYear).mapToInt(Integer::intValue).min().orElse(-1);
+        end_year = seasons.stream().map(SeasonDTO::getYear).mapToInt(Integer::intValue).max().orElse(-1);
     }
 }
