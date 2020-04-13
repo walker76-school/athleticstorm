@@ -38,6 +38,14 @@ public class TeamController {
                                             .orElse(null);
     }
 
+    @GetMapping("/byName/{teamName}")
+    public Team getTeamByTeamName(@PathVariable("teamName") String teamName){
+        return collegeFootballAPIService.getAllTeams().stream()
+                .filter(x -> x.getSchool().equalsIgnoreCase(teamName))
+                .findFirst()
+                .orElse(null);
+    }
+
     @GetMapping("/color")
     public TeamResponse getColor(@RequestParam("team") String team){
         return teamService.getTeamColor(team);

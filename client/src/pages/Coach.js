@@ -21,7 +21,7 @@ class Coach extends Component {
 
     componentDidMount() {
         // Get coach name from url
-        axios.get('http://localhost:8080/api/coaches/record/byName/' + this.props.location.state.first_name + '-' + this.props.location.state.last_name)
+        axios.get('http://localhost:8080/api/coaches/record/byName/' + this.props.match.params.coachName)
         .then(result => {
             console.log(result);
             this.setState({

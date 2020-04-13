@@ -28,8 +28,8 @@ public class CoachController {
 
     @GetMapping("/record/byName/{name}" )
     public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
-        String firstName = name.split("-")[0];
-        String lastName = name.split("-")[1];
+        String firstName = name.split(" ")[0];
+        String lastName = name.split(" ")[1];
         Coach coach = collegeFootballAPIService.getCoachByName(firstName, lastName);
         return collegeFootballAPIService.buildRecordFromCoach(coach);
     }

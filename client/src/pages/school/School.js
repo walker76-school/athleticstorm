@@ -42,7 +42,7 @@ class School extends Component {
     constructor(props){
         super(props);
         this.state = {
-            teamId: this.props.location.state.teamId,
+            teamId: -1,
             coaches: [],
             allCoaches: [],
             players: [],
@@ -72,7 +72,7 @@ class School extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/teams/' + this.props.location.state.teamId)
+        axios.get('http://localhost:8080/api/teams/byName/' + this.props.match.params.schoolName)
         .then(result => {
             console.log(result);
             this.setState({
