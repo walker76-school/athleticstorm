@@ -38,8 +38,10 @@ class SchoolList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teams: []
+            teams: [],
+            allTeams: []
         };
+        this.filterTeams = this.filterTeams.bind(this);
     }
 
     componentDidMount() {
@@ -47,7 +49,18 @@ class SchoolList extends Component {
         axios.get('http://localhost:8080/api/teams/fbs')
         .then(res => {
             this.setState({ teams: res.data });
+            this.setState({ allTeams: res.data });
         });
+    }
+
+    filterTeams(filter){
+        var tempTeams = [];
+        for( var x = 0; x < this.state.allTeams.length; x++){
+            if(this.state.allTeams[x].school.includes(filter)){
+             tempTeams.push(this.state.allTeams[x]);
+            }
+        }
+        this.setState({ teams: tempTeams });
     }
 
     render() {
@@ -55,6 +68,9 @@ class SchoolList extends Component {
 
         return (
             <div className={classes.root} >
+                <br/>
+                <input type="text" placeholder="Search" onChange={(event) => {this.filterTeams(event.target.value)}}/>
+                <br/>
                 <br/>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
                     {
