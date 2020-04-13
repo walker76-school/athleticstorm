@@ -66,7 +66,7 @@ class SchoolList extends Component {
     filterTeams(filter){
         var tempTeams = [];
         for( var x = 0; x < this.state.allTeams.length; x++){
-            if(this.state.allTeams[x].school.includes(filter)){
+            if(this.state.allTeams[x].school.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
              tempTeams.push(this.state.allTeams[x]);
             }
         }
