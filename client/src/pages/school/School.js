@@ -278,13 +278,7 @@ class School extends Component {
                                 return (
                                     <Grid item xs={3} key={ndx}>
                                         <Link
-                                            to={{
-                                                pathname: "/coach/" + coach.first_name + " " + coach.last_name,
-                                                state: {
-                                                    first_name: coach.first_name,
-                                                    last_name: coach.last_name,
-                                                }
-                                            }}
+                                            to={"/coach/" + coach.first_name + " " + coach.last_name}
                                             style={{ color: this.state.primaryColor }}
                                         >
                                             <StyledPaper classes={this.props.classes}>

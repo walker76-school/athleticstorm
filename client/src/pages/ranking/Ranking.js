@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const styles = makeStyles(theme => ({
@@ -89,11 +89,13 @@ class Ranking extends Component {
                             this.state.allRecords.map((record, ndx) => {
                                 return (
                                     <Grid item xs={3} key={ndx}>
-                                        <StyledPaper classes={this.props.classes}>
+                                        <Link to={"/coach/" + record.firstName + " " + record.lastName}>
+                                            <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
                                                 <Typography><b>{record.firstName} {record.lastName}</b></Typography>
                                                 <Typography><b>Wins:</b> {record.wins} <b>Losses:</b> {record.losses}</Typography>
                                             </StyledPaper>
+                                         </Link>
                                     </Grid>
                                 );
                             })
