@@ -4,9 +4,23 @@ import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import LoadingIndicator from "../../common/LoadingIndicator";
-import StyledPaper from "../../util/StyledPaper";
+import Paper from "@material-ui/core/Paper";
+import {makeStyles} from "@material-ui/core/styles";
+import {Link, withRouter} from "react-router-dom";
+import withStyles from "@material-ui/core/styles/withStyles";
 
-export default class Ranking extends Component {
+const styles = makeStyles(theme => ({
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+}));
+
+class Ranking extends Component {
 
     constructor(props) {
         super(props);
@@ -75,7 +89,7 @@ export default class Ranking extends Component {
                             this.state.allRecords.map((record, ndx) => {
                                 return (
                                     <Grid item xs={3} key={ndx}>
-                                            <StyledPaper>
+                                        <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
                                                 <Typography><b>{record.firstName} {record.lastName}</b></Typography>
                                                 <Typography><b>Wins:</b> {record.wins} <b>Losses:</b> {record.losses}</Typography>
@@ -90,6 +104,45 @@ export default class Ranking extends Component {
                     }
                 </Grid>
             </div>
+        );
+    }
+}
+
+export default withStyles(styles)(Ranking);
+
+class StyledPaper extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            elevation: 1
+        };
+
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
+    }
+
+    onMouseOver(){
+        this.setState({ elevation: 5 });
+    }
+
+    onMouseOut(){
+        this.setState({ elevation: 1 });
+    }
+
+    render() {
+
+        const {classes} = this.props;
+
+        return (
+            <Paper
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
+                elevation={this.state.elevation}
+                square={true}
+                className={classes.paper}
+            >
+                {this.props.children}
+            </Paper>
         );
     }
 }

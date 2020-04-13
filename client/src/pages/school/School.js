@@ -17,8 +17,6 @@ const styles = makeStyles(theme => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        width: 80,
-        height: 80,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -436,7 +434,8 @@ class StyledPaper extends Component {
 
     render() {
 
-        let {classes} = this.props;
+        const {classes} = this.props;
+
         return (
             <Paper
                 onMouseOver={this.onMouseOver}
