@@ -10,7 +10,7 @@ const style = {
     textAlign: "center",
     padding: "10px",
     bottom: "0",
-    height: "70px",
+    height: "90px",
     width: "100%",
 };
 
@@ -26,6 +26,7 @@ export default class AppFooter extends Component {
                         <a target="_blank" rel="noopener noreferrer" href={'https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm'} style={{ padding: '20px' }}>GitLab Page</a>
                     </div>
                 </div>
+                <p>Data comes courtesy of <a href={"https://collegefootballdata.com/"} target={"_blank"}>CollegeFootballData</a></p>
             </Footer>
         );
     }
