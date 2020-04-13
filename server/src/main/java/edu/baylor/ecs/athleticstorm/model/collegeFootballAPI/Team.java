@@ -14,6 +14,7 @@ package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,7 @@ import java.util.TreeSet;
 @EqualsAndHashCode
 public class Team implements Comparable<Team>{
 
-    private static List<String> FBS_CONFERENCES = Arrays.asList("SEC", "Big 12", "ACC", "Big Ten", "PAC-12", "Mountain West", "Sun Belt", "Mid_american", "FBS Independents", "Conference USA");
+    public static List<String> FBS_CONFERENCES = Arrays.asList("SEC", "Big 12", "ACC", "Big Ten", "PAC-12", "Mountain West", "Sun Belt", "Mid_american", "FBS Independents", "Conference USA");
 
     // the id of the team
     @Id
@@ -48,7 +49,6 @@ public class Team implements Comparable<Team>{
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Id
     @Column(name = "IS_FBS")
     @EqualsAndHashCode.Exclude
     private boolean is_fbs;
@@ -102,12 +102,12 @@ public class Team implements Comparable<Team>{
     private List<String> logos;
 
     // the current coaches of the team
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
     private Set<Coach> coaches = new TreeSet<>();
 
     // the players for the current season of the team
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
 

@@ -54,7 +54,7 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Exclude
     private Player player;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
     private Team team;

@@ -56,7 +56,7 @@ public class Coach implements Comparable<Coach> {
 
     // the team the coach is currently coaching
     // will be null if the coach is not coaching a team in the last year
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID", nullable = true)
     @EqualsAndHashCode.Exclude
     private Team team = null;
