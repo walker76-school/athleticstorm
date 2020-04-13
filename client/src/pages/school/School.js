@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import '../common/AppHeader.css';
-import logo from './football.jpeg'
+import '../../common/AppHeader.css';
+import logo from '../football.jpeg'
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
@@ -10,8 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Popup from "./player/Popup";
-import LoadingIndicator from "../common/LoadingIndicator";
+import Popup from "../player/Popup";
+import LoadingIndicator from "../../common/LoadingIndicator";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -47,16 +47,22 @@ class School extends Component {
             allCoaches: [],
             players: [],
             allPlayers: [],
+            OC: [],
+            allOC: [],
+            DC: [],
+            allDC: [],
             schoolName: '',
             logo: '',
             primaryColor: '',
             year: '2019',
             selectedPlayer: null,
             loadedCoaches: false,
-            loadedPlayers: false
+            loadedPlayers: false,
+            loadedCoordinators: false
         };
 
         this.loadCoaches = this.loadCoaches.bind(this);
+        this.loadCoordinators = this.loadCoordinators.bind(this);
         this.loadPlayers = this.loadPlayers.bind(this);
         this.headcoachSort = this.headcoachSort.bind(this);
         this.OCSort = this.OCSort.bind(this);
@@ -77,6 +83,7 @@ class School extends Component {
                 secondaryColor: result.data.alt_color
             }, () => {
                 this.loadCoaches();
+                this.loadCoordinators();
                 this.loadPlayers(this.state.year);
             });
         });
@@ -85,14 +92,31 @@ class School extends Component {
     loadCoaches(){
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
-        .then(result => {
-            console.log(result);
-            this.setState({
-                coaches: result.data,
-                allCoaches: result.data,
-                loadedCoaches: true
+            .then(result => {
+                console.log(result);
+                this.setState({
+                    coaches: result.data,
+                    allCoaches: result.data,
+                    loadedCoaches: true
+                });
             });
-        });
+    }
+
+    loadCoordinators(){
+        // Get List Of Coaches From API
+        axios.get('http://localhost:8080/api/coordinators/byTeamId/' + this.state.teamId)
+            .then(result => {
+                console.log(result);
+                let oc = result.data.filter(x => x.position === "OC");
+                let dc = result.data.filter(x => x.position === "DC");
+                this.setState({
+                    OC: oc,
+                    allOC: oc,
+                    DC: dc,
+                    allDC: dc,
+                    loadedCoordinators: true
+                });
+            });
     }
 
     loadPlayers(newYear){
@@ -154,11 +178,51 @@ class School extends Component {
     }
 
     OCSort(event){
-        // fill in with headcoach stuff
+        let sortBy = event.target.value;
+        console.log(event.target.value);
+        if("Descending" === sortBy){
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name < b.name ? 1 : -1);
+            this.setState({ OC: sortedOC });
+        }else if("Ascending" === sortBy){
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name > b.name ? 1 : -1);
+            this.setState({ OC: sortedOC });
+        }else if("Most Recent" === sortBy){
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            this.setState({ OC: sortedOC });
+        }else if("Oldest" === sortBy){
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            this.setState({ OC: sortedOC });
+        }else if("Best Score" === sortBy){
+
+        }else if("Worst Score" === sortBy){
+
+        }else{
+            console.log("Invalid Option " + sortBy);
+        }
     }
 
     DCSort(event){
-        // fill in with headcoachsort stuff
+        let sortBy = event.target.value;
+        console.log(event.target.value);
+        if("Descending" === sortBy){
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name < b.name ? 1 : -1);
+            this.setState({ DC: sortedDC });
+        }else if("Ascending" === sortBy){
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name > b.name ? 1 : -1);
+            this.setState({ DC: sortedDC });
+        }else if("Most Recent" === sortBy){
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            this.setState({ DC: sortedDC });
+        }else if("Oldest" === sortBy){
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            this.setState({ DC: sortedDC });
+        }else if("Best Score" === sortBy){
+
+        }else if("Worst Score" === sortBy){
+
+        }else{
+            console.log("Invalid Option " + sortBy);
+        }
     }
 
     filter(filter){
@@ -169,18 +233,34 @@ class School extends Component {
             }
         }
 
+        var tempOC = [];
+        for( var y = 0; y < this.state.allOC.length; y++){
+            if(this.state.allOC[y].name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
+                tempOC.push(this.state.allOC[y]);
+            }
+        }
+
+        var tempDC = [];
+        for( var z = 0; z < this.state.allDC.length; z++){
+            if(this.state.allDC[z].name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
+                tempCoaches.push(this.state.allDC[z]);
+            }
+        }
+
         var tempPlayers = [];
-        for( var y = 0; y < this.state.allPlayers.length; y++){
-            console.log(this.state.allPlayers[y]);
-            if(this.state.allPlayers[y].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
-                this.state.allPlayers[y].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
-                this.state.allPlayers[y].position.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
-                tempPlayers.push(this.state.allPlayers[y]);
+        for( var i = 0; i < this.state.allPlayers.length; i++){
+            console.log(this.state.allPlayers[i]);
+            if(this.state.allPlayers[i].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+                this.state.allPlayers[i].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+                this.state.allPlayers[i].position.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
+                tempPlayers.push(this.state.allPlayers[i]);
             }
         }
 
         this.setState({
             coaches: tempCoaches,
+            OC: tempOC,
+            DC: tempDC,
             players: tempPlayers
         });
     }
@@ -189,7 +269,7 @@ class School extends Component {
 
         const {classes} = this.props;
 
-        if(!this.state.loadedCoaches || !this.state.loadedPlayers){
+        if(!this.state.loadedCoaches || !this.state.loadedPlayers || !this.state.loadedCoordinators){
             return <LoadingIndicator/>;
         }
 
@@ -208,15 +288,15 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.headcoachSort}>
-                            <option value="Ascending">Ascending</option>
                             <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    <Grid container align="center" justify="left" spacing={3} className={classes.list}>
+                    <Grid container align="center" spacing={3} className={classes.list}>
                         {
                             this.state.coaches.map((coach, ndx) => {
                                 return (
@@ -249,29 +329,65 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.OCSort}>
-                            <option value="Ascending">Ascending</option>
                             <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    {/* Grid for Offensive Coordinators */}
+                    <Grid container align="center" spacing={3} className={classes.list}>
+                        {
+                            this.state.allOC.map((oc, ndx) => {
+                                return (
+                                    <Grid item xs={3}>
+                                        <a style={{ color: this.state.primaryColor }}>
+                                            <StyledPaper classes={classes}>
+                                                <Avatar className={classes.logo} src={logo}/>
+                                                <Typography>
+                                                    {oc.name} <br/>
+                                                    {oc.startYear === oc.endYear ? oc.startYear : oc.startYear + "-" + oc.endYear}
+                                                </Typography>
+                                            </StyledPaper>
+                                        </a>
+                                    </Grid>
+                                );
+                            })
+                        }
+                    </Grid>
                 </div>
                 <br/>
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.DCSort}>
-                            <option value="Ascending">Ascending</option>
                             <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    {/* Grid for Defensive Coordinators */}
+                    <Grid container align="center" spacing={3} className={classes.list}>
+                        {
+                            this.state.allDC.map((dc, ndx) => {
+                                return (
+                                    <Grid item xs={3}>
+                                        <a style={{ color: this.state.primaryColor }}>
+                                            <StyledPaper classes={classes}>
+                                                <Avatar className={classes.logo} src={logo}/>
+                                                <Typography>
+                                                    {dc.name} <br/>
+                                                    {dc.startYear === dc.endYear ? dc.startYear : dc.startYear + "-" + dc.endYear}
+                                                </Typography>
+                                            </StyledPaper>
+                                        </a>
+                                    </Grid>
+                                );
+                            })
+                        }
+                    </Grid>
                 </div>
                 <br/>
                 <div>
@@ -284,7 +400,7 @@ class School extends Component {
                         </select>
                     </h1>
                 </div>
-                <Grid container align="center" justify="left" spacing={3} className={classes.list}>
+                <Grid container align="center" spacing={3} className={classes.list}>
                     {
                         this.state.players.map((player, ndx) => {
                             return (
