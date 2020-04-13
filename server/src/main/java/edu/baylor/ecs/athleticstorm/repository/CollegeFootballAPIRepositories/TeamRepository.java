@@ -23,6 +23,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Optional<Team> findTeamBySchool(String school);
 
-    @Query("SELECT t from Team t WHERE t.division = 'FBS'")
+    @Query("SELECT t from Team t WHERE t.is_fbs = true")
     List<Team> findAllFBS();
 }

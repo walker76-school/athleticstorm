@@ -48,7 +48,7 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Include
     private Integer year;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
     @MapsId
     @EqualsAndHashCode.Exclude

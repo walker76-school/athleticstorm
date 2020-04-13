@@ -87,7 +87,7 @@ public class Player implements Comparable<Player>{
     @EqualsAndHashCode.Exclude
     private Usage usage = null;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player")
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayerList = new TreeSet<>();
 

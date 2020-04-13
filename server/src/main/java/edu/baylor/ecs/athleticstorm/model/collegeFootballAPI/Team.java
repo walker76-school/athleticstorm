@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,11 +40,18 @@ import java.util.TreeSet;
 @EqualsAndHashCode
 public class Team implements Comparable<Team>{
 
+    private static List<String> FBS_CONFERENCES = Arrays.asList("SEC", "Big 12", "ACC", "Big Ten", "PAC-12", "Mountain West", "Sun Belt", "Mid_american", "FBS Independents", "Conference USA");
+
     // the id of the team
     @Id
     @Column(name = "ID")
     @EqualsAndHashCode.Include
     private Long id;
+
+    @Id
+    @Column(name = "IS_FBS")
+    @EqualsAndHashCode.Exclude
+    private boolean is_fbs;
 
     // the name of the school
     @Column(name = "SCHOOL")
@@ -125,5 +133,6 @@ public class Team implements Comparable<Team>{
         this.color = team.getColor();
         this.alt_color = team.getAlt_color();
         this.logos = team.getLogos();
+        this.is_fbs = FBS_CONFERENCES.contains(this.conference);
     }
 }
