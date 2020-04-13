@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Avatar} from "@material-ui/core";
+import LoadingIndicator from "../../common/LoadingIndicator";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -39,7 +40,8 @@ class SchoolList extends Component {
         super(props);
         this.state = {
             teams: [],
-            allTeams: []
+            allTeams: [],
+            loaded: false
         };
         this.filterTeams = this.filterTeams.bind(this);
     }
@@ -48,8 +50,16 @@ class SchoolList extends Component {
         // Get List Of FBS Teams From API
         axios.get('http://localhost:8080/api/teams/fbs')
         .then(res => {
-            this.setState({ teams: res.data });
-            this.setState({ allTeams: res.data });
+            this.setState({
+                teams: res.data,
+                allTeams: res.data,
+                loaded: true
+            });
+        })
+        .catch(error => {
+            this.setState({
+                loaded: true
+            });
         });
     }
 
@@ -64,7 +74,12 @@ class SchoolList extends Component {
     }
 
     render() {
+
         const { classes } = this.props;
+
+        if(!this.state.loaded){
+            return <LoadingIndicator/>
+        }
 
         return (
             <div className={classes.root} >
