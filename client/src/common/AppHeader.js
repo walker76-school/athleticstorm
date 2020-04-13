@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 import './AppHeader.css';
 import logo from './AthleticStormLogo.png'
+import rankingIcon from '../logo.svg';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
 const Header = Layout.Header;
     
@@ -29,6 +30,11 @@ class AppHeader extends Component {
                 <Icon type="home" className="nav-icon" />
               </Link>
             </Menu.Item>,
+              <Menu.Item key="/ranking">
+                  <Link to="/ranking">
+                      <img src={rankingIcon} alt="ranking" className="ranking-icon" />
+                  </Link>
+              </Menu.Item>,
             <Menu.Item key="/profile" className="profile-menu">
                 <ProfileDropdownMenu 
                   currentUser={this.props.currentUser} 

@@ -2,12 +2,14 @@ package edu.baylor.ecs.athleticstorm.controller;
 
 import edu.baylor.ecs.athleticstorm.DTO.TeamResponse;
 import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
+import edu.baylor.ecs.athleticstorm.model.coach.CoachStats;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/coaches")
@@ -19,6 +21,11 @@ public class CoachController {
     @GetMapping("/all")
     public List<Coach> getAllCoaches(){
         return collegeFootballAPIService.getAllCoaches();
+    }
+
+    @GetMapping("/allStats")
+    public List<CoachStats> getAllCoachRecords(){
+        return collegeFootballAPIService.getAllCoaches().parallelStream().map(CoachStats::new).collect(Collectors.toList());
     }
 
     @GetMapping("/byTeamId/{teamId}" )

@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Avatar } from "@material-ui/core";
+import LoadingIndicator from "../common/LoadingIndicator";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -47,12 +48,9 @@ class Ranking extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            teams: [],
-            allCoaches: [],
-            coachList: [],
-            tempCoachDataStorage: []
+            allRecords: [],
+            loaded: false
         };
-        this.customCoachData = this.customCoachData.bind(this);
         this.headcoachSort = this.headcoachSort.bind(this);
     }
 
@@ -60,14 +58,14 @@ class Ranking extends Component {
         let sortBy = event.target.value;
         console.log(event.target.value);
         if("Alphabetical" === sortBy){
-            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => a.value.last_name > b.value.last_name ? 1 : -1);
-            this.setState({ tempCoachDataStorage: sortedCoaches });
+            const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => a.lastName > b.lastName ? 1 : -1);
+            this.setState({ allRecords: sortedCoaches });
         }else if("Win %" === sortBy){
-            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => a.value.winPerc < b.value.winPerc ? 1 : -1);
-            this.setState({ tempCoachDataStorage: sortedCoaches });
+            const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => a.winPercentage < b.winPercentage ? 1 : -1);
+            this.setState({ allRecords: sortedCoaches });
         }else if("Most Wins" === sortBy){
-            const sortedCoaches = [].concat(this.state.tempCoachDataStorage).sort((a, b) => parseInt(a.value.wins,10) < parseInt(b.value.wins,10) ? 1 : -1);
-            this.setState({ tempCoachDataStorage: sortedCoaches });
+            const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => parseInt(a.wins,10) < parseInt(b.wins,10) ? 1 : -1);
+            this.setState({ allRecords: sortedCoaches });
         }else if("Coach Grade" === sortBy){
          
         }else{
@@ -75,38 +73,30 @@ class Ranking extends Component {
         }
     }
 
-    customCoachData() {
-        var coachFinal = [];
-        //for (var i = 0; i < 10 && i < this.state.allCoaches.length; i++) {
-        for (var i = 0; i < this.state.allCoaches.length; i++) {
-            axios.get('http://localhost:8080/api/coaches/record/byName/' + this.state.allCoaches[i].first_name + '-' + this.state.allCoaches[i].last_name)
-                .then(result => {
-                    // Create a new array based on current state:
-                    var tempCoaches = this.state.tempCoachDataStorage;
-                    // Get win percentage of the coach
-                    var editedCoach = result.data;
-                    editedCoach.winPerc = 100 * result.data.wins / (result.data.losses + result.data.wins + result.data.ties);
-                    // Add item to it
-                    tempCoaches.push({ value: editedCoach });
-
-                    // Set state
-                    this.setState({ tempCoachDataStorage: tempCoaches });
-                })
-        }
-        console.log(this.state.tempCoachDataStorage[0]);
-    }
-
     componentDidMount() {
         
-        axios.get('http://localhost:8080/api/coaches/all')
-            .then(res => {
-                this.setState({ allCoaches: res.data });
-                this.customCoachData();
+        axios.get('http://localhost:8080/api/coaches/allStats')
+        .then(res => {
+            this.setState({
+                allRecords: res.data,
+                loaded: true
             });
+        })
+        .catch(error => {
+            this.setState({
+                allRecords: [],
+                loaded: true
+            });
+        });
     }
 
     render() {
         const { classes } = this.props;
+
+        if(!this.state.loaded){
+            return <LoadingIndicator/>
+        }
+
         return (
             <div className={classes.root} >
                 <br />
@@ -120,22 +110,22 @@ class Ranking extends Component {
                     </h1>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} className={classes.list}>
                     {
-                        this.state.tempCoachDataStorage.length > 0 ?
-                            this.state.tempCoachDataStorage.map((coach, ndx) => {
+                        this.state.allRecords.length > 0 ?
+                            this.state.allRecords.map((record, ndx) => {
                                 return (
                                     <Grid item xs={3} key={ndx}>
                                             <StyledPaper classes={classes}>
                                                 {/* <Avatar className={classes.logo} src={team.logos[0]}/> */}
                                                 <Typography>#{ndx+1}</Typography>
-                                                <Typography><b>{coach.value.first_name} {coach.value.last_name}</b></Typography>
-                                                <Typography><b>Wins:</b> {coach.value.wins} <b>Losses:</b> {coach.value.losses}</Typography>
+                                                <Typography><b>{record.firstName} {record.lastName}</b></Typography>
+                                                <Typography><b>Wins:</b> {record.wins} <b>Losses:</b> {record.losses}</Typography>
                                             </StyledPaper>
                                     </Grid>
                                 );
                             })
                             :
                             <Typography>
-                               Please wait while we load the coach data.
+                               No coaches loaded.
                             </Typography>
                     }
                 </Grid>
@@ -144,7 +134,7 @@ class Ranking extends Component {
     }
 }
 
-export default withStyles(styles)(withRouter(Ranking));
+export default withStyles(styles)(Ranking);
 
 class StyledPaper extends Component {
     constructor(props) {
