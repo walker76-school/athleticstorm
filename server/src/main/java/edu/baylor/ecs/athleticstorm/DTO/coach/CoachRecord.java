@@ -27,6 +27,14 @@ public class CoachRecord {
         terms = new ArrayList<>();
     }
 
+    public CoachRecord(CoachDTO coach){
+        this.coachId = -1;
+        this.name= coach.getFirst_name() + " " + coach.getLast_name();
+        this.wins = 0;
+        this.losses = 0;
+        terms = new ArrayList<>();
+    }
+
     public void addTerm(Term term){
         this.terms.add(term);
         this.terms.sort(Comparator.comparingInt(Term::getStart_year).reversed());

@@ -33,10 +33,7 @@ public class CoachController {
     @GetMapping("/record/byName/{name}" )
     public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
         CoachDTO coach = coachService.getCoachByName(name);
-        //TODO
-        //return coachService.buildRecordFromCoach(coach);
-
-        return null;
+        return coachService.buildRecordFromCoach(coach);
     }
 
 }
