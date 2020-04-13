@@ -3,26 +3,25 @@ import './App.css';
 import {
     Route,
     withRouter,
-    Switch, Redirect
+    Switch
 } from 'react-router-dom';
 import {getCurrentUser} from '../util/APIUtils';
 import {ACCESS_TOKEN} from '../constants';
 import Home from '../pages/home/Home';
-import Coach from '../pages/Coach';
-import Ranking from '../pages/Ranking';
+import Coach from '../pages/coach/Coach';
+import Ranking from '../pages/ranking/Ranking';
 import Login from '../user/login/Login';
-import Player from "../pages/player/Player";
 import School from "../pages/school/School";
 import Signup from '../user/signup/Signup';
 import AppHeader from '../common/AppHeader';
 import AppFooter from '../common/AppFooter';
-import Team from '../pages/Team';
+import Team from '../pages/home/Team';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import {Layout, notification} from 'antd';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
-
+import PrivateRoute from "../common/PrivateRoute";
 const {Content} = Layout;
 
 const theme = createMuiTheme({
@@ -143,10 +142,6 @@ class App extends Component {
                                 <Coach/>
                             </PrivateRoute>
 
-                            <PrivateRoute exact path="/player/:id">
-                                <Player/>
-                            </PrivateRoute>
-
                             <Route component={NotFound}/>
                         </Switch>
                     </div>
@@ -159,23 +154,3 @@ class App extends Component {
 }
 
 export default withRouter(App);
-
-class PrivateRoute extends Component {
-
-    render() {
-        return (
-            <Route
-                {...this.props}
-                render={() => {
-                    return localStorage.getItem(ACCESS_TOKEN) !== null ? (
-                        this.props.children
-                    ) : (
-                        <Redirect to="/login"/>
-                    )
-                    // this.props.children
-                }
-                }
-            />
-        );
-    }
-}

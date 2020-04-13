@@ -21,12 +21,12 @@ export default class AppFooter extends Component {
             <Footer className="app-header" style={style}>
                 <div className="container">
                     <div>
-                        <Link to={'/team'} style={{ padding: '20px' }}>Meet the Team</Link>
+                        <Link to={'/team'} style={{ padding: '20px', color: '#3773B0' }}>Meet the Team</Link>
                         <Link to={'/'} style={{ padding: '20px' }}><img src={Football} alt="Athletic Storm alt logo"/></Link>
-                        <a target="_blank" rel="noopener noreferrer" href={'https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm'} style={{ padding: '20px' }}>GitLab Page</a>
+                        <a target="_blank" rel="noopener noreferrer" href={'https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm'} style={{ padding: '20px', color: '#3773B0' }}>GitLab Page</a>
                     </div>
                 </div>
-                <p>Data comes courtesy of <a href={"https://collegefootballdata.com/"} target={"_blank"}>CollegeFootballData</a></p>
+                <p>Data comes courtesy of <a href={"https://collegefootballdata.com/"} target={"_blank"} style={{color: '#3773B0'}}>CollegeFootballData</a></p>
             </Footer>
         );
     }

@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import '../../common/AppHeader.css';
-import logo from '../football.jpeg'
+import logo from './football.jpeg'
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+import Popup from "../player/Popup";
+import LoadingIndicator from "../../common/LoadingIndicator";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Popup from "../player/Popup";
-import LoadingIndicator from "../../common/LoadingIndicator";
 
 const styles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    list: {
-        marginTop: theme.spacing(2),
-    },
     paper: {
         padding: theme.spacing(2),
         textAlign: 'center',
@@ -29,11 +22,6 @@ const styles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    logo: {
-        marginTop: theme.spacing(2),
-        paddingTop: theme.spacing(2)
-
     }
 }));
 
@@ -74,7 +62,6 @@ class School extends Component {
     componentDidMount() {
         axios.get('http://localhost:8080/api/teams/byName/' + this.props.match.params.schoolName)
         .then(result => {
-            console.log(result);
             this.setState({
                 teamId: result.data.id,
                 schoolName: result.data.school,
@@ -93,7 +80,6 @@ class School extends Component {
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
             .then(result => {
-                console.log(result);
                 this.setState({
                     coaches: result.data,
                     allCoaches: result.data,
@@ -106,7 +92,6 @@ class School extends Component {
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coordinators/byTeamId/' + this.state.teamId)
             .then(result => {
-                console.log(result);
                 let oc = result.data.filter(x => x.position === "OC");
                 let dc = result.data.filter(x => x.position === "DC");
                 this.setState({
@@ -155,7 +140,6 @@ class School extends Component {
 
     headcoachSort(event){
         let sortBy = event.target.value;
-        console.log(event.target.value);
         if("Descending" === sortBy){
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name < b.last_name ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
@@ -179,7 +163,6 @@ class School extends Component {
 
     OCSort(event){
         let sortBy = event.target.value;
-        console.log(event.target.value);
         if("Descending" === sortBy){
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name < b.name ? 1 : -1);
             this.setState({ OC: sortedOC });
@@ -203,7 +186,6 @@ class School extends Component {
 
     DCSort(event){
         let sortBy = event.target.value;
-        console.log(event.target.value);
         if("Descending" === sortBy){
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name < b.name ? 1 : -1);
             this.setState({ DC: sortedDC });
@@ -226,30 +208,29 @@ class School extends Component {
     }
 
     filter(filter){
-        var tempCoaches = [];
-        for( var x = 0; x < this.state.allCoaches.length; x++){
+        let tempCoaches = [];
+        for( let x = 0; x < this.state.allCoaches.length; x++){
             if(this.state.allCoaches[x].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || this.state.allCoaches[x].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
                 tempCoaches.push(this.state.allCoaches[x]);
             }
         }
 
-        var tempOC = [];
-        for( var y = 0; y < this.state.allOC.length; y++){
+        let tempOC = [];
+        for( let y = 0; y < this.state.allOC.length; y++){
             if(this.state.allOC[y].name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
                 tempOC.push(this.state.allOC[y]);
             }
         }
 
-        var tempDC = [];
-        for( var z = 0; z < this.state.allDC.length; z++){
+        let tempDC = [];
+        for( let z = 0; z < this.state.allDC.length; z++){
             if(this.state.allDC[z].name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
                 tempDC.push(this.state.allDC[z]);
             }
         }
 
-        var tempPlayers = [];
-        for( var i = 0; i < this.state.allPlayers.length; i++){
-            console.log(this.state.allPlayers[i]);
+        let tempPlayers = [];
+        for( let i = 0; i < this.state.allPlayers.length; i++){
             if(this.state.allPlayers[i].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
                 this.state.allPlayers[i].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
                 this.state.allPlayers[i].position.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
@@ -267,15 +248,12 @@ class School extends Component {
 
     render() {
 
-        const {classes} = this.props;
-
         if(!this.state.loadedCoaches || !this.state.loadedPlayers || !this.state.loadedCoordinators){
             return <LoadingIndicator/>;
         }
 
         return (
             <div>
-                <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
                 <br/>
                 <input type="text" placeholder="Search" onChange={(event) => {this.filter(event.target.value)}}/>
                 <br/>
@@ -296,11 +274,11 @@ class School extends Component {
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    <Grid container align="center" spacing={3} className={classes.list}>
+                    <Grid container align="center" spacing={3}>
                         {
                             this.state.coaches.map((coach, ndx) => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item xs={3} key={ndx}>
                                         <Link
                                             to={{
                                                 pathname: "/coach/" + coach.first_name + " " + coach.last_name,
@@ -311,8 +289,8 @@ class School extends Component {
                                             }}
                                             style={{ color: this.state.primaryColor }}
                                         >
-                                            <StyledPaper classes={classes}>
-                                                <Avatar className={classes.logo} src={logo}/>
+                                            <StyledPaper classes={this.props.classes}>
+                                                <Avatar src={logo}/>
                                                 <Typography>
                                                     {coach.first_name + " " + coach.last_name} <br/>
                                                     {coach.seasons.length === 1 ? coach.seasons[0].year : coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year}
@@ -337,14 +315,14 @@ class School extends Component {
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    <Grid container align="center" spacing={3} className={classes.list}>
+                    <Grid container align="center" spacing={3}>
                         {
                             this.state.OC.map((oc, ndx) => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item xs={3} key={ndx}>
                                         <a style={{ color: this.state.primaryColor }}>
-                                            <StyledPaper classes={classes}>
-                                                <Avatar className={classes.logo} src={logo}/>
+                                            <StyledPaper classes={this.props.classes}>
+                                                <Avatar src={logo}/>
                                                 <Typography>
                                                     {oc.name} <br/>
                                                     {oc.startYear === oc.endYear ? oc.startYear : oc.startYear + "-" + oc.endYear}
@@ -369,14 +347,14 @@ class School extends Component {
                             <option value="Worst Score">Worst Score</option>
                         </select>
                     </h1>
-                    <Grid container align="center" spacing={3} className={classes.list}>
+                    <Grid container align="center" spacing={3}>
                         {
                             this.state.DC.map((dc, ndx) => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item xs={3} key={ndx}>
                                         <a style={{ color: this.state.primaryColor }}>
-                                            <StyledPaper classes={classes}>
-                                                <Avatar className={classes.logo} src={logo}/>
+                                            <StyledPaper classes={this.props.classes}>
+                                                <Avatar src={logo}/>
                                                 <Typography>
                                                     {dc.name} <br/>
                                                     {dc.startYear === dc.endYear ? dc.startYear : dc.startYear + "-" + dc.endYear}
@@ -400,11 +378,11 @@ class School extends Component {
                         </select>
                     </h1>
                 </div>
-                <Grid container align="center" spacing={3} className={classes.list}>
+                <Grid container align="center" spacing={3}>
                     {
                         this.state.players.map((player, ndx) => {
                             return (
-                                <Grid item xs={3}>
+                                <Grid item xs={3} key={ndx}>
                                     <a
                                         onClick={() => {
                                             this.setSelectedPlayer({
@@ -416,8 +394,8 @@ class School extends Component {
                                             })
                                         }}
                                         style={{ color: this.state.primaryColor }} >
-                                        <StyledPaper classes={classes}>
-                                            <Avatar className={classes.logo} src={logo}/>
+                                        <StyledPaper classes={this.props.classes}>
+                                            <Avatar src={logo}/>
                                             <Typography>
                                                 {player.first_name + " " + player.last_name} <br/>
                                                 {player.position ? player.position + " " + this.state.year : this.state.year}
@@ -429,6 +407,7 @@ class School extends Component {
                         })
                     }
                 </Grid>
+                <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
             </div>
         );
     }
@@ -456,13 +435,15 @@ class StyledPaper extends Component {
     }
 
     render() {
+
+        let {classes} = this.props;
         return (
             <Paper
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 elevation={this.state.elevation}
                 square={true}
-                className={this.props.classes.paper}
+                className={classes.paper}
             >
                 {this.props.children}
             </Paper>

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import BleachersPic from "../bleachers.jpg";
+import BleachersPic from "./bleachers.jpg";
 import Button from "@material-ui/core/Button";
 
 export default class WelcomePage extends Component {
@@ -26,7 +26,7 @@ export default class WelcomePage extends Component {
                 </div>
                 <div>
                     <h1 style={{ display: 'flex', justifyContent: 'center' }}>Coach rating system</h1>
-                    <h3>(Michael/Shaeffer can fill this part out more specifically than I can) - Make it sensational and buzzwordy</h3>
+                    <h3>(Michael/Schaeffer can fill this part out more specifically than I can) - Make it sensational and buzzwordy</h3>
                 </div>
             </div>
         );

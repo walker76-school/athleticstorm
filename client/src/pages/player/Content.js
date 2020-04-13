@@ -14,11 +14,8 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
-        console.log("About to load ", this.props.selectedPlayer);
-
         axios.post("http://localhost:8080/api/player/getStats/", this.props.selectedPlayer)
             .then(result => {
-                console.log(result.data);
                 this.setState({
                     completed: true,
                     playerData: result.data
@@ -33,7 +30,7 @@ export default class Content extends Component {
         if (this.state.completed) {
 
             return (
-                <div style={{"text-align": "center"}}>
+                <div style={{"textAlign": "center"}}>
                     <div>
                         <h2> Weight: {this.state.playerData.player.weight} pounds</h2>
                         <h2> Height: {this.state.playerData.player.height} inches</h2>

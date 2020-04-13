@@ -27,12 +27,12 @@ class AppHeader extends Component {
           menuItems = [
             <Menu.Item key="/">
               <Link to="/">
-                <Icon type="home" className="nav-icon" />
+                <Icon style={{ color: '#3773B0'}} type="home" className="nav-icon" />
               </Link>
             </Menu.Item>,
               <Menu.Item key="/ranking">
                   <Link to="/ranking">
-                      <img src={rankingIcon} alt="ranking" className="ranking-icon" />
+                      <img style={{ color: '#3773B0'}} src={rankingIcon} alt="ranking" className="ranking-icon" />
                   </Link>
               </Menu.Item>,
             <Menu.Item key="/profile" className="profile-menu">
@@ -94,11 +94,10 @@ function ProfileDropdownMenu(props) {
       trigger={['click']}
       getPopupContainer = { () => document.getElementsByClassName('profile-menu')[0]}>
       <a className="ant-dropdown-link">
-         <Icon type="user" className="nav-icon" style={{marginRight: 0}} /> <Icon type="down" />
+         <Icon type="user" className="nav-icon" style={{marginRight: 0, color: '#3773B0'}} /> <Icon type="down" />
       </a>
     </Dropdown>
   );
 }
-
 
 export default withRouter(AppHeader);
