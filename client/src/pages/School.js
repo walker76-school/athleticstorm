@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Popup from "./player/Popup";
+import LoadingIndicator from "../common/LoadingIndicator";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -43,12 +44,16 @@ class School extends Component {
         this.state = {
             teamId: this.props.location.state.teamId,
             coaches: [],
+            allCoaches: [],
             players: [],
+            allPlayers: [],
             schoolName: '',
             logo: '',
             primaryColor: '',
             year: '2019',
-            selectedPlayer: null
+            selectedPlayer: null,
+            loadedCoaches: false,
+            loadedPlayers: false
         };
 
         this.loadCoaches = this.loadCoaches.bind(this);
@@ -83,7 +88,9 @@ class School extends Component {
         .then(result => {
             console.log(result);
             this.setState({
-                coaches: result.data
+                coaches: result.data,
+                allCoaches: result.data,
+                loadedCoaches: true
             });
         });
     }
@@ -95,8 +102,16 @@ class School extends Component {
             // Get List Of Players From API
             axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
             .then(result => {
+                let tempPlayers = [];
+                for(var x = 0; x < result.data.length; x++){
+                    if(result.data[x].first_name !== null && result.data[x].last_name !== null && result.data[x].position !== null){
+                        tempPlayers.push(result.data[x]);
+                    }
+                }
                 this.setState({
-                    players: result.data
+                    players: tempPlayers,
+                    allPlayers: tempPlayers,
+                    loadedPlayers: true
                 });
             })
         });
@@ -118,10 +133,10 @@ class School extends Component {
         let sortBy = event.target.value;
         console.log(event.target.value);
         if("Descending" === sortBy){
-            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name > b.last_name ? 1 : -1);
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name < b.last_name ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
         }else if("Ascending" === sortBy){
-            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name  < b.last_name ? 1 : -1);
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name  > b.last_name ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
         }else if("Most Recent" === sortBy){
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => parseInt(a.seasons[0].year, 10)  < parseInt(b.seasons[0].year, 10) ? 1 : -1);
@@ -146,13 +161,44 @@ class School extends Component {
         // fill in with headcoachsort stuff
     }
 
+    filter(filter){
+        var tempCoaches = [];
+        for( var x = 0; x < this.state.allCoaches.length; x++){
+            if(this.state.allCoaches[x].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) || this.state.allCoaches[x].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
+                tempCoaches.push(this.state.allCoaches[x]);
+            }
+        }
+
+        var tempPlayers = [];
+        for( var y = 0; y < this.state.allPlayers.length; y++){
+            console.log(this.state.allPlayers[y]);
+            if(this.state.allPlayers[y].first_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+                this.state.allPlayers[y].last_name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()) ||
+                this.state.allPlayers[y].position.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
+                tempPlayers.push(this.state.allPlayers[y]);
+            }
+        }
+
+        this.setState({
+            coaches: tempCoaches,
+            players: tempPlayers
+        });
+    }
+
     render() {
 
         const {classes} = this.props;
 
+        if(!this.state.loadedCoaches || !this.state.loadedPlayers){
+            return <LoadingIndicator/>;
+        }
+
         return (
             <div>
                 <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
+                <br/>
+                <input type="text" placeholder="Search" onChange={(event) => {this.filter(event.target.value)}}/>
+                <br/>
                 <br/>
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{this.state.schoolName}</h1>
@@ -162,8 +208,8 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.headcoachSort}>
-                            <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
+                            <option value="Descending">Descending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
@@ -203,8 +249,8 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.OCSort}>
-                            <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
+                            <option value="Descending">Descending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
@@ -217,8 +263,8 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.DCSort}>
-                            <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
+                            <option value="Descending">Descending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
                             <option value="Best Score">Best Score</option>
