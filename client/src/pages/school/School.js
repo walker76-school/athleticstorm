@@ -243,7 +243,7 @@ class School extends Component {
         var tempDC = [];
         for( var z = 0; z < this.state.allDC.length; z++){
             if(this.state.allDC[z].name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())){
-                tempCoaches.push(this.state.allDC[z]);
+                tempDC.push(this.state.allDC[z]);
             }
         }
 
@@ -339,7 +339,7 @@ class School extends Component {
                     </h1>
                     <Grid container align="center" spacing={3} className={classes.list}>
                         {
-                            this.state.allOC.map((oc, ndx) => {
+                            this.state.OC.map((oc, ndx) => {
                                 return (
                                     <Grid item xs={3}>
                                         <a style={{ color: this.state.primaryColor }}>
@@ -371,7 +371,7 @@ class School extends Component {
                     </h1>
                     <Grid container align="center" spacing={3} className={classes.list}>
                         {
-                            this.state.allDC.map((dc, ndx) => {
+                            this.state.DC.map((dc, ndx) => {
                                 return (
                                     <Grid item xs={3}>
                                         <a style={{ color: this.state.primaryColor }}>
