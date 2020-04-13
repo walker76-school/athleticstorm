@@ -20,8 +20,24 @@ import Team from '../pages/Team';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import {Layout, notification} from 'antd';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {ThemeProvider} from "@material-ui/styles";
 
 const {Content} = Layout;
+
+const theme = createMuiTheme({
+        palette: {
+            primary: {
+                main: '#3773B0'
+            },
+            info: {
+                light: '#3773B0',
+                main: '#3773B0',
+                dark: '#3773B0'
+            }
+        }
+    },
+);
 
 class App extends Component {
     constructor(props) {
@@ -101,7 +117,8 @@ class App extends Component {
             return <LoadingIndicator/>
         }
         return (
-            <Layout className="app-container">
+            <ThemeProvider theme={theme}>
+                <Layout className="app-container">
                 <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
                            onLogout={this.handleLogout}/>
@@ -136,6 +153,7 @@ class App extends Component {
                 </Content>
                 <AppFooter/>
             </Layout>
+            </ThemeProvider>
         );
     }
 }
