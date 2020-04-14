@@ -45,13 +45,13 @@ public class AdvancedPlayerDTO {
     private String conference;
     private UsageDTO usage;
 
-    public AdvancedPlayerDTO(Player p){
+    public AdvancedPlayerDTO(Player p, Usage u){
         this.id = p.getId();
         this.name = p.getName();
         this.position = p.getPosition();
         this.team = p.getTeam();
         //this.conference
         //this.season
-        this.usage = new UsageDTO(p.getUsage());
+        this.usage = new UsageDTO(u);
     }
 }

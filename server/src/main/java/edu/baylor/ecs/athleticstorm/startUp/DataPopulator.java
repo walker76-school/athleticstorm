@@ -201,7 +201,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 if(Objects.isNull(p)){
                     continue;
                 }
-                RosterPlayer rp = new RosterPlayer(p.getId(), 2019, p, t);
+                RosterPlayer rp = new RosterPlayer(2019, p, t);
                 t.getRosterPlayers().add(rp);
                 p.getRosterPlayerList().add(rp);
                 rosterPlayers.add(rp);
@@ -218,16 +218,20 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         if(usageRepository.count() > 0){
             return;
         }
-        AdvancedPlayerDTO [] usages = restTemplate.getForObject(playerUsage("2019", null), AdvancedPlayerDTO[].class);
 
-        List<Usage> u =
-        Arrays.stream(usages).map(x -> {
-            Optional<Player> temp = playerRepository.findById(x.getId());
-            return temp.isPresent() ? new Usage(x.getUsage(), temp.get()) : null;
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+        for(String year : new String[]{"2017","2018","2019"}){
+            AdvancedPlayerDTO [] usages = restTemplate.getForObject(playerUsage(year, null), AdvancedPlayerDTO[].class);
 
-        usageRepository.saveAll(u);
-        usageRepository.flush();;
+            Long yearLong = new Long(year);
+            List<Usage> u =
+                    Arrays.stream(usages).map(x -> {
+                        Optional<Player> temp = playerRepository.findById(x.getId());
+                        return temp.isPresent() ? new Usage(x.getUsage(), temp.get(), yearLong) : null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+
+            usageRepository.saveAll(u);
+        }
+        usageRepository.flush();
     }
 
 }

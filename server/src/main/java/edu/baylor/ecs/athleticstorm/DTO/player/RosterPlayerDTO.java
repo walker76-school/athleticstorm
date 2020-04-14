@@ -35,7 +35,7 @@ public class RosterPlayerDTO {
     //private String country;
 
     public RosterPlayerDTO(RosterPlayer rosterPlayer){
-        this.id = rosterPlayer.getId();
+        this.id = rosterPlayer.getPlayer().getId();
         this.first_name = rosterPlayer.getPlayer().getFirstName();
         this.last_name = rosterPlayer.getPlayer().getLastName();
         this.height = rosterPlayer.getPlayer().getHeight();

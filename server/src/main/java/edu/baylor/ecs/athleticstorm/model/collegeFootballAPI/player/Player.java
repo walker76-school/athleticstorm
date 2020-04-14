@@ -83,9 +83,9 @@ public class Player implements Comparable<Player>{
     @EqualsAndHashCode.Exclude
     private String teamColor;
 
-    @OneToOne(mappedBy = "player", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private Usage usage = null;
+    private Set<Usage> usage = new TreeSet<>();
 
     @OneToMany(mappedBy = "player")
     @EqualsAndHashCode.Exclude

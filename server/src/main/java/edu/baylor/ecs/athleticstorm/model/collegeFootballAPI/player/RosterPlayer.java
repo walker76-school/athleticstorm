@@ -34,23 +34,18 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @Data
     @EqualsAndHashCode
     public static class RosterPlayerId implements Serializable {
-        private Long id;
+        private Long player;
         private int year;
     }
-
-    @Id
-    @Column(name = "PLAYER_ID", insertable = false, updatable = false)
-    @EqualsAndHashCode.Include
-    private Long id;
 
     @Id
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
     private Integer year;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "PLAYER_ID", referencedColumnName = "ID")
-    @MapsId
     @EqualsAndHashCode.Exclude
     private Player player;
 
@@ -59,14 +54,14 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Exclude
     private Team team;
 
-    public RosterPlayer(Long id, Team t) {
-        this.id = new Long(id);
+    public RosterPlayer(Player p, Team t) {
+        this.player = p;
         this.team = t;
     }
 
     @Override
     public int compareTo(RosterPlayer rosterPlayer) {
-        int idCompare = this.id.compareTo(rosterPlayer.getId());
+        int idCompare = this.player.compareTo(rosterPlayer.getPlayer());
         return idCompare != 0 ? idCompare : this.year.compareTo(rosterPlayer.getYear());
     }
 }

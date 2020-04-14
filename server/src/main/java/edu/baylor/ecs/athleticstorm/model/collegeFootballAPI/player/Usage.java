@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @Data
@@ -26,16 +27,24 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PLAYER_USAGE")
+@IdClass(Usage.UsageId.class)
 @EqualsAndHashCode
 public class Usage implements Comparable<Usage>{
 
-    @Id
-    @Column(name = "PLAYER_ID")
-    @EqualsAndHashCode.Include
-    private Long id;
+    @Data
+    public static class UsageId implements Serializable {
+        private Long player;
+        private Long year;
+    }
 
-    @OneToOne
-    @MapsId
+    @Id
+    @Column(name = "YEAR", insertable = false, updatable = false)
+    @EqualsAndHashCode.Include
+    private Long year;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
     private Player player;
 
@@ -71,10 +80,10 @@ public class Usage implements Comparable<Usage>{
     @EqualsAndHashCode.Exclude
     private float passingDowns;
 
-    public Usage(AdvancedPlayerDTO.UsageDTO usageDTO, Player p){
-        this.id = p.getId();
+    public Usage(AdvancedPlayerDTO.UsageDTO usageDTO, Player p, Long year){
+        this.year = new Long(year);
         this.player = p;
-        p.setUsage(this);
+        p.getUsage().add(this);
         this.overall = usageDTO.getOverall();
         this.pass = usageDTO.getPass();
         this.rush = usageDTO.getRush();
@@ -87,6 +96,10 @@ public class Usage implements Comparable<Usage>{
 
     @Override
     public int compareTo(Usage usage) {
-        return this.id.compareTo(usage.getId());
+        int val = this.player.compareTo(usage.getPlayer());
+        if(val == 0){
+            return this.year.compareTo(usage.getYear());
+        }
+        return val;
     }
 }

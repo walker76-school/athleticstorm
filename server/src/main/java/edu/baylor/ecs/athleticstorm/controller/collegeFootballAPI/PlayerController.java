@@ -13,7 +13,7 @@ public class PlayerController {
     private PlayerService playerService;
 
     @GetMapping("/getStats/")
-    public CompositePlayer getPlayerById(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName){
-        return playerService.getPlayerStats(firstName, lastName);
+    public CompositePlayer getPlayerById(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName, @RequestParam(name = "year") String year){
+        return playerService.getPlayerStats(firstName, lastName, Long.parseLong(year));
     }
 }
