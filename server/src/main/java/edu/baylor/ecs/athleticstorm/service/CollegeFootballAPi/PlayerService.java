@@ -15,7 +15,6 @@ package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
 import edu.baylor.ecs.athleticstorm.DTO.player.*;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.PlayerRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.RosterPlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
