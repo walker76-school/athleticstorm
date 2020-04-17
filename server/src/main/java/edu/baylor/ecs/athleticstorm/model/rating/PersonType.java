@@ -13,5 +13,5 @@
 package edu.baylor.ecs.athleticstorm.model.rating;
 
 public enum PersonType {
-    COACH, PLAYER
+    COACH, OFFENSIVE, DEFENSIVE
 }

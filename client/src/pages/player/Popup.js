@@ -74,7 +74,7 @@ export default class Player extends Component {
                     {name}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Content selectedPlayer={this.props.selectedPlayer} setPlayerData={this.setPlayerData} />
+                    <Content selectedPlayer={this.props.selectedPlayer} setPlayerData={this.setPlayerData} onClose={this.props.handleClose}/>
                 </DialogContent>
             </Dialog>
         );

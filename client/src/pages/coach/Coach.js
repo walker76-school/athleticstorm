@@ -13,7 +13,7 @@ class Coach extends Component {
         super(props);
         this.state = {
             loading: true,
-            first_name: "",
+            name: "",
             last_name: "",
             record: null
         };
@@ -26,8 +26,7 @@ class Coach extends Component {
             console.log(result.data);
             this.setState({
                 loading: false,
-                first_name: result.data.first_name,
-                last_name: result.data.last_name,
+                name: result.data.name,
                 record: result.data
             });
         })
@@ -40,7 +39,7 @@ class Coach extends Component {
             return (
                 <div>
                     <div style={{"text-align": "center"}}>
-                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.first_name} {this.state.last_name}</h1>
+                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: "#ff0000"}}>89.3</span>)</h1>
                         <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <br/>

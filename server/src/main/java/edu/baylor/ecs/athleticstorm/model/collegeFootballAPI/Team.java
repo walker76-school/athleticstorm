@@ -15,6 +15,7 @@ package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 
+import edu.baylor.ecs.athleticstorm.model.coordinator.Coordinator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -110,6 +111,11 @@ public class Team implements Comparable<Team>{
     @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
+
+    // the players for the current coordinators of the team
+    @OneToMany(mappedBy = "team")
+    @EqualsAndHashCode.Exclude
+    private Set<Coordinator> coordinators = new TreeSet<>();
 
     @Override
     public int compareTo(Team team) {

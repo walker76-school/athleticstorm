@@ -14,6 +14,7 @@
 package edu.baylor.ecs.athleticstorm.startUp;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
+import edu.baylor.ecs.athleticstorm.DTO.coordinator.CoordinatorDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.RosterPlayerDTO;
@@ -24,7 +25,9 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Usage;
+import edu.baylor.ecs.athleticstorm.model.coordinator.Coordinator;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.*;
+import edu.baylor.ecs.athleticstorm.repository.RatingRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
@@ -32,10 +35,14 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,6 +77,15 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Autowired
     private UsageRepository usageRepository;
 
+    @Autowired
+    private RatingRepository ratingRepository;
+
+    @Autowired
+    private CoordinatorRepository coordinatorRepository;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     private Set<Team> teams = null;
     private Set<Player> players = null;
     private Set<Coach> coaches = null;
@@ -78,10 +94,10 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Override
     @Transactional
-    public void onApplicationEvent(ContextRefreshedEvent event){
+    public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // see if already done or colors already exist in the DB
-        if(setupComplete || (usageRepository.count() > 0)){
+        if(setupComplete || (coordinatorRepository.count() > 0)){
             setupComplete = true;
             return;
         }
@@ -89,7 +105,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     @Transactional
-    public void setup(){
+    public void setup() {
 
         logger.info("Beginning Setup");
 
@@ -107,6 +123,10 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
         // get all of the usage stats for players
         getPlayerUsage();
+
+        getCoachRatings();
+
+        getCoordinators();
 
         logger.info("End Setup");
 
@@ -232,6 +252,74 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             usageRepository.saveAll(u);
         }
         usageRepository.flush();
+    }
+
+    @Transactional
+    public void getCoachRatings(){
+        logger.info("Getting ratings");
+        for(Coach c: coaches){
+
+        }
+    }
+
+    @Transactional
+    public void getCoordinators() {
+
+        if(coordinatorRepository.count() > 0){
+            return;
+        }
+
+        try {
+            List<Coordinator> coordinators = new ArrayList<>();
+
+            Resource resource = resourceLoader.getResource("classpath:data/OC.csv");
+            InputStream inputStream = resource.getInputStream();
+            Scanner sc = new Scanner(inputStream);
+            parseFile(sc, coordinators, "OC");
+            sc.close();
+
+            resource = resourceLoader.getResource("classpath:data/DC.csv");
+            inputStream = resource.getInputStream();
+            sc = new Scanner(inputStream);
+            parseFile(sc, coordinators, "DC");
+            sc.close();
+
+            coordinatorRepository.saveAll(coordinators);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void parseFile(Scanner sc, List<Coordinator> coordinators, String key){
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine();
+            String[] tokens = line.split(",");
+            Map<String, List<Integer>> nameToYears = new HashMap<>();
+            getCoordinatorsByYear(nameToYears, tokens, 1, 2017);
+            getCoordinatorsByYear(nameToYears, tokens, 2, 2018);
+            getCoordinatorsByYear(nameToYears, tokens, 3, 2019);
+
+            for(Map.Entry<String, List<Integer>> entry : nameToYears.entrySet()){
+                List<Integer> years = entry.getValue();
+                Integer startYear = years.stream().min(Integer::compareTo).get();
+                Integer endYear = years.stream().max(Integer::compareTo).get();
+                Team t = teams.stream().filter(x -> x.getSchool().equals(tokens[0])).findFirst().orElse(null);
+                if(t != null) {
+                    coordinators.add(new Coordinator(entry.getKey(), key, startYear, endYear, t));
+                }
+
+            }
+        }
+    }
+
+    private void getCoordinatorsByYear(Map<String, List<Integer>> nameToYears, String[] tokens, int index, int year){
+        String token = tokens[index];
+        String[] coordinators = token.split("/");
+        for(String name : coordinators){
+            List<Integer> years = nameToYears.getOrDefault(name, new ArrayList<>());
+            years.add(year);
+            nameToYears.put(name, years);
+        }
     }
 
 }

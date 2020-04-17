@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import axios from "axios";
+import {notification} from "antd";
 
 export default class Content extends Component {
 
@@ -30,6 +31,13 @@ export default class Content extends Component {
                 }, () => {
                     this.props.setPlayerData(result.data);
                 });
+            })
+            .catch(error => {
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });
+                this.props.onClose();
             })
     }
 

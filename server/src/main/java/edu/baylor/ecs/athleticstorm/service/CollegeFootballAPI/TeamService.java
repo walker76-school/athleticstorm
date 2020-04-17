@@ -10,7 +10,7 @@
  *
  ******************************************************************************/
 
-package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
+package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;

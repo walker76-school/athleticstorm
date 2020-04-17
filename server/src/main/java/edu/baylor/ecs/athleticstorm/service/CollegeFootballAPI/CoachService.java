@@ -10,7 +10,7 @@
  *
  ******************************************************************************/
 
-package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi;
+package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
@@ -18,7 +18,6 @@ import edu.baylor.ecs.athleticstorm.DTO.coach.Term;
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.CoachRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;

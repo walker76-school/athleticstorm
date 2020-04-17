@@ -2,7 +2,7 @@ package edu.baylor.ecs.athleticstorm.controller.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
-import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi.CoachService;
+import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
