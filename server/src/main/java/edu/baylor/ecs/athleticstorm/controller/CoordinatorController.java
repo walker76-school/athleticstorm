@@ -1,9 +1,9 @@
 package edu.baylor.ecs.athleticstorm.controller;
 
+import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.exception.ResourceNotFoundException;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import edu.baylor.ecs.athleticstorm.model.coordinator.Coordinator;
-import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPIService;
+import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPi.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -20,14 +20,14 @@ import java.util.stream.Stream;
 public class CoordinatorController {
 
     @Autowired
-    private CollegeFootballAPIService collegeFootballAPIService;
+    private TeamService teamService;
 
     @Autowired
     private ResourceLoader resourceLoader;
 
     @GetMapping("/byTeamId/{teamId}")
     public List<Coordinator> getPlayerById(@PathVariable("teamId") int teamId) throws IOException {
-        Team team = collegeFootballAPIService.getAllTeams().stream()
+        TeamDTO team = teamService.getAllTeams().stream()
                 .filter(x -> x.getId() == teamId)
                 .findFirst()
                 .orElse(null);
