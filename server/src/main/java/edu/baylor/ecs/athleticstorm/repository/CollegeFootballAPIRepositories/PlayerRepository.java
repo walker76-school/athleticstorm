@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    @Query("SELECT p FROM Player p join p.usage where p.firstName = :firstName and p.lastName = :lastName")
+    @Query("SELECT p FROM Player p left join p.usage where p.firstName = :firstName and p.lastName = :lastName")
     public Optional<Player> findPlayerByFirstAndLastName(String firstName, String lastName);
 
     public Optional<Player> findPlayerByNameEquals(String name);
