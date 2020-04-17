@@ -20,7 +20,7 @@ public class RosterController {
     }
 
     @GetMapping("/{teamId}/{year}")
-    public List<RosterPlayerDTO> getSeasonRosterByYear(@PathVariable("teamId") Long teamId, @PathVariable("year") Long year){
+    public List<RosterPlayerDTO> getSeasonRosterByYear(@PathVariable("teamId") Long teamId, @PathVariable("year") Integer year){
         return playerService.roster(teamId, year);
     }
 }
