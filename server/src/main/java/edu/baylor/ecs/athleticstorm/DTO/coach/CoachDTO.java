@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class CoachDTO {
         this.last_name = c.getName().split("\\s+")[1];
         this.seasons = new LinkedList<>();
         c.getSeasons().forEach(x -> this.seasons.add(new SeasonDTO(x)));
+        this.seasons.sort(Comparator.comparing(SeasonDTO::getYear).reversed());
     }
 }
 

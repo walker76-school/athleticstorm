@@ -18,4 +18,9 @@ public class RosterController {
     public List<RosterPlayerDTO> getSeasonRoster(@PathVariable("teamId") Long teamId){
         return playerService.getTeamRoster(teamId);
     }
+
+    @GetMapping("/{teamId}/{year}")
+    public List<RosterPlayerDTO> getSeasonRosterByYear(@PathVariable("teamId") Long teamId, @PathVariable("year") Long year){
+        return playerService.roster(teamId, year);
+    }
 }

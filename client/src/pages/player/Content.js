@@ -14,8 +14,16 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
-        axios.post("http://localhost:8080/api/player/getStats/", this.props.selectedPlayer)
+        let request = {
+            firstName: this.props.selectedPlayer.first_name,
+            lastName: this.props.selectedPlayer.last_name,
+            year: this.props.selectedPlayer.year
+        };
+        console.log(request);
+
+        axios.post("http://localhost:8080/api/player/getStats/", request)
             .then(result => {
+                console.log(result);
                 this.setState({
                     completed: true,
                     playerData: result.data

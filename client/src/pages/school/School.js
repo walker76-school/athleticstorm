@@ -277,6 +277,22 @@ class School extends Component {
                     <Grid container align="center" spacing={3}>
                         {
                             this.state.coaches.map((coach, ndx) => {
+
+                                let yearRange = "";
+                                if(coach.seasons.length === 1){
+                                    yearRange = coach.seasons[0].year;
+                                } else {
+                                    let minYear = coach.seasons[0].year;
+                                    let maxYear = coach.seasons[0].year;
+                                    for(let i = 0; i < coach.seasons.length; i++){
+                                        if(coach.seasons[i].year < minYear){
+                                            minYear = coach.seasons[i].year;
+                                        } else if (coach.seasons[i].year > maxYear){
+                                            maxYear = coach.seasons[i].year;
+                                        }
+                                    }
+                                    yearRange = minYear + "-" + maxYear;
+                                }
                                 return (
                                     <Grid item xs={3} key={ndx}>
                                         <Link
@@ -287,7 +303,7 @@ class School extends Component {
                                                 <Avatar src={logo}/>
                                                 <Typography>
                                                     {coach.first_name + " " + coach.last_name} <br/>
-                                                    {coach.seasons.length === 1 ? coach.seasons[0].year : coach.seasons[0].year + "-" + coach.seasons[coach.seasons.length - 1].year}
+                                                    {yearRange}
                                                 </Typography>
                                             </StyledPaper>
                                         </Link>
