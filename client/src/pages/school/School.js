@@ -50,7 +50,7 @@ class School extends Component {
         this.loadCoaches = this.loadCoaches.bind(this);
         this.loadCoordinators = this.loadCoordinators.bind(this);
         this.loadPlayers = this.loadPlayers.bind(this);
-        this.headcoachSort = this.headcoachSort.bind(this);
+        this.headCoachSort = this.headCoachSort.bind(this);
         this.OCSort = this.OCSort.bind(this);
         this.DCSort = this.DCSort.bind(this);
         this.onModalClose = this.onModalClose.bind(this);
@@ -82,6 +82,8 @@ class School extends Component {
                     coaches: result.data,
                     allCoaches: result.data,
                     loadedCoaches: true
+                }, () => {
+                    this.headCoachSort('Descending');
                 });
             });
     }
@@ -98,6 +100,9 @@ class School extends Component {
                     DC: dc,
                     allDC: dc,
                     loadedCoordinators: true
+                }, () => {
+                    this.OCSort('Descending');
+                    this.DCSort('Descending');
                 });
             });
     }
@@ -136,8 +141,7 @@ class School extends Component {
         })
     }
 
-    headcoachSort(event){
-        let sortBy = event.target.value;
+    headCoachSort(sortBy){
         if("Descending" === sortBy){
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name < b.last_name ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
@@ -159,8 +163,7 @@ class School extends Component {
         }
     }
 
-    OCSort(event){
-        let sortBy = event.target.value;
+    OCSort(sortBy){
         if("Descending" === sortBy){
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name < b.name ? 1 : -1);
             this.setState({ OC: sortedOC });
@@ -182,8 +185,7 @@ class School extends Component {
         }
     }
 
-    DCSort(event){
-        let sortBy = event.target.value;
+    DCSort(sortBy){
         if("Descending" === sortBy){
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name < b.name ? 1 : -1);
             this.setState({ DC: sortedDC });
@@ -263,7 +265,7 @@ class School extends Component {
 
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.headcoachSort}>
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.headCoachSort(event.target.value)}}>
                             <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
@@ -298,7 +300,7 @@ class School extends Component {
                 <br/>
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.OCSort}>
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.OCSort(event.target.value)}}>
                             <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
@@ -330,7 +332,7 @@ class School extends Component {
                 <br/>
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={this.DCSort}>
+                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.DCSort(event.target.value)}}>
                             <option value="Descending">Descending</option>
                             <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
