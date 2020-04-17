@@ -20,9 +20,14 @@ public class CoachController {
         return coachService.getAllCoaches();
     }
 
-    @GetMapping("/byTeamId/{teamId}" )
+    @GetMapping("/currentCoaches/{teamId}" )
     public List<CoachDTO> getCoachesByTeamId(@PathVariable("teamId") Long teamId){
         return coachService.getCoachesByTeamId(teamId);
+    }
+
+    @GetMapping("/byTeamId/{teamId}" )
+    public List<CoachDTO> getHistoricalCoachesByTeamId(@PathVariable("teamId") Long teamId){
+        return coachService.getHistoricalCoachesByTeamId(teamId);
     }
 
     @GetMapping("/byName/{name}")

@@ -46,6 +46,11 @@ public class CoachService {
         return convertToDTO(team.getCoaches());
     }
 
+    public List<CoachDTO> getHistoricalCoachesByTeamId(Long teamId) {
+        String teamName = teamRepository.getOne(teamId).getSchool();
+        return convertToDTO(coachRepository.findHistoricalCoachesByTeam(teamName));
+    }
+
     public CoachDTO getCoachByName(String name) {
         return new CoachDTO(coachRepository.findCoachByNameEquals(name).get());
     }
