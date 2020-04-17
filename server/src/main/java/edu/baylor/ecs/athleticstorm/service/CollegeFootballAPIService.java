@@ -1,20 +1,11 @@
 package edu.baylor.ecs.athleticstorm.service;
 
-import edu.baylor.ecs.athleticstorm.model.coach.CoachRecord;
-import edu.baylor.ecs.athleticstorm.model.coach.Term;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.*;
-import edu.baylor.ecs.athleticstorm.model.player.CompositePlayer;
-import edu.baylor.ecs.athleticstorm.model.player.PlayerInfoRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.*;
 
 @Service
 public class CollegeFootballAPIService {
 
+    /*
     @Autowired
     private RestTemplate restTemplate;
 
@@ -137,4 +128,6 @@ public class CollegeFootballAPIService {
         }
         return null;
     }
+    */
+
 }

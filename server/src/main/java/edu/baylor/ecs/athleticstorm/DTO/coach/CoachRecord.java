@@ -1,4 +1,4 @@
-package edu.baylor.ecs.athleticstorm.model.coach;
+package edu.baylor.ecs.athleticstorm.DTO.coach;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,7 @@ import java.util.*;
 public class CoachRecord {
 
     private int coachId;
-    private String first_name;
-    private String last_name;
+    private String name;
     private int wins;
     private int losses;
     private int ties;
@@ -22,8 +21,15 @@ public class CoachRecord {
 
     public CoachRecord(Coach coach){
         this.coachId = -1;
-        this.first_name = coach.getFirst_name();
-        this.last_name = coach.getLast_name();
+        this.name= coach.getName();
+        this.wins = 0;
+        this.losses = 0;
+        terms = new ArrayList<>();
+    }
+
+    public CoachRecord(CoachDTO coach){
+        this.coachId = -1;
+        this.name= coach.getFirst_name() + " " + coach.getLast_name();
         this.wins = 0;
         this.losses = 0;
         terms = new ArrayList<>();
