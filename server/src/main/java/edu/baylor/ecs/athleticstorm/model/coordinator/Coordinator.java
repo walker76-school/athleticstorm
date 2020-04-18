@@ -8,23 +8,32 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "COORDINATOR")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@IdClass(Coordinator.CoordinatorID.class)
 public class Coordinator implements Comparable<Coordinator>{
 
+    @Data
+    public static class CoordinatorID implements Serializable {
+        private String name;
+        private int startYear;
+    }
+
     @Id
-    @Column(name = "NAME")
+    @Column(name = "NAME", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
     private String name;
 
-    @Column(name = "POSITION")
+    @Column(name = "POSITION", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private String position;
 
+    @Id
     @Column(name = "START_YEAR")
     @EqualsAndHashCode.Exclude
     private int startYear;

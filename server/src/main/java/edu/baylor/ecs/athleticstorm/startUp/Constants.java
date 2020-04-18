@@ -38,4 +38,16 @@ public final class Constants {
     public static String playerUsage(String year, String playerId){
         return PLAYER_URL + "/usage?year=" + year + (Objects.nonNull(playerId) ? ("&playerId=" + playerId) : "");
     }
+
+    public static String gamesPerTeamAndYear(int year, String team){
+        return BASE_URL + "/games?year=" + year + "&seasonType=regular" + (!team.isEmpty() ? ("&team=" + team) : "");
+    }
+
+    public static String spRatings(){
+        return BASE_URL + "/ratings/sp";
+    }
+
+    public static String ppaRatings(int year){
+        return BASE_URL + "/ppa/games?year=" + year + "&excludeGarbageTime=true";
+    }
 }

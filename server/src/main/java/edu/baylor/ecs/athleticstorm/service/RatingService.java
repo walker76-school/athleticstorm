@@ -1,57 +1,110 @@
 package edu.baylor.ecs.athleticstorm.service;
 
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.ppa.PPA;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.spRatings.SPRating;
+import edu.baylor.ecs.athleticstorm.model.rating.RatingComposite;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.*;
+
+import static edu.baylor.ecs.athleticstorm.startUp.Constants.*;
 
 @Service
 public class RatingService {
 
-    /**
-     * ACS = ((OC * OW/1) + (DC * DW/1) + (SC * SW)) / (OW + DW + SC)
-     *
-     * HC = (ACS + (HWP * 1.5) + (AWP * 1.5))/4
-     *
-     * ACS = assistant coaches score
-     * OC = offensive coordinator score
-     * OW = offense weight
-     * DC = defensive coordinator score
-     * DW = defense weight
-     * SC = special teams coordinator score
-     * SW = special teams weight
-     * HC = head coach score
-     * HWP = home win percentage
-     * AWP = away win percentage
-     */
+    @Autowired
+    private RestTemplate restTemplate;
 
-    private final int OW = 1;
-    private final int DW = 1;
+    private final double SWEIGHT = 0.5; // Weight of SP+ Ratings
+    private final double PWEIGHT = 1.0; // Weight of PPA Ratings
 
-    public double getRatingsForCoach(){
-        double OC = getRatingsForOC();
-        double DC = getRatingsForDC();
-        double ACS = ((OC * OW) + (DC * DW)) / (OW + DW);
-        double HWP = 1;
-        double AWP = 1;
+    private final double OW = 50; // Weight of Offensive Score
+    private final double DW = 50; // Weight of Defensive Score
+    private final double HWW = 1.5; // Weight of Home Wins
+    private final double AWW = 1.5; // Weight of Away Wins
 
-        return (ACS + (HWP * 1.5) + (AWP * 1.5))/4;
+    static final Map<Integer, Set<SPRating>> SP_RATINGS = new HashMap<>();
+    static final Map<Integer, Set<PPA>> PPA_RATINGS = new HashMap<>();
+
+    static final Map<Integer, SPRating> LOWEST_SP_RATINGS = new HashMap<>();
+    static final Map<Integer, SPRating> HIGHEST_SP_RATINGS = new HashMap<>();
+
+    static boolean isInit = false;
+
+    @Transactional
+    public void init(){
+        if(SP_RATINGS.size() == 0){
+            SPRating[] spRatings = restTemplate.getForObject(spRatings(), SPRating[].class);
+            assert spRatings != null;
+            for(SPRating rating : spRatings){
+                Set<SPRating> ratingPerYear = SP_RATINGS.getOrDefault(rating.getYear(), new HashSet<>());
+                ratingPerYear.add(rating);
+                SP_RATINGS.put(rating.getYear(), ratingPerYear);
+            }
+        }
+
+        // Lowest / Highest SP Ratings For Each Year
+        for(Map.Entry<Integer, Set<SPRating>> entry : SP_RATINGS.entrySet()){
+            SPRating min = entry.getValue().stream().min(Comparator.comparing(SPRating::getRating)).get();
+            SPRating max = entry.getValue().stream().max(Comparator.comparing(SPRating::getRating)).get();
+            LOWEST_SP_RATINGS.put(entry.getKey(), min);
+            HIGHEST_SP_RATINGS.put(entry.getKey(), max);
+        }
+
+        if(PPA_RATINGS.size() == 0){
+            for(int year = 2017; year <= 2019; year++) {
+                PPA[] ppas = restTemplate.getForObject(ppaRatings(year), PPA[].class);
+                assert ppas != null;
+                PPA_RATINGS.put(year, new HashSet<>(Arrays.asList(ppas)));
+            }
+        }
+
+        isInit = true;
     }
 
-    public double getRatingsForOC(){
-        double scale = 1.5;
-        double rweight = 1;
-        double pweight = 1.5;
+    public RatingComposite getRatings(String team, int year, int week, double hwp, double awp){
 
-        double ppa = 1.0;
+        if(!isInit){
+            init();
+        }
 
-        double existingRating = 1.0;
+        String opponent = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+                .findFirst()
+                .get()
+                .getOpponent();
 
-        // scale be 1.5, the rweight be 1 and pweight be 1.5
-        //double rpw = (((existingRating + Math.abs(ratingLow)) * rweight) * ((ppa + Math.abs(ppaLow)) * pweight) / ((ratingHigh + Math.abs(ratingLow)) * (ppaHigh + Math.abs(ppaLow)))) * 100;
-        double rpw = 1.0;
-        return (existingRating + rpw * scale) / (1 + scale);
+        double sRating = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase(opponent)).findFirst().get().getRating(); // SP+ Rating of week's opponent
+        double sRatingLow = Math.abs(LOWEST_SP_RATINGS.get(year).getRating()); // Lowest SP+ of the week
+        double sRatingHigh = Math.abs(HIGHEST_SP_RATINGS.get(year).getRating()); // Highest SP+ of the week
+
+        PPA ppa = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+                .findFirst()
+                .get(); // Avg PPA of Offensive
+
+        PPA ppaHigh = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+                .max(Comparator.comparing(a -> a.getOffense().getOverall()))
+                .get(); // Highest PPA in League
+
+        PPA ppaLow = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+                .max(Comparator.comparing(a -> a.getOffense().getOverall()))
+                .get(); // Lowest PPA in League
+
+        double numeratorOC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getOffense().getOverall() + Math.abs(ppaLow.getOffense().getOverall())) * PWEIGHT);
+        double denominatorOC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHigh.getOffense().getOverall() + Math.abs(ppaLow.getOffense().getOverall())) * PWEIGHT);
+
+        double numeratorDC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getDefense().getOverall() + Math.abs(ppaLow.getDefense().getOverall())) * PWEIGHT);
+        double denominatorDC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHigh.getDefense().getOverall() + Math.abs(ppaLow.getDefense().getOverall())) * PWEIGHT);
+
+        double ocr = numeratorOC / denominatorOC * 100;
+        double dcr = numeratorDC / denominatorDC * 100;
+
+        double acr = ((ocr * (OW / 100)) + (dcr * (DW / 100))) / (OW + DW);
+
+        double coachScore = (acr + (hwp * HWW) + (awp * AWW)) / 4;
+
+        return new RatingComposite(coachScore, ocr, dcr);
     }
-
-    public double getRatingsForDC(){
-        return -1;
-    }
-
 }

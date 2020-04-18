@@ -14,22 +14,26 @@
 package edu.baylor.ecs.athleticstorm.startUp;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
-import edu.baylor.ecs.athleticstorm.DTO.coordinator.CoordinatorDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.RosterPlayerDTO;
+import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.game.Game;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Usage;
 import edu.baylor.ecs.athleticstorm.model.coordinator.Coordinator;
+import edu.baylor.ecs.athleticstorm.model.rating.PersonType;
+import edu.baylor.ecs.athleticstorm.model.rating.Rating;
+import edu.baylor.ecs.athleticstorm.model.rating.RatingComposite;
+import edu.baylor.ecs.athleticstorm.model.rating.RatingKey;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.*;
 import edu.baylor.ecs.athleticstorm.repository.RatingRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import edu.baylor.ecs.athleticstorm.service.RatingService;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +85,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     private RatingRepository ratingRepository;
 
     @Autowired
+    private RatingService ratingService;
+
+    @Autowired
     private CoordinatorRepository coordinatorRepository;
 
     @Autowired
@@ -97,8 +104,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // see if already done or colors already exist in the DB
-        if(setupComplete || (coordinatorRepository.count() > 0)){
-            setupComplete = true;
+        if(setupComplete){
             return;
         }
         setup();
@@ -124,9 +130,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         // get all of the usage stats for players
         getPlayerUsage();
 
-        getCoachRatings();
-
         getCoordinators();
+
+        getRatings();
 
         logger.info("End Setup");
 
@@ -255,15 +261,8 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     @Transactional
-    public void getCoachRatings(){
-        logger.info("Getting ratings");
-        for(Coach c: coaches){
-
-        }
-    }
-
-    @Transactional
     public void getCoordinators() {
+        logger.info("Getting coordinators");
 
         if(coordinatorRepository.count() > 0){
             return;
@@ -295,9 +294,18 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             String line = sc.nextLine();
             String[] tokens = line.split(",");
             Map<String, List<Integer>> nameToYears = new HashMap<>();
-            getCoordinatorsByYear(nameToYears, tokens, 1, 2017);
-            getCoordinatorsByYear(nameToYears, tokens, 2, 2018);
-            getCoordinatorsByYear(nameToYears, tokens, 3, 2019);
+
+            List<Integer> yearsOrDefault = nameToYears.getOrDefault(tokens[1], new ArrayList<>());
+            yearsOrDefault.add(2017);
+            nameToYears.put(tokens[1], yearsOrDefault);
+
+            yearsOrDefault = nameToYears.getOrDefault(tokens[2], new ArrayList<>());
+            yearsOrDefault.add(2018);
+            nameToYears.put(tokens[2], yearsOrDefault);
+
+            yearsOrDefault = nameToYears.getOrDefault(tokens[3], new ArrayList<>());
+            yearsOrDefault.add(2019);
+            nameToYears.put(tokens[3], yearsOrDefault);
 
             for(Map.Entry<String, List<Integer>> entry : nameToYears.entrySet()){
                 List<Integer> years = entry.getValue();
@@ -305,6 +313,8 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 Integer endYear = years.stream().max(Integer::compareTo).get();
                 Team t = teams.stream().filter(x -> x.getSchool().equals(tokens[0])).findFirst().orElse(null);
                 if(t != null) {
+                    //Coordinator coordinator = new Coordinator(entry.getKey(), key, startYear, endYear, t);
+                    //coordinatorRepository.save(coordinator);
                     coordinators.add(new Coordinator(entry.getKey(), key, startYear, endYear, t));
                 }
 
@@ -312,14 +322,67 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
-    private void getCoordinatorsByYear(Map<String, List<Integer>> nameToYears, String[] tokens, int index, int year){
-        String token = tokens[index];
-        String[] coordinators = token.split("/");
-        for(String name : coordinators){
-            List<Integer> years = nameToYears.getOrDefault(name, new ArrayList<>());
-            years.add(year);
-            nameToYears.put(name, years);
+    @Transactional
+    public void getRatings() {
+
+        if(ratingRepository.count() > 0){
+            return;
         }
+
+        List<Rating> ratings = new ArrayList<>();
+
+        for(Coach coach : coaches){
+
+            int endYear = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getYear();
+            if(endYear < 2017){
+                continue; // We can't calculate for them
+            }
+
+            double coachScore = 50;
+            double ocScore = 50;
+            double dcScore = 50;
+
+            for(int year = 2017; year <= Math.min(endYear, 2019); year++){
+
+                int finalYear = year;
+                // TODO - Multiple OC and DC per Year
+                String oc = coach.getTeam().getCoordinators().stream().filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
+                String dc = coach.getTeam().getCoordinators().stream().filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
+                String team = coach.getTeam().getSchool();
+
+                // Get all the games and calculate the home/away percentages
+                Game[] games = restTemplate.getForObject(gamesPerTeamAndYear(year, team), Game[].class);
+
+                List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
+                List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
+
+                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
+                double awp = awayGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
+
+                for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
+                    int week = game.getWeek();
+
+                    RatingComposite composite = ratingService.getRatings(team, year, week, hwp, awp);
+
+                    // Adjust Scores and Save
+                    coachScore = scaleRating(coachScore, composite.getCoach());
+                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), coachScore, PersonType.COACH));
+
+                    ocScore = scaleRating(ocScore, composite.getOC());
+                    ratings.add(new Rating(new RatingKey(oc, year, week), ocScore, PersonType.OFFENSIVE));
+
+                    dcScore = scaleRating(dcScore, composite.getDC());
+                    ratings.add(new Rating(new RatingKey(dc, year, week), dcScore, PersonType.DEFENSIVE));
+
+                }
+            }
+        }
+
+        ratingRepository.saveAll(ratings);
     }
 
+    private double scaleRating(double currentRating, double weeklyRating){
+        final double SCALE = 1.0;
+        return (currentRating + (weeklyRating * SCALE)) / (1 + SCALE);
+    }
 }

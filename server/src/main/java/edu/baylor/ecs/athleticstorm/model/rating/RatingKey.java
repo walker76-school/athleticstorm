@@ -12,6 +12,8 @@
 
 package edu.baylor.ecs.athleticstorm.model.rating;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
@@ -20,6 +22,8 @@ import java.io.Serializable;
 
 @Embeddable
 @EqualsAndHashCode
+@Data
+@AllArgsConstructor
 public class RatingKey implements Serializable {
 
     @Column(name = "NAME")
@@ -27,4 +31,7 @@ public class RatingKey implements Serializable {
 
     @Column(name = "YEAR")
     private Integer year;
+
+    @Column(name = "WEEK")
+    private Integer week;
 }
