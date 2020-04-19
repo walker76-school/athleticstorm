@@ -14,6 +14,7 @@ package edu.baylor.ecs.athleticstorm.model.rating;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -21,6 +22,7 @@ import javax.persistence.*;
 @Table(name = "RATING")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Rating {
 
     @EmbeddedId

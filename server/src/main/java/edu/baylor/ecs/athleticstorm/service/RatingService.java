@@ -37,12 +37,9 @@ public class RatingService {
     @Transactional
     public void init(){
         if(SP_RATINGS.size() == 0){
-            SPRating[] spRatings = restTemplate.getForObject(spRatings(), SPRating[].class);
-            assert spRatings != null;
-            for(SPRating rating : spRatings){
-                Set<SPRating> ratingPerYear = SP_RATINGS.getOrDefault(rating.getYear(), new HashSet<>());
-                ratingPerYear.add(rating);
-                SP_RATINGS.put(rating.getYear(), ratingPerYear);
+            for(int year = 2017; year <= 2019; year++) {
+                SPRating[] spRatings = restTemplate.getForObject(spRatings(year), SPRating[].class);
+                SP_RATINGS.put(year, new HashSet<>(Arrays.asList(spRatings)));
             }
         }
 
@@ -71,32 +68,56 @@ public class RatingService {
             init();
         }
 
-        String opponent = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
-                .findFirst()
-                .get()
-                .getOpponent();
+        String opponent = "nationalAverages";
+        Optional<PPA> opponentOpt = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team)).findFirst();
+        if(!opponentOpt.isPresent()){
+            System.err.println("Year - " + year);
+            System.err.println("Week - " + week);
+            System.err.println("Team - " + team);
+        } else {
+            opponent = opponentOpt.get().getOpponent();
+        }
 
-        double sRating = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase(opponent)).findFirst().get().getRating(); // SP+ Rating of week's opponent
+        String finalOpponent = opponent;
+        Optional<SPRating> spOpt = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase(finalOpponent)).findFirst();
+        if(!spOpt.isPresent()){
+            System.err.println("Year - " + year);
+            System.err.println("Opponent - " + opponent);
+            spOpt = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase("nationalAverages")).findFirst();
+        }
+        double sRating = spOpt.get().getRating(); // SP+ Rating of week's opponent
         double sRatingLow = Math.abs(LOWEST_SP_RATINGS.get(year).getRating()); // Lowest SP+ of the week
         double sRatingHigh = Math.abs(HIGHEST_SP_RATINGS.get(year).getRating()); // Highest SP+ of the week
 
-        PPA ppa = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
-                .findFirst()
-                .get(); // Avg PPA of Offensive
+        Optional<PPA> ppaOpt = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+                .findFirst();
+        if(!ppaOpt.isPresent()){
+            return null;
+        }
 
-        PPA ppaHigh = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+        PPA ppa = ppaOpt.get(); // Avg PPA of Offensive or Defensive
+
+        PPA ppaHighOC = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week)
                 .max(Comparator.comparing(a -> a.getOffense().getOverall()))
                 .get(); // Highest PPA in League
 
-        PPA ppaLow = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team))
+        PPA ppaLowOC = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week)
                 .max(Comparator.comparing(a -> a.getOffense().getOverall()))
                 .get(); // Lowest PPA in League
 
-        double numeratorOC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getOffense().getOverall() + Math.abs(ppaLow.getOffense().getOverall())) * PWEIGHT);
-        double denominatorOC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHigh.getOffense().getOverall() + Math.abs(ppaLow.getOffense().getOverall())) * PWEIGHT);
+        double numeratorOC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getOffense().getOverall() + Math.abs(ppaLowOC.getOffense().getOverall())) * PWEIGHT);
+        double denominatorOC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHighOC.getOffense().getOverall() + Math.abs(ppaLowOC.getOffense().getOverall())) * PWEIGHT);
 
-        double numeratorDC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getDefense().getOverall() + Math.abs(ppaLow.getDefense().getOverall())) * PWEIGHT);
-        double denominatorDC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHigh.getDefense().getOverall() + Math.abs(ppaLow.getDefense().getOverall())) * PWEIGHT);
+        PPA ppaHighDC = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week)
+                .max(Comparator.comparing(a -> a.getDefense().getOverall()))
+                .get(); // Highest PPA in League
+
+        PPA ppaLowDC = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week)
+                .max(Comparator.comparing(a -> a.getDefense().getOverall()))
+                .get(); // Lowest PPA in League
+
+        double numeratorDC = ((sRating + Math.abs(sRatingLow)) * SWEIGHT) * ((ppa.getDefense().getOverall() + Math.abs(ppaLowDC.getDefense().getOverall())) * PWEIGHT);
+        double denominatorDC = ((sRatingHigh + Math.abs(sRatingLow)) * SWEIGHT) * ((ppaHighDC.getDefense().getOverall() + Math.abs(ppaLowDC.getDefense().getOverall())) * PWEIGHT);
 
         double ocr = numeratorOC / denominatorOC * 100;
         double dcr = numeratorDC / denominatorDC * 100;

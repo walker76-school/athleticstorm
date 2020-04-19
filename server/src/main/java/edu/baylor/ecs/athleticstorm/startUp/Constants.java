@@ -43,8 +43,8 @@ public final class Constants {
         return BASE_URL + "/games?year=" + year + "&seasonType=regular" + (!team.isEmpty() ? ("&team=" + team) : "");
     }
 
-    public static String spRatings(){
-        return BASE_URL + "/ratings/sp";
+    public static String spRatings(int year){
+        return BASE_URL + "/ratings/sp?year=" + year;
     }
 
     public static String ppaRatings(int year){

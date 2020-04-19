@@ -16,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @IdClass(Coordinator.CoordinatorID.class)
+@EqualsAndHashCode
 public class Coordinator implements Comparable<Coordinator>{
 
     @Data
@@ -29,13 +30,13 @@ public class Coordinator implements Comparable<Coordinator>{
     @EqualsAndHashCode.Include
     private String name;
 
-    @Column(name = "POSITION", insertable = false, updatable = false)
+    @Column(name = "POSITION")
     @EqualsAndHashCode.Exclude
     private String position;
 
     @Id
-    @Column(name = "START_YEAR")
-    @EqualsAndHashCode.Exclude
+    @Column(name = "START_YEAR", insertable = false, updatable = false)
+    @EqualsAndHashCode.Include
     private int startYear;
 
     @Column(name = "END_YEAR")
