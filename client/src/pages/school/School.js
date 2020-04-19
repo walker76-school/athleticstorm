@@ -8,10 +8,12 @@ import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Popup from "../player/Popup";
 import LoadingIndicator from "../../common/LoadingIndicator";
+import Cookies from 'universal-cookie';
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import {notification} from 'antd';
+import Redirect from "react-router-dom/Redirect";
 const styles = makeStyles(theme => ({
     paper: {
         padding: theme.spacing(2),
@@ -22,6 +24,10 @@ const styles = makeStyles(theme => ({
         justifyContent: 'center',
     }
 }));
+
+let unlocked = true;
+
+const cookies = new Cookies();
 
 class School extends Component {
 
@@ -58,6 +64,7 @@ class School extends Component {
     }
 
     componentDidMount() {
+        unlocked = true;
         axios.get('http://localhost:8080/api/teams/byName/' + this.props.match.params.schoolName)
         .then(result => {
             this.setState({
@@ -71,6 +78,18 @@ class School extends Component {
                 this.loadCoordinators();
                 this.loadPlayers(this.state.year);
             });
+            // Add team to teams_visited if it's not already there and decrease teams available to visit.
+            // If team has already been visited by user, no change is necessary
+            if(!cookies.get('Teams_visited').find(element => element === result.data.school)) {
+                if(cookies.get('Num_teams') > 0) {
+                    cookies.set('Num_teams', cookies.get('Num_teams') - 1,{path: '/'});
+                    let teamsVisited = cookies.get('Teams_visited');
+                    teamsVisited.push(result.data.school);
+                    cookies.set('Teams_visited', teamsVisited, {path: '/'});
+                } else{
+                    unlocked = false;
+                }
+            }
         });
     }
 
@@ -108,25 +127,32 @@ class School extends Component {
     }
 
     loadPlayers(newYear){
-        this.setState({
-            year: newYear
-        }, () => {
-            // Get List Of Players From API
-            axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
-            .then(result => {
-                let tempPlayers = [];
-                for(var x = 0; x < result.data.length; x++){
-                    if(result.data[x].first_name !== null && result.data[x].last_name !== null && result.data[x].position !== null){
-                        tempPlayers.push(result.data[x]);
-                    }
-                }
-                this.setState({
-                    players: tempPlayers,
-                    allPlayers: tempPlayers,
-                    loadedPlayers: true
+        if(cookies.get('Role') !== 'ROLE_REDSHIRT' || newYear === this.state.year) {
+            this.setState({
+                year: newYear
+            }, () => {
+                // Get List Of Players From API
+                axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
+                    .then(result => {
+                        let tempPlayers = [];
+                        for (var x = 0; x < result.data.length; x++) {
+                            if (result.data[x].first_name !== null && result.data[x].last_name !== null && result.data[x].position !== null) {
+                                tempPlayers.push(result.data[x]);
+                            }
+                        }
+                        this.setState({
+                            players: tempPlayers,
+                            allPlayers: tempPlayers,
+                            loadedPlayers: true
+                        });
+                    })
+            });
+        } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to access other years.'
                 });
-            })
-        });
+            }
     }
 
     onModalClose(){
@@ -254,88 +280,178 @@ class School extends Component {
 
         return (
             <div>
-                <br/>
-                <input type="text" placeholder="Search" onChange={(event) => {this.filter(event.target.value)}}/>
-                <br/>
-                <br/>
+                {unlocked &&
                 <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }} >&nbsp;{this.state.schoolName}</h1>
-                    <img src={this.state.logo} width="100" height="100" alt="Logo" />
-                </div>
+                    <br/>
+                    <input type="text" placeholder="Search" onChange={(event) => {
+                        this.filter(event.target.value)
+                    }}/>
+                    <br/>
+                    <br/>
+                    <div>
+                        <h1 style={{
+                            backgroundColor: this.state.primaryColor,
+                            color: "#ffffff"
+                        }}>&nbsp;{this.state.schoolName}</h1>
+                        <img src={this.state.logo} width="100" height="100" alt="Logo"/>
+                    </div>
 
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.headCoachSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
-                    <Grid container align="center" spacing={3}>
-                        {
-                            this.state.coaches.map((coach, ndx) => {
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Head Coaches
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
+                                this.headCoachSort(event.target.value)
+                            }}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        <Grid container align="center" spacing={3}>
+                            {
+                                this.state.coaches.map((coach, ndx) => {
 
-                                let yearRange = "";
-                                if(coach.seasons.length === 1){
-                                    yearRange = coach.seasons[0].year;
-                                } else {
-                                    let minYear = coach.seasons[0].year;
-                                    let maxYear = coach.seasons[0].year;
-                                    for(let i = 0; i < coach.seasons.length; i++){
-                                        if(coach.seasons[i].year < minYear){
-                                            minYear = coach.seasons[i].year;
-                                        } else if (coach.seasons[i].year > maxYear){
-                                            maxYear = coach.seasons[i].year;
+                                    let yearRange = "";
+                                    if (coach.seasons.length === 1) {
+                                        yearRange = coach.seasons[0].year;
+                                    } else {
+                                        let minYear = coach.seasons[0].year;
+                                        let maxYear = coach.seasons[0].year;
+                                        for (let i = 0; i < coach.seasons.length; i++) {
+                                            if (coach.seasons[i].year < minYear) {
+                                                minYear = coach.seasons[i].year;
+                                            } else if (coach.seasons[i].year > maxYear) {
+                                                maxYear = coach.seasons[i].year;
+                                            }
                                         }
+                                        yearRange = minYear + "-" + maxYear;
                                     }
-                                    yearRange = minYear + "-" + maxYear;
-                                }
-                                return (
-                                    <Grid item xs={3} key={ndx}>
-                                        <Link
-                                            to={"/coach/" + coach.first_name + " " + coach.last_name}
-                                            style={{ color: this.state.primaryColor }}
-                                        >
-                                            <StyledPaper classes={this.props.classes}>
-                                                <Avatar src={logo}/>
-                                                <Typography>
-                                                    {coach.first_name + " " + coach.last_name} <br/>
-                                                    {yearRange}
-                                                </Typography>
-                                            </StyledPaper>
-                                        </Link>
-                                    </Grid>
-                                );
-                            })
-                        }
-                    </Grid>
-                </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.OCSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
+                                    return (
+                                        <Grid item xs={3} key={ndx}>
+                                            <Link
+                                                to={"/coach/" + coach.first_name + " " + coach.last_name}
+                                                style={{color: this.state.primaryColor}}
+                                            >
+                                                <StyledPaper classes={this.props.classes}>
+                                                    <Avatar src={logo}/>
+                                                    <Typography>
+                                                        {coach.first_name + " " + coach.last_name} <br/>
+                                                        {yearRange}
+                                                    </Typography>
+                                                </StyledPaper>
+                                            </Link>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                        </Grid>
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Offensive
+                            Coordinators
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
+                                this.OCSort(event.target.value)
+                            }}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        <Grid container align="center" spacing={3}>
+                            {
+                                this.state.OC.map((oc, ndx) => {
+                                    return (
+                                        <Grid item xs={3} key={ndx}>
+                                            <a style={{color: this.state.primaryColor}}>
+                                                <StyledPaper classes={this.props.classes}>
+                                                    <Avatar src={logo}/>
+                                                    <Typography>
+                                                        {oc.name} <br/>
+                                                        {oc.startYear === oc.endYear ? oc.startYear : oc.startYear + "-" + oc.endYear}
+                                                    </Typography>
+                                                </StyledPaper>
+                                            </a>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                        </Grid>
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Defensive
+                            Coordinators
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
+                                this.DCSort(event.target.value)
+                            }}>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Most Recent">Most Recent</option>
+                                <option value="Oldest">Oldest</option>
+                                <option value="Best Score">Best Score</option>
+                                <option value="Worst Score">Worst Score</option>
+                            </select>
+                        </h1>
+                        <Grid container align="center" spacing={3}>
+                            {
+                                this.state.DC.map((dc, ndx) => {
+                                    return (
+                                        <Grid item xs={3} key={ndx}>
+                                            <a style={{color: this.state.primaryColor}}>
+                                                <StyledPaper classes={this.props.classes}>
+                                                    <Avatar src={logo}/>
+                                                    <Typography>
+                                                        {dc.name} <br/>
+                                                        {dc.startYear === dc.endYear ? dc.startYear : dc.startYear + "-" + dc.endYear}
+                                                    </Typography>
+                                                </StyledPaper>
+                                            </a>
+                                        </Grid>
+                                    );
+                                })
+                            }
+                        </Grid>
+                    </div>
+                    <br/>
+                    <div>
+                        <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Players
+                            <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
+                                this.loadPlayers(event.target.value)
+                            }}>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                            </select>
+                        </h1>
+                    </div>
                     <Grid container align="center" spacing={3}>
                         {
-                            this.state.OC.map((oc, ndx) => {
+                            this.state.players.slice(0, cookies.get('Num_players')).map((player, ndx) => {
                                 return (
                                     <Grid item xs={3} key={ndx}>
-                                        <a style={{ color: this.state.primaryColor }}>
+                                        <a
+                                            onClick={() => {
+                                                this.setSelectedPlayer({
+                                                    teamdId: this.state.teamId,
+                                                    playerId: player.id,
+                                                    first_name: player.first_name,
+                                                    last_name: player.last_name,
+                                                    year: this.state.year,
+                                                })
+                                            }}
+                                            style={{color: this.state.primaryColor}}>
                                             <StyledPaper classes={this.props.classes}>
                                                 <Avatar src={logo}/>
                                                 <Typography>
-                                                    {oc.name} <br/>
-                                                    {oc.startYear === oc.endYear ? oc.startYear : oc.startYear + "-" + oc.endYear}
+                                                    {player.first_name + " " + player.last_name} <br/>
+                                                    {player.position ? player.position + " " + this.state.year : this.state.year}
                                                 </Typography>
                                             </StyledPaper>
                                         </a>
@@ -344,81 +460,14 @@ class School extends Component {
                             })
                         }
                     </Grid>
+                    <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null}
+                           selectedPlayer={this.state.selectedPlayer}/>
                 </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.DCSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
-                            <option value="Most Recent">Most Recent</option>
-                            <option value="Oldest">Oldest</option>
-                            <option value="Best Score">Best Score</option>
-                            <option value="Worst Score">Worst Score</option>
-                        </select>
-                    </h1>
-                    <Grid container align="center" spacing={3}>
-                        {
-                            this.state.DC.map((dc, ndx) => {
-                                return (
-                                    <Grid item xs={3} key={ndx}>
-                                        <a style={{ color: this.state.primaryColor }}>
-                                            <StyledPaper classes={this.props.classes}>
-                                                <Avatar src={logo}/>
-                                                <Typography>
-                                                    {dc.name} <br/>
-                                                    {dc.startYear === dc.endYear ? dc.startYear : dc.startYear + "-" + dc.endYear}
-                                                </Typography>
-                                            </StyledPaper>
-                                        </a>
-                                    </Grid>
-                                );
-                            })
-                        }
-                    </Grid>
-                </div>
-                <br/>
-                <div>
-                    <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Players
-                        <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.loadPlayers(event.target.value)}}>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                        </select>
-                    </h1>
-                </div>
-                <Grid container align="center" spacing={3}>
-                    {
-                        this.state.players.map((player, ndx) => {
-                            return (
-                                <Grid item xs={3} key={ndx}>
-                                    <a
-                                        onClick={() => {
-                                            this.setSelectedPlayer({
-                                                teamdId: this.state.teamId,
-                                                playerId: player.id,
-                                                first_name: player.first_name,
-                                                last_name: player.last_name,
-                                                year: this.state.year,
-                                            })
-                                        }}
-                                        style={{ color: this.state.primaryColor }} >
-                                        <StyledPaper classes={this.props.classes}>
-                                            <Avatar src={logo}/>
-                                            <Typography>
-                                                {player.first_name + " " + player.last_name} <br/>
-                                                {player.position ? player.position + " " + this.state.year : this.state.year}
-                                            </Typography>
-                                        </StyledPaper>
-                                    </a>
-                                </Grid>
-                            );
-                        })
-                    }
-                </Grid>
-                <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
+                }
+                {!unlocked && <Redirect to={"/SubscriptionError"}/>
+                }
             </div>
+
         );
     }
 }

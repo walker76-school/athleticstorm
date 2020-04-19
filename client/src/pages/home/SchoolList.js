@@ -110,8 +110,7 @@ class SchoolList extends Component {
                                                 style={{color: this.state.primaryColor}}
                                             >
                                                 <StyledPaper classes={classes}>
-                                                    { unlocked && <Avatar className={classes.logo} src={team.logos[0]}/>}
-                                                    { !unlocked && <Avatar className={classes.logo} src={LockIcon}/>}
+                                                    <Avatar className={classes.logo} src={team.logos[0]}/>
                                                     <Typography>{team.school}</Typography>
                                                 </StyledPaper>
                                             </Link>
