@@ -16,6 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @IdClass(Coordinator.CoordinatorID.class)
+@EqualsAndHashCode
 public class Coordinator implements Comparable<Coordinator>{
 
     @Data
@@ -29,13 +30,13 @@ public class Coordinator implements Comparable<Coordinator>{
     @EqualsAndHashCode.Include
     private String name;
 
-    @Column(name = "POSITION", insertable = false, updatable = false)
+    @Column(name = "POSITION")
     @EqualsAndHashCode.Exclude
     private String position;
 
     @Id
-    @Column(name = "START_YEAR")
-    @EqualsAndHashCode.Exclude
+    @Column(name = "START_YEAR", insertable = false, updatable = false)
+    @EqualsAndHashCode.Include
     private int startYear;
 
     @Column(name = "END_YEAR")
@@ -51,6 +52,9 @@ public class Coordinator implements Comparable<Coordinator>{
 
     @Override
     public int compareTo(Coordinator o) {
-        return this.name.compareTo(o.getName());
+        if(!this.name.equalsIgnoreCase(o.getName())) {
+            return this.name.compareTo(o.getName());
+        }
+        return Integer.compare(this.startYear, o.getStartYear());
     }
 }
