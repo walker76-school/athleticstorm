@@ -370,7 +370,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 }
 
                 Optional<Coordinator> dcOpt = coach.getTeam().getCoordinators().stream()
-                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
+                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
                         .findFirst();
 
                 if(!dcOpt.isPresent()){
@@ -387,8 +387,8 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
                 List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
 
-                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
-                double awp = awayGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
+                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
+                double awp = awayGames.stream().filter(x -> x.getAway_points() > x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
 
                 for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
                     int week = game.getWeek();

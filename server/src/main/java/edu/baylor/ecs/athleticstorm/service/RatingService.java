@@ -122,7 +122,7 @@ public class RatingService {
         double ocr = numeratorOC / denominatorOC * 100;
         double dcr = numeratorDC / denominatorDC * 100;
 
-        double acr = ((ocr * (OW / 100)) + (dcr * (DW / 100))) / (OW + DW);
+        double acr = ((ocr * (OW / 100)) + (dcr * (DW / 100)));
 
         double coachScore = (acr + (hwp * HWW) + (awp * AWW)) / 4;
 
