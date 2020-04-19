@@ -92,12 +92,7 @@ public class AuthController {
         roleSet.add(newRole);
         roleSet.add(userRole);
 
-        //TODO: This is the basis for where the issue lies. If the line with userRole is not commented
-        // out it works fine to sign up and log in, but if newRole is in it doesn't work. The function should
-        // be the same but it just doesn't work. Getting closer....
         user.setRoles(roleSet);
-
-//        user.setRoles(Collections.singleton(userRole));
 
         User result = userRepository.save(user);
 

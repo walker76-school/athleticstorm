@@ -329,90 +329,90 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Transactional
     public void getRatings() {
 
-        if(ratingRepository.count() > 0){
-            return;
-        }
-
-        List<Rating> ratings = new ArrayList<>();
-
-        for(Coach coach : coaches){
-
-            if(coach.getTeam() == null){
-                System.err.println(coach.getName());
-                continue; // Some error
-            }
-
-            int endYear = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getYear();
-            if(endYear < 2017){
-                continue; // We can't calculate for them
-            }
-
-            double coachScore = 50;
-            double ocScore = 50;
-            double dcScore = 50;
-
-            for(int year = 2017; year <= Math.min(endYear, 2019); year++){
-
-                int finalYear = year;
-
-                //String oc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
-                //String dc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
-
-                // TODO - Get Team from Seasons of Coach using year
-
-                // TODO - Multiple OC and DC per Year
-                Optional<Coordinator> ocOpt = coach.getTeam().getCoordinators().stream()
-                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
-                        .findFirst();
-
-                if(!ocOpt.isPresent()){
-                    continue;
-                }
-
-                Optional<Coordinator> dcOpt = coach.getTeam().getCoordinators().stream()
-                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
-                        .findFirst();
-
-                if(!dcOpt.isPresent()){
-                    continue;
-                }
-
-                String oc = ocOpt.get().getName();
-                String dc = dcOpt.get().getName();
-                String team = coach.getTeam().getSchool();
-
-                // Get all the games and calculate the home/away percentages
-                Game[] games = restTemplate.getForObject(gamesPerTeamAndYear(year, team), Game[].class);
-
-                List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
-                List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
-
-                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
-                double awp = awayGames.stream().filter(x -> x.getAway_points() > x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
-
-                for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
-                    int week = game.getWeek();
-
-                    RatingComposite composite = ratingService.getRatings(team, year, week, hwp, awp);
-                    if(composite == null){
-                        continue;
-                    }
-
-                    // Adjust Scores and Save
-                    coachScore = scaleRating(coachScore, composite.getCoach());
-                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), !Double.isFinite(coachScore) ? 50.0 : coachScore, PersonType.COACH));
-
-                    ocScore = scaleRating(ocScore, composite.getOC());
-                    ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
-
-                    dcScore = scaleRating(dcScore, composite.getDC());
-                    ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
-
-                }
-            }
-        }
-
-        ratingRepository.saveAll(ratings);
+//        if(ratingRepository.count() > 0){
+//            return;
+//        }
+//
+//        List<Rating> ratings = new ArrayList<>();
+//
+//        for(Coach coach : coaches){
+//
+//            if(coach.getTeam() == null){
+//                System.err.println(coach.getName());
+//                continue; // Some error
+//            }
+//
+//            int endYear = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getYear();
+//            if(endYear < 2017){
+//                continue; // We can't calculate for them
+//            }
+//
+//            double coachScore = 50;
+//            double ocScore = 50;
+//            double dcScore = 50;
+//
+//            for(int year = 2017; year <= Math.min(endYear, 2019); year++){
+//
+//                int finalYear = year;
+//
+//                //String oc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
+//                //String dc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
+//
+//                // TODO - Get Team from Seasons of Coach using year
+//
+//                // TODO - Multiple OC and DC per Year
+//                Optional<Coordinator> ocOpt = coach.getTeam().getCoordinators().stream()
+//                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
+//                        .findFirst();
+//
+//                if(!ocOpt.isPresent()){
+//                    continue;
+//                }
+//
+//                Optional<Coordinator> dcOpt = coach.getTeam().getCoordinators().stream()
+//                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
+//                        .findFirst();
+//
+//                if(!dcOpt.isPresent()){
+//                    continue;
+//                }
+//
+//                String oc = ocOpt.get().getName();
+//                String dc = dcOpt.get().getName();
+//                String team = coach.getTeam().getSchool();
+//
+//                // Get all the games and calculate the home/away percentages
+//                Game[] games = restTemplate.getForObject(gamesPerTeamAndYear(year, team), Game[].class);
+//
+//                List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
+//                List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
+//
+//                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
+//                double awp = awayGames.stream().filter(x -> x.getAway_points() > x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
+//
+//                for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
+//                    int week = game.getWeek();
+//
+//                    RatingComposite composite = ratingService.getRatings(team, year, week, hwp, awp);
+//                    if(composite == null){
+//                        continue;
+//                    }
+//
+//                    // Adjust Scores and Save
+//                    coachScore = scaleRating(coachScore, composite.getCoach());
+//                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), !Double.isFinite(coachScore) ? 50.0 : coachScore, PersonType.COACH));
+//
+//                    ocScore = scaleRating(ocScore, composite.getOC());
+//                    ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
+//
+//                    dcScore = scaleRating(dcScore, composite.getDC());
+//                    ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
+//
+//                }
+//            }
+//        }
+//
+//        ratingRepository.saveAll(ratings);
     }
 
     private double scaleRating(double currentRating, double weeklyRating){
