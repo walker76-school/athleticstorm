@@ -8,7 +8,7 @@ import {
 } from '../../constants';
 
 import { Form, Input, Button, notification } from 'antd';
-import Subscription_List from "../subscriptions/subscription_list";
+import SubscriptionList from "./subscriptions/SubscriptionList";
 const FormItem = Form.Item;
 
 class Signup extends Component {
@@ -136,7 +136,7 @@ class Signup extends Component {
                 </div> }
 
                 {this.state.renderSubscription &&
-                    <Subscription_List handleSubmit={this.handleSubmit}/>
+                    <SubscriptionList handleSubmit={this.handleSubmit}/>
                         }
             </div>
         );

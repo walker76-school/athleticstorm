@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import '../common/AppHeader.css';
 import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
@@ -28,11 +27,6 @@ const TeamsButton = styled(Button)({
 });
 
 class SubscriptionError extends Component {
-
-    constructor(props){
-        super(props);
-
-    }
 
     componentDidMount() {
 

@@ -1,0 +1,56 @@
+package edu.baylor.ecs.athleticstorm.model.coordinator;
+
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "COORDINATOR")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@IdClass(Coordinator.CoordinatorID.class)
+public class Coordinator implements Comparable<Coordinator>{
+
+    @Data
+    public static class CoordinatorID implements Serializable {
+        private String name;
+        private int startYear;
+    }
+
+    @Id
+    @Column(name = "NAME", insertable = false, updatable = false)
+    @EqualsAndHashCode.Include
+    private String name;
+
+    @Column(name = "POSITION", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    private String position;
+
+    @Id
+    @Column(name = "START_YEAR")
+    @EqualsAndHashCode.Exclude
+    private int startYear;
+
+    @Column(name = "END_YEAR")
+    @EqualsAndHashCode.Exclude
+    private int endYear;
+
+    // the team the coach is currently coaching
+    // will be null if the coach is not coaching a team in the last year
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID", nullable = true)
+    @EqualsAndHashCode.Exclude
+    private Team team = null;
+
+    @Override
+    public int compareTo(Coordinator o) {
+        return this.name.compareTo(o.getName());
+    }
+}

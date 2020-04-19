@@ -10,7 +10,6 @@ import edu.baylor.ecs.athleticstorm.security.UserPrincipal;
 import edu.baylor.ecs.athleticstorm.exception.ResourceNotFoundException;
 import edu.baylor.ecs.athleticstorm.model.auth.User;
 import edu.baylor.ecs.athleticstorm.repository.UserRepository;
-import org.assertj.core.internal.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
