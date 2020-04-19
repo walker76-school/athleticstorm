@@ -83,7 +83,7 @@ class School extends Component {
                     allCoaches: result.data,
                     loadedCoaches: true
                 }, () => {
-                    this.headCoachSort('Descending');
+                    this.headCoachSort('Most Recent');
                 });
             });
     }
@@ -101,8 +101,8 @@ class School extends Component {
                     allDC: dc,
                     loadedCoordinators: true
                 }, () => {
-                    this.OCSort('Descending');
-                    this.DCSort('Descending');
+                    this.OCSort('Most Recent');
+                    this.DCSort('Most Recent');
                 });
             });
     }
@@ -266,10 +266,10 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Head Coaches
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.headCoachSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
+                            <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
@@ -278,17 +278,24 @@ class School extends Component {
                         {
                             this.state.coaches.map((coach, ndx) => {
 
+                                let validSeasons = [];
+                                for(let i = 0; i < coach.seasons.length; i++) {
+                                    if(coach.seasons[i].school === this.state.schoolName){
+                                        validSeasons.push(coach.seasons[i]);
+                                    }
+                                }
+
                                 let yearRange = "";
-                                if(coach.seasons.length === 1){
-                                    yearRange = coach.seasons[0].year;
+                                if(validSeasons.length === 1){
+                                    yearRange = validSeasons[0].year;
                                 } else {
-                                    let minYear = coach.seasons[0].year;
-                                    let maxYear = coach.seasons[0].year;
-                                    for(let i = 0; i < coach.seasons.length; i++){
-                                        if(coach.seasons[i].year < minYear){
-                                            minYear = coach.seasons[i].year;
-                                        } else if (coach.seasons[i].year > maxYear){
-                                            maxYear = coach.seasons[i].year;
+                                    let minYear = validSeasons[0].year;
+                                    let maxYear = validSeasons[0].year;
+                                    for(let i = 0; i < validSeasons.length; i++){
+                                        if(validSeasons[i].school === this.state.schoolName && validSeasons[i].year < minYear){
+                                            minYear = validSeasons[i].year;
+                                        } else if (validSeasons[i].school === this.state.schoolName && validSeasons[i].year > maxYear){
+                                            maxYear = validSeasons[i].year;
                                         }
                                     }
                                     yearRange = minYear + "-" + maxYear;
@@ -317,10 +324,10 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Offensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.OCSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
+                            <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
@@ -349,10 +356,10 @@ class School extends Component {
                 <div>
                     <h1 style={{ backgroundColor: this.state.primaryColor, color: "#ffffff" }}>&nbsp;Defensive Coordinators
                         <select style={{ float: 'right', color: this.state.primaryColor }} onChange={(event) => {this.DCSort(event.target.value)}}>
-                            <option value="Descending">Descending</option>
-                            <option value="Ascending">Ascending</option>
                             <option value="Most Recent">Most Recent</option>
                             <option value="Oldest">Oldest</option>
+                            <option value="Descending">Descending</option>
+                            <option value="Ascending">Ascending</option>
                             <option value="Best Score">Best Score</option>
                             <option value="Worst Score">Worst Score</option>
                         </select>
