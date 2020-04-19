@@ -98,13 +98,14 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     private Set<Coach> coaches = null;
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
     private Set<Season> seasons = new TreeSet<>();
+    private Set<Coordinator> coordinators = new TreeSet<>();
 
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // see if already done or colors already exist in the DB
-        if(setupComplete){
+        if(setupComplete || ratingRepository.count() > 0){
             return;
         }
         setup();
@@ -265,11 +266,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         logger.info("Getting coordinators");
 
         if(coordinatorRepository.count() > 0){
+            this.coordinators = new TreeSet<>(coordinatorRepository.findAll());
             return;
         }
 
         try {
-            List<Coordinator> coordinators = new ArrayList<>();
+            Set<Coordinator> coordinators = new HashSet<>();
 
             Resource resource = resourceLoader.getResource("classpath:data/OC.csv");
             InputStream inputStream = resource.getInputStream();
@@ -284,12 +286,13 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             sc.close();
 
             coordinatorRepository.saveAll(coordinators);
+            this.coordinators = coordinators;
         } catch (IOException e){
             e.printStackTrace();
         }
     }
 
-    private void parseFile(Scanner sc, List<Coordinator> coordinators, String key){
+    private void parseFile(Scanner sc, Set<Coordinator> coordinators, String key){
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
             String[] tokens = line.split(",");
@@ -313,9 +316,10 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 Integer endYear = years.stream().max(Integer::compareTo).get();
                 Team t = teams.stream().filter(x -> x.getSchool().equals(tokens[0])).findFirst().orElse(null);
                 if(t != null) {
-                    //Coordinator coordinator = new Coordinator(entry.getKey(), key, startYear, endYear, t);
+                    Coordinator coordinator = new Coordinator(entry.getKey(), key, startYear, endYear, t);
                     //coordinatorRepository.save(coordinator);
-                    coordinators.add(new Coordinator(entry.getKey(), key, startYear, endYear, t));
+                    t.getCoordinators().add(coordinator);
+                    coordinators.add(coordinator);
                 }
 
             }
@@ -333,6 +337,11 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
         for(Coach coach : coaches){
 
+            if(coach.getTeam() == null){
+                System.err.println(coach.getName());
+                continue; // Some error
+            }
+
             int endYear = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getYear();
             if(endYear < 2017){
                 continue; // We can't calculate for them
@@ -345,9 +354,31 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             for(int year = 2017; year <= Math.min(endYear, 2019); year++){
 
                 int finalYear = year;
+
+                //String oc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
+                //String dc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
+
+                // TODO - Get Team from Seasons of Coach using year
+
                 // TODO - Multiple OC and DC per Year
-                String oc = coach.getTeam().getCoordinators().stream().filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
-                String dc = coach.getTeam().getCoordinators().stream().filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
+                Optional<Coordinator> ocOpt = coach.getTeam().getCoordinators().stream()
+                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
+                        .findFirst();
+
+                if(!ocOpt.isPresent()){
+                    continue;
+                }
+
+                Optional<Coordinator> dcOpt = coach.getTeam().getCoordinators().stream()
+                        .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
+                        .findFirst();
+
+                if(!dcOpt.isPresent()){
+                    continue;
+                }
+
+                String oc = ocOpt.get().getName();
+                String dc = dcOpt.get().getName();
                 String team = coach.getTeam().getSchool();
 
                 // Get all the games and calculate the home/away percentages
@@ -356,23 +387,26 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
                 List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
 
-                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
-                double awp = awayGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size();
+                double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
+                double awp = awayGames.stream().filter(x -> x.getAway_points() > x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
 
                 for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
                     int week = game.getWeek();
 
                     RatingComposite composite = ratingService.getRatings(team, year, week, hwp, awp);
+                    if(composite == null){
+                        continue;
+                    }
 
                     // Adjust Scores and Save
                     coachScore = scaleRating(coachScore, composite.getCoach());
-                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), coachScore, PersonType.COACH));
+                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), !Double.isFinite(coachScore) ? 50.0 : coachScore, PersonType.COACH));
 
                     ocScore = scaleRating(ocScore, composite.getOC());
-                    ratings.add(new Rating(new RatingKey(oc, year, week), ocScore, PersonType.OFFENSIVE));
+                    ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
 
                     dcScore = scaleRating(dcScore, composite.getDC());
-                    ratings.add(new Rating(new RatingKey(dc, year, week), dcScore, PersonType.DEFENSIVE));
+                    ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
 
                 }
             }
@@ -383,6 +417,10 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     private double scaleRating(double currentRating, double weeklyRating){
         final double SCALE = 1.0;
-        return (currentRating + (weeklyRating * SCALE)) / (1 + SCALE);
+        double weeklyRatingFinal = weeklyRating;
+        if(Double.isNaN(weeklyRating)){
+            weeklyRatingFinal = 50;
+        }
+        return (currentRating + (weeklyRatingFinal * SCALE)) / (1 + SCALE);
     }
 }

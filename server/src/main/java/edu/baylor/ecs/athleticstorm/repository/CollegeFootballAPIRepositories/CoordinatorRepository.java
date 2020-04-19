@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface CoordinatorRepository extends JpaRepository<Coordinator, Long> {
+public interface CoordinatorRepository extends JpaRepository<Coordinator, Coordinator.CoordinatorID> {
     public Optional<Coordinator> findCoordinatorByNameEquals(String name);
 
     List<Coordinator> findCoordinatorsByTeam_Id(long teamId);
