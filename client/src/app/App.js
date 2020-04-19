@@ -66,11 +66,13 @@ class App extends Component {
     }
 
     loadCurrentUser() {
+        console.log('starting');
         this.setState({
             isLoading: true
         });
         getCurrentUser()
             .then(response => {
+                console.log('getcurr');
                 this.setState({
                     currentUser: response,
                     isAuthenticated: true,
@@ -113,7 +115,11 @@ class App extends Component {
             message: 'Athletic Storm',
             description: "You're successfully logged in.",
         });
-        this.loadCurrentUser().then(response => {
+        this.setState({
+            isLoading: true
+        });
+        getCurrentUser().then(response => {
+            console.log(response);
             this.setState({
                 currentUser: response,
                 isAuthenticated: true,
@@ -133,6 +139,7 @@ class App extends Component {
             cookies.set('Num_players', numPlayers,{path: '/'});
             cookies.set('Role', role,{path: '/'});
         }).catch(error => {
+            console.log('error baby');
             this.setState({
                 isLoading: false
             });

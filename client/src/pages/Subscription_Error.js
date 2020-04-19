@@ -44,7 +44,7 @@ class SubscriptionError extends Component {
                     Upgrade your subscription Plan
                 </SubscriptionButton>
                 <br/><br/><br/>
-                <Link to='/schoollist'>
+                <Link to='/'>
                     <TeamsButton size="medium" variant="contained" color="secondary">
                         Return to Teams Page
                     </TeamsButton>
