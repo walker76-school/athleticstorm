@@ -18,6 +18,7 @@ public class CoachRecord {
     private int losses;
     private int ties;
     private List<Term> terms;
+    private double rating;
 
     public CoachRecord(Coach coach){
         this.coachId = -1;

@@ -26,4 +26,6 @@ public interface RatingRepository extends JpaRepository<Rating, RatingKey> {
     public List<Rating> findAllByKeyYearAndType(Integer year, PersonType personType);
 
     public List<Rating> findAllByKeyYear(Integer year);
+
+    public List<Rating> findAllByKey_Name(String name);
 }

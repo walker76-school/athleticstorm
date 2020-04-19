@@ -105,7 +105,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // see if already done or colors already exist in the DB
-        if(setupComplete){
+        if(setupComplete || ratingRepository.count() > 0){
             return;
         }
         setup();
@@ -329,9 +329,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Transactional
     public void getRatings() {
 
-//        if(ratingRepository.count() > 0){
-//            return;
-//        }
+        if(ratingRepository.count() > 0){
+            return;
+        }
 
         List<Rating> ratings = new ArrayList<>();
 

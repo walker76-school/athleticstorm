@@ -32,6 +32,20 @@ class Coach extends Component {
         })
     }
 
+    perc2color(perc) {
+        var r, g, b = 0;
+        if(perc < 50) {
+            r = 255;
+            g = Math.round(5.1 * perc);
+        }
+        else {
+            g = 255;
+            r = Math.round(510 - 5.10 * perc);
+        }
+        var h = r * 0x10000 + g * 0x100 + b;
+        return '#' + ('000000' + h.toString(16)).slice(-6);
+    }
+
     render() {
         if (!this.state.loading) {
 
@@ -39,7 +53,7 @@ class Coach extends Component {
             return (
                 <div>
                     <div style={{"text-align": "center"}}>
-                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: "#ff0000"}}>89.3</span>)</h1>
+                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>
                         <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <br/>
