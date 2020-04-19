@@ -10,7 +10,9 @@ import LockIcon from '../../common/LockIcon.png';
 import {notification} from "antd";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import Paper from "@material-ui/core/Paper";
-import makeStyles from "@material-ui/core/styles/withStyles";
+import {makeStyles} from "@material-ui/core/styles";
+import withStyles from "@material-ui/core/styles/withStyles";
+
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -136,7 +138,7 @@ class SchoolList extends Component {
     }
 }
 
-export default makeStyles(styles)(SchoolList);
+export default withStyles(styles)(SchoolList);
 
 class StyledPaper extends Component {
     constructor(props){
