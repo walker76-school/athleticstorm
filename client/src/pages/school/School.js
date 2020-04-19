@@ -78,6 +78,7 @@ class School extends Component {
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
             .then(result => {
+                console.log(result.data);
                 this.setState({
                     coaches: result.data,
                     allCoaches: result.data,
@@ -155,9 +156,11 @@ class School extends Component {
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => parseInt(a.seasons[0].year, 10) > parseInt(b.seasons[0].year, 10) ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
         }else if("Best Score" === sortBy){
-
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ coaches: sortedCoaches });
         }else if("Worst Score" === sortBy){
-
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating > b.rating ? 1 : -1 ? 1 : -1);
+            this.setState({ coaches: sortedCoaches });
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -171,15 +174,17 @@ class School extends Component {
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name > b.name ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Most Recent" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => parseInt(a.startYear, 10) < parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Oldest" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Best Score" === sortBy){
-
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ OC: sortedOC });
         }else if("Worst Score" === sortBy){
-
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+            this.setState({ OC: sortedOC });
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -193,15 +198,17 @@ class School extends Component {
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name > b.name ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Most Recent" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => parseInt(a.startYear, 10) < parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Oldest" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Best Score" === sortBy){
-
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ DC: sortedDC });
         }else if("Worst Score" === sortBy){
-
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+            this.setState({ DC: sortedDC });
         }else{
             console.log("Invalid Option " + sortBy);
         }
