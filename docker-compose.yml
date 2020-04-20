@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile
       args:
         REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api
-    image: athleticstorm/athleticstorm-client:5.0
+    image: gitlab.ecs.baylor.edu:5555/aars/20200143c9-athleticstorm/athleticstorm-client:5.0
     ports:
       - "80:80" # Forward the exposed port 80 on the container to port 80 on the host machine
     restart: always
