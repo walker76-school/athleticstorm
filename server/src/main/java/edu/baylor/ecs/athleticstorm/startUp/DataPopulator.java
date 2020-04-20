@@ -108,13 +108,18 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         if(setupComplete || ratingRepository.count() > 0){
             return;
         }
+
+        logger.info("The AthleticStorm Server is about to start the process of pulling all necessary information to populate the database.");
+        logger.info("This process can take upwards of 20 minutes.");
+        logger.info("Please be patient.");
+
         setup();
     }
 
     @Transactional
     public void setup() {
 
-        logger.info("Beginning Setup");
+        logger.info("Beginning Setup ... ");
 
         // get all of the teams
         teams = getTeams();
@@ -142,21 +147,21 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public Set<Team> getTeams(){
-        logger.info("Getting teams");
+        logger.info("Getting Teams ... ");
         if(teamRepository.count() == 0) {
             TeamDTO[] teams = restTemplate.getForObject(TEAM_URL, TeamDTO[].class);
             List<Team> t = Arrays.stream(teams).map(Team::new).collect(Collectors.toList());
             teamRepository.saveAll(t);
             teamRepository.flush();
             return new TreeSet<>(t);
-        }else{
+        } else {
             return new TreeSet<>(teamRepository.findAll());
         }
     }
 
     @Transactional
     public Set<Coach> getCoaches(){
-        logger.info("Getting coaches");
+        logger.info("Getting Coaches ... ");
         if(coachRepository.count() == 0) {
             CoachDTO[] coachDTOS = restTemplate.getForObject(COACH_URL, CoachDTO[].class);
             List<Coach> c = Arrays.stream(coachDTOS).map(x -> new Coach(x, this.seasons)).collect(Collectors.toList());
@@ -172,7 +177,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void saveSeasons(){
-        logger.info("Getting seasons");
+        logger.info("Getting Seasons ... ");
         for(Coach c: coaches){
             Season record = c.getSeasons().stream().filter(x -> x.getYear() == 2019).findAny().orElse(null);
             if(Objects.isNull(record) || c.getSeasons().isEmpty()){
@@ -192,7 +197,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public Set<Player> getPlayers(){
-        logger.info("Getting players");
+        logger.info("Getting Players ... ");
         if(playerRepository.count() == 0) {
             Set<Player> toReturn = new TreeSet<>();
             for (Team t : teams) {
@@ -208,7 +213,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void getTeamRosters(){
-        logger.info("Getting rosters");
+        logger.info("Getting Rosters ... ");
         if(rosterPlayerRepository.count() > 0){
             rosterPlayers = new TreeSet<>(rosterPlayerRepository.findAll());
             return;
@@ -242,6 +247,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void getPlayerUsage(){
+
+        logger.info("Getting Player Usage ... ");
+
         if(usageRepository.count() > 0){
             return;
         }
@@ -263,7 +271,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void getCoordinators() {
-        logger.info("Getting coordinators");
+        logger.info("Getting Coordinators ... ");
 
         if(coordinatorRepository.count() > 0){
             this.coordinators = new TreeSet<>(coordinatorRepository.findAll());
@@ -328,6 +336,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
     @Transactional
     public void getRatings() {
+        logger.info("Getting Ratings ... ");
 
         if(ratingRepository.count() > 0){
             return;
