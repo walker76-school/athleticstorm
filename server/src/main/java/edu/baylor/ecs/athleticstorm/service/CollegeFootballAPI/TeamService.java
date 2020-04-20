@@ -14,13 +14,15 @@ package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
+import edu.baylor.ecs.athleticstorm.model.coordinator.Coordinator;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.io.InputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,9 @@ public class TeamService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     public List<TeamDTO> getAllTeams() {
         return convertToDTO(teamRepository.findAll());
@@ -50,4 +55,27 @@ public class TeamService {
         return teams.stream().map(TeamDTO::new).collect(Collectors.toList());
     }
 
+    public List<String> getVideosByName(String teamName) {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:data/Videos.csv");
+            InputStream inputStream = resource.getInputStream();
+            Scanner sc = new Scanner(inputStream);
+            List<String> videos = new ArrayList<>();
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] tokens = line.split(",");
+                if(tokens[0].equalsIgnoreCase(teamName)){
+                    videos.add(tokens[1].substring(tokens[1].indexOf('=') + 1));
+                    videos.add(tokens[2].substring(tokens[2].indexOf('=') + 1));
+                    videos.add(tokens[3].substring(tokens[3].indexOf('=') + 1));
+                }
+            }
+            sc.close();
+            return videos;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
 }

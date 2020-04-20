@@ -37,4 +37,9 @@ public class TeamController {
         return teamService.getTeamByName(teamName);
     }
 
+    @GetMapping("/videos/byName/{teamName}")
+    public List<String> getVideosByTeamName(@PathVariable("teamName") String teamName){
+        return teamService.getVideosByName(teamName);
+    }
+
 }

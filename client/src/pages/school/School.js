@@ -14,6 +14,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {notification} from 'antd';
 import Redirect from "react-router-dom/Redirect";
+import YouTube from 'react-youtube';
+
 const styles = makeStyles(theme => ({
     paper: {
         padding: theme.spacing(2),
@@ -43,6 +45,7 @@ class School extends Component {
             allOC: [],
             DC: [],
             allDC: [],
+            videos: [],
             schoolName: '',
             logo: '',
             primaryColor: '',
@@ -50,12 +53,14 @@ class School extends Component {
             selectedPlayer: null,
             loadedCoaches: false,
             loadedPlayers: false,
-            loadedCoordinators: false
+            loadedCoordinators: false,
+            loadedVideos: false
         };
 
         this.loadCoaches = this.loadCoaches.bind(this);
         this.loadCoordinators = this.loadCoordinators.bind(this);
         this.loadPlayers = this.loadPlayers.bind(this);
+        this.loadVideos = this.loadVideos.bind(this);
         this.headCoachSort = this.headCoachSort.bind(this);
         this.OCSort = this.OCSort.bind(this);
         this.DCSort = this.DCSort.bind(this);
@@ -75,6 +80,7 @@ class School extends Component {
                 secondaryColor: result.data.alt_color
             }, () => {
                 this.loadCoaches();
+                this.loadVideos();
                 this.loadCoordinators();
                 this.loadPlayers(this.state.year);
             });
@@ -90,6 +96,23 @@ class School extends Component {
                     unlocked = false;
                 }
             }
+        });
+    }
+
+    loadVideos(){
+        // Get List Of Coaches From API
+        axios.get('http://localhost:8080/api/teams/videos/byName/' + this.state.schoolName)
+        .then(result => {
+            console.log(result.data);
+            this.setState({
+                videos: result.data,
+                loadedVideos: true
+            });
+        })
+        .catch(error => {
+            this.setState({
+                loadedVideos: true
+            });
         });
     }
 
@@ -281,7 +304,7 @@ class School extends Component {
 
     render() {
 
-        if(!this.state.loadedCoaches || !this.state.loadedPlayers || !this.state.loadedCoordinators){
+        if(!this.state.loadedCoaches || !this.state.loadedPlayers || !this.state.loadedCoordinators || !this.state.loadedVideos){
             return <LoadingIndicator/>;
         }
 
@@ -300,8 +323,25 @@ class School extends Component {
                             backgroundColor: this.state.primaryColor,
                             color: "#ffffff"
                         }}>&nbsp;{this.state.schoolName}</h1>
-                        <img src={this.state.logo} width="100" height="100" alt="Logo"/>
                     </div>
+                    <Grid container>
+                        <Grid item xs={2}>
+                            <img src={this.state.logo} width="100" height="100" alt="Logo"/>
+                        </Grid>
+                        {
+                            this.state.videos.map(videoId => {
+                                return (
+                                    <Grid item xs={3}>
+                                        <YouTube videoId={videoId} opts={{
+                                            height: "125px",
+                                            width: "200px"
+                                        }}/>
+                                    </Grid>
+                                );
+                            })
+                        }
+                    </Grid>
+                    <br/>
 
                     <div>
                         <h1 style={{backgroundColor: this.state.primaryColor, color: "#ffffff"}}>&nbsp;Head Coaches
