@@ -43,6 +43,8 @@ class Ranking extends Component {
             const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => parseInt(a.wins,10) < parseInt(b.wins,10) ? 1 : -1);
             this.setState({ allRecords: sortedCoaches });
         }else if("Coach Grade" === sortBy){
+            const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ allRecords: sortedCoaches });
          
         }else{
             console.log("Invalid Option " + sortBy);
@@ -64,6 +66,20 @@ class Ranking extends Component {
                 loaded: true
             });
         });
+    }
+
+    perc2color(perc) {
+        var r, g, b = 0;
+        if(perc < 50) {
+            r = 255;
+            g = Math.round(5.1 * perc);
+        }
+        else {
+            g = 255;
+            r = Math.round(510 - 5.10 * perc);
+        }
+        var h = r * 0x10000 + g * 0x100 + b;
+        return '#' + ('000000' + h.toString(16)).slice(-6);
     }
 
     render() {
@@ -89,10 +105,10 @@ class Ranking extends Component {
                             this.state.allRecords.map((record, ndx) => {
                                 return (
                                     <Grid item xs={3} key={ndx}>
-                                        <Link to={"/coach/" + record.firstName + " " + record.lastName}>
+                                        <Link to={"/coach/" + record.first_name + " " + record.last_name}>
                                             <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
-                                                <Typography><b>{record.firstName} {record.lastName}</b></Typography>
+                                                <Typography><b>{record.first_name} {record.last_name}</b>(<span style={{color: record.rating === -1 ? "#000000" : this.perc2color(record.rating)}}>{record.rating === -1 ? "--" : record.rating.toFixed(2)}</span>)</Typography>
                                                 <Typography><b>Wins:</b> {record.wins} <b>Losses:</b> {record.losses}</Typography>
                                             </StyledPaper>
                                          </Link>
