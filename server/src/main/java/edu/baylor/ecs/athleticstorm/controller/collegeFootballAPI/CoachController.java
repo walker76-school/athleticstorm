@@ -2,6 +2,8 @@ package edu.baylor.ecs.athleticstorm.controller.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
+import edu.baylor.ecs.athleticstorm.DTO.coach.RatedCoachDTO;
+import edu.baylor.ecs.athleticstorm.model.coach.CoachStats;
 import edu.baylor.ecs.athleticstorm.model.rating.Rating;
 import edu.baylor.ecs.athleticstorm.model.rating.RatingKey;
 import edu.baylor.ecs.athleticstorm.repository.RatingRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/coaches")
@@ -29,18 +32,35 @@ public class CoachController {
     }
 
     @GetMapping("/currentCoaches/{teamId}" )
-    public List<CoachDTO> getCoachesByTeamId(@PathVariable("teamId") Long teamId){
-        return coachService.getCoachesByTeamId(teamId);
+    public List<RatedCoachDTO> getCoachesByTeamId(@PathVariable("teamId") Long teamId){
+        return coachService.getCoachesByTeamId(teamId).stream().map(x -> {
+            RatedCoachDTO ratedCoachDTO = new RatedCoachDTO(x);
+            List<Rating> ratings = ratingRepository.findAllByKey_Name(x.getFirst_name() + " " + x.getLast_name());
+            Optional<Rating> ratingOpt = ratings.stream().max(Rating::compareTo);
+            ratedCoachDTO.setRating(ratingOpt.isPresent() ? ratingOpt.get().getRating() : -1);
+            return ratedCoachDTO;
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/byTeamId/{teamId}" )
-    public List<CoachDTO> getHistoricalCoachesByTeamId(@PathVariable("teamId") Long teamId){
-        return coachService.getHistoricalCoachesByTeamId(teamId);
+    public List<RatedCoachDTO> getHistoricalCoachesByTeamId(@PathVariable("teamId") Long teamId){
+        return coachService.getHistoricalCoachesByTeamId(teamId).stream().map(x -> {
+            RatedCoachDTO ratedCoachDTO = new RatedCoachDTO(x);
+            List<Rating> ratings = ratingRepository.findAllByKey_Name(x.getFirst_name() + " " + x.getLast_name());
+            Optional<Rating> ratingOpt = ratings.stream().max(Rating::compareTo);
+            ratedCoachDTO.setRating(ratingOpt.isPresent() ? ratingOpt.get().getRating() : -1);
+            return ratedCoachDTO;
+        }).collect(Collectors.toList());
     }
 
     @GetMapping("/byName/{name}")
-    public CoachDTO getCoachByName(@PathVariable("name") String name){
-        return coachService.getCoachByName(name);
+    public RatedCoachDTO getCoachByName(@PathVariable("name") String name){
+        CoachDTO x =  coachService.getCoachByName(name);
+        RatedCoachDTO ratedCoachDTO = new RatedCoachDTO(x);
+        List<Rating> ratings = ratingRepository.findAllByKey_Name(x.getFirst_name() + " " + x.getLast_name());
+        Optional<Rating> ratingOpt = ratings.stream().max(Rating::compareTo);
+        ratedCoachDTO.setRating(ratingOpt.isPresent() ? ratingOpt.get().getRating() : -1);
+        return ratedCoachDTO;
     }
 
     @GetMapping("/record/byName/{name}" )
@@ -52,5 +72,17 @@ public class CoachController {
         record.setRating(ratingOpt.isPresent() ? ratingOpt.get().getRating() : -1);
         return record;
     }
+
+    @GetMapping("/allStats")
+    public List<CoachStats> getAllCoachRecords(){
+        return coachService.getAllCoaches().parallelStream().map(x -> {
+            RatedCoachDTO ratedCoachDTO = new RatedCoachDTO(x);
+            List<Rating> ratings = ratingRepository.findAllByKey_Name(x.getFirst_name() + " " + x.getLast_name());
+            Optional<Rating> ratingOpt = ratings.stream().max(Rating::compareTo);
+            ratedCoachDTO.setRating(ratingOpt.isPresent() ? ratingOpt.get().getRating() : -1);
+            return ratedCoachDTO;
+        }).map(CoachStats::new).collect(Collectors.toList());
+    }
+
 
 }

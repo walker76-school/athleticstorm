@@ -58,67 +58,67 @@ class Coach extends Component {
                     </div>
                     <br/>
                     {this.state.record.terms.map(term => (
-                    <div>
-                    <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>
-                        <Grid container align="center" justify="left" spacing={3}>
-                            <Grid item xs={2}>
-                                <Link
-                                    to={{
-                                        pathname: "/school/" + term.team.school,
-                                        state: {
-                                            teamId: term.team.id
-                                        }
-                                    }}
-                                    style={{"text-align": "center"}}
-                                >
-                                    <img style={{ marginLeft: 10 }} src={term.team.logos[0]} height="100" width="100" alt={term.team.school}/>
-                                </Link>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <span style={{ marginLeft: 30, color: term.team.color}}>
-                                    {term.team.school} ({term.start_year}{term.end_year !== -1 ? "-" + term.end_year : ""})
-                                </span>
-                            </Grid>
-                            <Grid item xs={7}>
+                        <div>
+                            <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>
                                 <Grid container align="center" justify="left" spacing={3}>
-                                    {term.seasons.map(season => (
-                                        <Grid item xs={3}>
-                                            <Paper>
-                                                <ReactMinimalPieChart
-                                                    animate={true}
-                                                    animationDuration={500}
-                                                    animationEasing="ease-out"
-                                                    cx={50}
-                                                    cy={50}
-                                                    data={[
-                                                        {
-                                                            color: '#009900',
-                                                            title: 'Wins',
-                                                            value: season.wins
-                                                        },
-                                                        {
-                                                            color: '#CC0000',
-                                                            title: 'Losses',
-                                                            value: season.losses
-                                                        }
-                                                    ]}
-                                                    label={false}
-                                                    radius={25}
-                                                    viewBoxSize={[
-                                                        30,
-                                                        30
-                                                    ]}
-                                                />
-                                                <Typography>{season.year}: {season.wins}-{season.losses}</Typography>
-                                            </Paper>
+                                    <Grid item xs={2}>
+                                        <Link
+                                            to={{
+                                                pathname: "/school/" + term.team.school,
+                                                state: {
+                                                    teamId: term.team.id
+                                                }
+                                            }}
+                                            style={{"text-align": "center"}}
+                                        >
+                                            <img style={{ marginLeft: 10 }} src={term.team.logos[0]} height="100" width="100" alt={term.team.school}/>
+                                        </Link>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <span style={{ marginLeft: 30, color: term.team.color}}>
+                                            {term.team.school} ({term.start_year}{term.end_year !== -1 && term.end_year !== term.start_year ? "-" + term.end_year : ""})
+                                        </span>
+                                    </Grid>
+                                    <Grid item xs={7}>
+                                        <Grid container align="center" justify="left" spacing={3}>
+                                            {term.seasons.map(season => (
+                                                <Grid item xs={3}>
+                                                    <Paper>
+                                                        <ReactMinimalPieChart
+                                                            animate={true}
+                                                            animationDuration={500}
+                                                            animationEasing="ease-out"
+                                                            cx={50}
+                                                            cy={50}
+                                                            data={[
+                                                                {
+                                                                    color: '#009900',
+                                                                    title: 'Wins',
+                                                                    value: season.wins
+                                                                },
+                                                                {
+                                                                    color: '#CC0000',
+                                                                    title: 'Losses',
+                                                                    value: season.losses
+                                                                }
+                                                            ]}
+                                                            label={false}
+                                                            radius={25}
+                                                            viewBoxSize={[
+                                                                30,
+                                                                30
+                                                            ]}
+                                                        />
+                                                        <Typography>{season.year}: {season.wins}-{season.losses}</Typography>
+                                                    </Paper>
+                                                </Grid>
+                                            ))}
                                         </Grid>
-                                    ))}
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                    <br/>
-                    </div>
+                            </Paper>
+                            <br/>
+                        </div>
                     ))}
                 </div>
             )

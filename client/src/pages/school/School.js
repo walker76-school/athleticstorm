@@ -97,12 +97,13 @@ class School extends Component {
         // Get List Of Coaches From API
         axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
             .then(result => {
+                console.log(result.data);
                 this.setState({
                     coaches: result.data,
                     allCoaches: result.data,
                     loadedCoaches: true
                 }, () => {
-                    this.headCoachSort('Descending');
+                    this.headCoachSort('Most Recent');
                 });
             });
     }
@@ -120,8 +121,8 @@ class School extends Component {
                     allDC: dc,
                     loadedCoordinators: true
                 }, () => {
-                    this.OCSort('Descending');
-                    this.DCSort('Descending');
+                    this.OCSort('Most Recent');
+                    this.DCSort('Most Recent');
                 });
             });
     }
@@ -181,9 +182,11 @@ class School extends Component {
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => parseInt(a.seasons[0].year, 10) > parseInt(b.seasons[0].year, 10) ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
         }else if("Best Score" === sortBy){
-
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ coaches: sortedCoaches });
         }else if("Worst Score" === sortBy){
-
+            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating > b.rating ? 1 : -1 ? 1 : -1);
+            this.setState({ coaches: sortedCoaches });
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -197,15 +200,17 @@ class School extends Component {
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name > b.name ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Most Recent" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => parseInt(a.startYear, 10) < parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Oldest" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Best Score" === sortBy){
-
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ OC: sortedOC });
         }else if("Worst Score" === sortBy){
-
+            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+            this.setState({ OC: sortedOC });
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -219,15 +224,17 @@ class School extends Component {
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name > b.name ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Most Recent" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear < b.startYear ? 1 : -1);
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => parseInt(a.startYear, 10) < parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Oldest" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.startYear > b.startYear ? 1 : -1);
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Best Score" === sortBy){
-
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+            this.setState({ DC: sortedDC });
         }else if("Worst Score" === sortBy){
-
+            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+            this.setState({ DC: sortedDC });
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -301,10 +308,10 @@ class School extends Component {
                             <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
                                 this.headCoachSort(event.target.value)
                             }}>
-                                <option value="Descending">Descending</option>
-                                <option value="Ascending">Ascending</option>
                                 <option value="Most Recent">Most Recent</option>
                                 <option value="Oldest">Oldest</option>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
                                 <option value="Best Score">Best Score</option>
                                 <option value="Worst Score">Worst Score</option>
                             </select>
@@ -313,17 +320,24 @@ class School extends Component {
                             {
                                 this.state.coaches.map((coach, ndx) => {
 
+                                    let validSeasons = [];
+                                    for (let i = 0; i < coach.seasons.length; i++) {
+                                        if (coach.seasons[i].school === this.state.schoolName) {
+                                            validSeasons.push(coach.seasons[i]);
+                                        }
+                                    }
+
                                     let yearRange = "";
-                                    if (coach.seasons.length === 1) {
-                                        yearRange = coach.seasons[0].year;
+                                    if (validSeasons.length === 1) {
+                                        yearRange = validSeasons[0].year;
                                     } else {
-                                        let minYear = coach.seasons[0].year;
-                                        let maxYear = coach.seasons[0].year;
-                                        for (let i = 0; i < coach.seasons.length; i++) {
-                                            if (coach.seasons[i].year < minYear) {
-                                                minYear = coach.seasons[i].year;
-                                            } else if (coach.seasons[i].year > maxYear) {
-                                                maxYear = coach.seasons[i].year;
+                                        let minYear = validSeasons[0].year;
+                                        let maxYear = validSeasons[0].year;
+                                        for (let i = 0; i < validSeasons.length; i++) {
+                                            if (validSeasons[i].school === this.state.schoolName && validSeasons[i].year < minYear) {
+                                                minYear = validSeasons[i].year;
+                                            } else if (validSeasons[i].school === this.state.schoolName && validSeasons[i].year > maxYear) {
+                                                maxYear = validSeasons[i].year;
                                             }
                                         }
                                         yearRange = minYear + "-" + maxYear;
@@ -355,10 +369,10 @@ class School extends Component {
                             <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
                                 this.OCSort(event.target.value)
                             }}>
-                                <option value="Descending">Descending</option>
-                                <option value="Ascending">Ascending</option>
                                 <option value="Most Recent">Most Recent</option>
                                 <option value="Oldest">Oldest</option>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
                                 <option value="Best Score">Best Score</option>
                                 <option value="Worst Score">Worst Score</option>
                             </select>
@@ -390,10 +404,10 @@ class School extends Component {
                             <select style={{float: 'right', color: this.state.primaryColor}} onChange={(event) => {
                                 this.DCSort(event.target.value)
                             }}>
-                                <option value="Descending">Descending</option>
-                                <option value="Ascending">Ascending</option>
                                 <option value="Most Recent">Most Recent</option>
                                 <option value="Oldest">Oldest</option>
+                                <option value="Descending">Descending</option>
+                                <option value="Ascending">Ascending</option>
                                 <option value="Best Score">Best Score</option>
                                 <option value="Worst Score">Worst Score</option>
                             </select>
@@ -464,10 +478,8 @@ class School extends Component {
                            selectedPlayer={this.state.selectedPlayer}/>
                 </div>
                 }
-                {!unlocked && <Redirect to={"/SubscriptionError"}/>
-                }
+                {!unlocked && <Redirect to={"/SubscriptionError"}/>}
             </div>
-
         );
     }
 }
