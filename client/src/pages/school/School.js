@@ -205,11 +205,27 @@ class School extends Component {
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => parseInt(a.seasons[0].year, 10) > parseInt(b.seasons[0].year, 10) ? 1 : -1);
             this.setState({ coaches: sortedCoaches });
         }else if("Best Score" === sortBy){
-            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating < b.rating ? 1 : -1);
-            this.setState({ coaches: sortedCoaches });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating < b.rating ? 1 : -1);
+                this.setState({ coaches: sortedCoaches });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
+
         }else if("Worst Score" === sortBy){
-            const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating > b.rating ? 1 : -1 ? 1 : -1);
-            this.setState({ coaches: sortedCoaches });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.rating > b.rating ? 1 : -1 ? 1 : -1);
+                this.setState({ coaches: sortedCoaches });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
+
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -229,11 +245,25 @@ class School extends Component {
             const sortedOC = [].concat(this.state.OC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ OC: sortedOC });
         }else if("Best Score" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating < b.rating ? 1 : -1);
-            this.setState({ OC: sortedOC });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+                this.setState({ OC: sortedOC });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
         }else if("Worst Score" === sortBy){
-            const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating > b.rating ? 1 : -1);
-            this.setState({ OC: sortedOC });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedOC = [].concat(this.state.OC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+                this.setState({ OC: sortedOC });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
         }else{
             console.log("Invalid Option " + sortBy);
         }
@@ -253,11 +283,26 @@ class School extends Component {
             const sortedDC = [].concat(this.state.DC).sort((a, b) => parseInt(a.startYear, 10) > parseInt(b.startYear, 10) ? 1 : -1);
             this.setState({ DC: sortedDC });
         }else if("Best Score" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating < b.rating ? 1 : -1);
-            this.setState({ DC: sortedDC });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating < b.rating ? 1 : -1);
+                this.setState({ DC: sortedDC });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
+
         }else if("Worst Score" === sortBy){
-            const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating > b.rating ? 1 : -1);
-            this.setState({ DC: sortedDC });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedDC = [].concat(this.state.DC).sort((a, b) => a.rating > b.rating ? 1 : -1);
+                this.setState({ DC: sortedDC });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
         }else{
             console.log("Invalid Option " + sortBy);
         }
