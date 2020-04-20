@@ -98,7 +98,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     private Set<Coach> coaches = null;
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
     private Set<Season> seasons = new TreeSet<>();
-    private Set<Coordinator> coordinators = new TreeSet<>();
 
     @Override
     @Transactional
@@ -274,7 +273,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         logger.info("Getting Coordinators ... ");
 
         if(coordinatorRepository.count() > 0){
-            this.coordinators = new TreeSet<>(coordinatorRepository.findAll());
             return;
         }
 
@@ -294,7 +292,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             sc.close();
 
             coordinatorRepository.saveAll(coordinators);
-            this.coordinators = coordinators;
         } catch (IOException e){
             e.printStackTrace();
         }
