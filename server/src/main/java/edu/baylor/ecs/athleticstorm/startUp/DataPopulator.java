@@ -306,17 +306,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             String[] tokens = line.split(",");
             Map<String, List<Integer>> nameToYears = new HashMap<>();
 
-            List<Integer> yearsOrDefault = nameToYears.getOrDefault(tokens[1], new ArrayList<>());
-            yearsOrDefault.add(2017);
-            nameToYears.put(tokens[1], yearsOrDefault);
-
-            yearsOrDefault = nameToYears.getOrDefault(tokens[2], new ArrayList<>());
-            yearsOrDefault.add(2018);
-            nameToYears.put(tokens[2], yearsOrDefault);
-
-            yearsOrDefault = nameToYears.getOrDefault(tokens[3], new ArrayList<>());
-            yearsOrDefault.add(2019);
-            nameToYears.put(tokens[3], yearsOrDefault);
+            populateYears(nameToYears, tokens[1].split("/"), 2017);
+            populateYears(nameToYears, tokens[2].split("/"), 2018);
+            populateYears(nameToYears, tokens[3].split("/"), 2019);
 
             for(Map.Entry<String, List<Integer>> entry : nameToYears.entrySet()){
                 List<Integer> years = entry.getValue();
@@ -334,6 +326,14 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    private void populateYears(Map<String, List<Integer>> nameToYears, String[] coordinators, int year){
+        for(String s : coordinators) {
+            List<Integer> yearsOrDefault = nameToYears.getOrDefault(s, new ArrayList<>());
+            yearsOrDefault.add(year);
+            nameToYears.put(s, yearsOrDefault);
+        }
+    }
+
     @Transactional
     public void getRatings() {
         logger.info("Getting Ratings ... ");
@@ -347,7 +347,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         for(Coach coach : coaches){
 
             if(coach.getTeam() == null){
-                System.err.println(coach.getName());
                 continue; // Some error
             }
 
@@ -357,37 +356,42 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             }
 
             double coachScore = 50;
-            double ocScore = 50;
-            double dcScore = 50;
 
             for(int year = 2017; year <= Math.min(endYear, 2019); year++){
 
                 int finalYear = year;
-
-                //String oc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc")).findFirst().get().getName();
-                //String dc = coordinators.stream().filter(x -> x.getTeam().getId() == teamId && x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc")).findFirst().get().getName();
-
-                // TODO - Get Team from Seasons of Coach using year
+                Map<String, Double> ocRatings = new HashMap<>();
+                Map<String, Double> dcRatings = new HashMap<>();
 
                 // TODO - Multiple OC and DC per Year
-                Optional<Coordinator> ocOpt = coach.getTeam().getCoordinators().stream()
+                List<Coordinator> ocs = coach.getTeam().getCoordinators().stream()
                         .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
-                        .findFirst();
+                        .collect(Collectors.toList());
 
-                if(!ocOpt.isPresent()){
+                if(ocs.isEmpty()){
                     continue;
                 }
 
-                Optional<Coordinator> dcOpt = coach.getTeam().getCoordinators().stream()
+                for(Coordinator oc : ocs){
+                    List<Rating> oldRatings = ratingRepository.findAllByKey_Name(oc.getName());
+                    Optional<Rating> ratingOpt = oldRatings.stream().max(Rating::compareTo);
+                    ocRatings.put(oc.getName(), ratingOpt.isPresent() ? ratingOpt.get().getRating() : 50);
+                }
+
+                List<Coordinator> dcs = coach.getTeam().getCoordinators().stream()
                         .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
-                        .findFirst();
+                        .collect(Collectors.toList());
 
-                if(!dcOpt.isPresent()){
+                if(dcs.isEmpty()){
                     continue;
                 }
 
-                String oc = ocOpt.get().getName();
-                String dc = dcOpt.get().getName();
+                for(Coordinator dc : dcs){
+                    List<Rating> oldRatings = ratingRepository.findAllByKey_Name(dc.getName());
+                    Optional<Rating> ratingOpt = oldRatings.stream().max(Rating::compareTo);
+                    dcRatings.put(dc.getName(), ratingOpt.isPresent() ? ratingOpt.get().getRating() : 50);
+                }
+
                 String team = coach.getTeam().getSchool();
 
                 // Get all the games and calculate the home/away percentages
@@ -411,11 +415,15 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                     coachScore = scaleRating(coachScore, composite.getCoach());
                     ratings.add(new Rating(new RatingKey(coach.getName(), year, week), !Double.isFinite(coachScore) ? 50.0 : coachScore, PersonType.COACH));
 
-                    ocScore = scaleRating(ocScore, composite.getOC());
-                    ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
+                    for(String oc : ocRatings.keySet()) {
+                        double ocScore = scaleRating(ocRatings.get(oc), composite.getOC());
+                        ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
+                    }
 
-                    dcScore = scaleRating(dcScore, composite.getDC());
-                    ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
+                    for(String dc : dcRatings.keySet()) {
+                        double dcScore = scaleRating(dcRatings.get(dc), composite.getDC());
+                        ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
+                    }
 
                 }
             }
