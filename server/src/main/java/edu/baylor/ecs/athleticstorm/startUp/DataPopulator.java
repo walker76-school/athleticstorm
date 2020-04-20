@@ -346,10 +346,6 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
         for(Coach coach : coaches){
 
-            if(coach.getTeam() == null){
-                continue; // Some error
-            }
-
             int endYear = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getYear();
             if(endYear < 2017){
                 continue; // We can't calculate for them
@@ -363,8 +359,15 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 Map<String, Double> ocRatings = new HashMap<>();
                 Map<String, Double> dcRatings = new HashMap<>();
 
+                String teamName = coach.getSeasons().stream().max(Comparator.comparing(Season::getYear)).get().getSchool();
+
+                Team team = coach.getTeam();
+                if(team == null) {
+                    team = teamRepository.findTeamBySchool(teamName).get();
+                }
+
                 // TODO - Multiple OC and DC per Year
-                List<Coordinator> ocs = coach.getTeam().getCoordinators().stream()
+                List<Coordinator> ocs = team.getCoordinators().stream()
                         .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("oc"))
                         .collect(Collectors.toList());
 
@@ -378,7 +381,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                     ocRatings.put(oc.getName(), ratingOpt.isPresent() ? ratingOpt.get().getRating() : 50);
                 }
 
-                List<Coordinator> dcs = coach.getTeam().getCoordinators().stream()
+                List<Coordinator> dcs = team.getCoordinators().stream()
                         .filter(x -> x.getStartYear() <= finalYear && x.getEndYear() >= finalYear && x.getPosition().equalsIgnoreCase("dc"))
                         .collect(Collectors.toList());
 
@@ -392,13 +395,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                     dcRatings.put(dc.getName(), ratingOpt.isPresent() ? ratingOpt.get().getRating() : 50);
                 }
 
-                String team = coach.getTeam().getSchool();
 
                 // Get all the games and calculate the home/away percentages
-                Game[] games = restTemplate.getForObject(gamesPerTeamAndYear(year, team), Game[].class);
+                Game[] games = restTemplate.getForObject(gamesPerTeamAndYear(year, teamName), Game[].class);
 
-                List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(team)).collect(Collectors.toList());
-                List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(team)).collect(Collectors.toList());
+                List<Game> homeGames = Arrays.stream(games).filter(x -> x.getHome_team().equals(teamName)).collect(Collectors.toList());
+                List<Game> awayGames = Arrays.stream(games).filter(x -> !x.getHome_team().equals(teamName)).collect(Collectors.toList());
 
                 double hwp = homeGames.stream().filter(x -> x.getAway_points() < x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
                 double awp = awayGames.stream().filter(x -> x.getAway_points() > x.getHome_points()).count() * 1.0 / homeGames.size() * 100;
@@ -406,7 +408,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
                 for(Game game : games){ // TODO - Need to be for every game, not every week cause missing
                     int week = game.getWeek();
 
-                    RatingComposite composite = ratingService.getRatings(team, year, week, hwp, awp);
+                    RatingComposite composite = ratingService.getRatings(teamName, year, week, hwp, awp);
                     if(composite == null){
                         continue;
                     }
