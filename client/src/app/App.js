@@ -92,6 +92,7 @@ class App extends Component {
     handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
 
+        cookies.set('Username', '', {path: '/'});
         cookies.set('Num_teams', 0,{path: '/'});
         cookies.set('Teams_visited', [],{path: '/'});
         cookies.set('Num_players', 0,{path: '/'});
@@ -125,6 +126,7 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
+            let username = this.state.currentUser.username;
             let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
             let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
             let role = this.state.currentUser.roleName[0];
@@ -134,6 +136,7 @@ class App extends Component {
                 role = this.state.currentUser.roleName[1];
             }
             console.log(numTeams);
+            cookies.set('Username', username, {path: '/'});
             cookies.set('Num_teams', numTeams, {path: '/'});
             cookies.set('Teams_visited', [], {path: '/'});
             cookies.set('Num_players', numPlayers,{path: '/'});

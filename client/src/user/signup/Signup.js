@@ -136,7 +136,7 @@ class Signup extends Component {
                 </div> }
 
                 {this.state.renderSubscription &&
-                    <SubscriptionList handleSubmit={this.handleSubmit}/>
+                    <SubscriptionList handleSubmit={this.handleSubmit} tier={'None'}/>
                         }
             </div>
         );

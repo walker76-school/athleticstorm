@@ -39,6 +39,14 @@ export function signup(signupRequest) {
     });
 }
 
+export function changeSubscription(subchange) {
+    return request({
+        url: API_BASE_URL + "/auth/subchange",
+        method: 'POST',
+        body: JSON.stringify(subchange)
+    });
+}
+
 export function checkUsernameAvailability(username) {
     return request({
         url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
