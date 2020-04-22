@@ -70,19 +70,13 @@ public class RatingService {
 
         String opponent = "nationalAverages";
         Optional<PPA> opponentOpt = PPA_RATINGS.get(year).stream().filter(x -> x.getWeek() == week && x.getTeam().equalsIgnoreCase(team)).findFirst();
-        if(!opponentOpt.isPresent()){
-            System.err.println("Year - " + year);
-            System.err.println("Week - " + week);
-            System.err.println("Team - " + team);
-        } else {
+        if(opponentOpt.isPresent()){
             opponent = opponentOpt.get().getOpponent();
         }
 
         String finalOpponent = opponent;
         Optional<SPRating> spOpt = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase(finalOpponent)).findFirst();
         if(!spOpt.isPresent()){
-            System.err.println("Year - " + year);
-            System.err.println("Opponent - " + opponent);
             spOpt = SP_RATINGS.get(year).stream().filter(x -> x.getTeam().equalsIgnoreCase("nationalAverages")).findFirst();
         }
         double sRating = spOpt.get().getRating(); // SP+ Rating of week's opponent

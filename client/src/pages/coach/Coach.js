@@ -6,6 +6,11 @@ import {Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import ReactMinimalPieChart from "react-minimal-pie-chart";
 import LoadingIndicator from "../../common/LoadingIndicator";
+import LockIcon from "../../common/LockIcon.png";
+import Cookies from 'universal-cookie';
+import {notification} from "antd";
+
+const cookies = new Cookies();
 
 class Coach extends Component {
 
@@ -49,11 +54,21 @@ class Coach extends Component {
     render() {
         if (!this.state.loading) {
 
+            let ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>;
+            if(cookies.get('Role') === 'ROLE_REDSHIRT') {
+                ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<img alt="Lock" style={{maxHeight: "75px"}} src={LockIcon} onClick={() => {
+                    notification.error({
+                        message: 'Athletic Storm',
+                        description: 'Upgrade your subscription to see ratings.'
+                    });
+                }}/>)</h1>
+            }
+
             // Name successfully found
             return (
                 <div>
                     <div style={{"text-align": "center"}}>
-                        <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>
+                        {ratingContent}
                         <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <br/>

@@ -8,6 +8,10 @@ import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {notification} from "antd";
+import {Avatar} from "@material-ui/core";
+import LockIcon from "../../common/LockIcon.png";
+import Cookies from 'universal-cookie';
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -17,8 +21,15 @@ const styles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    logo: {
+        marginTop: theme.spacing(2),
+        paddingTop: theme.spacing(2),
+        opacity: 0.1
     }
 }));
+
+const cookies = new Cookies();
 
 class Ranking extends Component {
 
@@ -43,8 +54,15 @@ class Ranking extends Component {
             const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => parseInt(a.wins,10) < parseInt(b.wins,10) ? 1 : -1);
             this.setState({ allRecords: sortedCoaches });
         }else if("Coach Grade" === sortBy){
-            const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => a.rating < b.rating ? 1 : -1);
-            this.setState({ allRecords: sortedCoaches });
+            if(cookies.get('Role') !== 'ROLE_REDSHIRT') {
+                const sortedCoaches = [].concat(this.state.allRecords).sort((a, b) => a.rating < b.rating ? 1 : -1);
+                this.setState({ allRecords: sortedCoaches });
+            } else{
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: 'Upgrade your subscription to use ratings.'
+                });
+            }
          
         }else{
             console.log("Invalid Option " + sortBy);
@@ -84,6 +102,8 @@ class Ranking extends Component {
 
     render() {
 
+        const {classes} = this.props;
+
         if(!this.state.loaded){
             return <LoadingIndicator/>
         }
@@ -103,12 +123,18 @@ class Ranking extends Component {
                     {
                         this.state.allRecords.length > 0 ?
                             this.state.allRecords.map((record, ndx) => {
+
+                                let ratingContent = <Typography><b>{record.first_name} {record.last_name}</b>(<span style={{color: record.rating === -1 ? "#000000" : this.perc2color(record.rating)}}>{record.rating === -1 ? "--" : record.rating.toFixed(2)}</span>)</Typography>;
+                                if(cookies.get('Role') === 'ROLE_REDSHIRT') {
+                                    ratingContent = <Typography><b>{record.first_name} {record.last_name}</b><Avatar className={classes.logo} src={LockIcon}/></Typography>;
+                                }
+
                                 return (
                                     <Grid item xs={3} key={ndx}>
                                         <Link to={"/coach/" + record.first_name + " " + record.last_name}>
                                             <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
-                                                <Typography><b>{record.first_name} {record.last_name}</b>(<span style={{color: record.rating === -1 ? "#000000" : this.perc2color(record.rating)}}>{record.rating === -1 ? "--" : record.rating.toFixed(2)}</span>)</Typography>
+                                                {ratingContent}
                                                 <Typography><b>Wins:</b> {record.wins} <b>Losses:</b> {record.losses}</Typography>
                                             </StyledPaper>
                                          </Link>
