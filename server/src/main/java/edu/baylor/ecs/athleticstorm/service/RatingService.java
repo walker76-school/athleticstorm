@@ -10,11 +10,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-import static edu.baylor.ecs.athleticstorm.startUp.Constants.*;
+import static edu.baylor.ecs.athleticstorm.startUp.URL_Constants.*;
 
+/**
+ * Service for getting player ratings
+ */
 @Service
 public class RatingService {
 
+    // rest template
     @Autowired
     private RestTemplate restTemplate;
 

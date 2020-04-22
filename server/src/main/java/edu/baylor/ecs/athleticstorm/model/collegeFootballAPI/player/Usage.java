@@ -21,6 +21,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * conatains the usage for a player in a specific year
+ *
+ * @author Ian laird
+ */
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor

@@ -21,6 +21,14 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Roster Player
+ *
+ * Relates a player to team for a specific year
+ *
+ * @author Ian Laird
+ */
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -54,11 +62,24 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Exclude
     private Team team;
 
+    /**
+     * constuctor
+     * @param p the player
+     * @param t the team
+     */
     public RosterPlayer(Player p, Team t) {
         this.player = p;
         this.team = t;
     }
 
+    /**
+     * compares player to another player
+     * @param rosterPlayer the other player
+     * @return comparison
+     *
+     * {@inheritDoc}
+     *
+     */
     @Override
     public int compareTo(RosterPlayer rosterPlayer) {
         int idCompare = this.player.compareTo(rosterPlayer.getPlayer());

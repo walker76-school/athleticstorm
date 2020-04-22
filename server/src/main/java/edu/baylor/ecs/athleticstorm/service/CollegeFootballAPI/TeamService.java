@@ -25,36 +25,76 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for interacting with teams
+ *
+ * @author Ian Laird
+ */
 @Service
 public class TeamService {
 
+    // jpa repo for teams
     @Autowired
     private TeamRepository teamRepository;
 
+    // resource loader
     @Autowired
     private ResourceLoader resourceLoader;
 
+    /**
+     * gets all teams in the db
+     *
+     * @return all teams
+     */
     public List<TeamDTO> getAllTeams() {
         return convertToDTO(teamRepository.findAll());
     }
 
+    /**
+     * gets a team by name
+     *
+     * @param name the name of the name
+     * @return the team
+     */
     public TeamDTO getTeamByName(String name){
         Optional<Team> response = teamRepository.findTeamBySchool(name);
         return response.isPresent() ? new TeamDTO(response.get()) : null;
     }
 
+    /**
+     * gets all FBS teams in the DB
+     *
+     * this is determined by the conference of the team
+     * @return all FBS teams
+     */
     public List<TeamDTO> getAllFBSTeams() {
         return convertToDTO(teamRepository.findAllFBS());
     }
 
+    /**
+     * get all teams by id
+     * @param id the id of the team
+     * @return the team
+     */
     public TeamDTO getTeamById(Long id){
         return new TeamDTO(teamRepository.getOne(id));
     }
 
+    /**
+     * converts a collection of {@link Team} to {@link TeamDTO}
+     * @param teams the collection of teams
+     * @return the list of dto
+     */
     public List<TeamDTO> convertToDTO(Collection<Team> teams){
         return teams.stream().map(TeamDTO::new).collect(Collectors.toList());
     }
 
+    /**
+     * gets all videos for a team
+     *
+     * @param teamName the name of the team
+     * @return the urls of the videos
+     */
     public List<String> getVideosByName(String teamName) {
         try {
             Resource resource = resourceLoader.getResource("classpath:data/Videos.csv");

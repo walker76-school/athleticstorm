@@ -17,7 +17,6 @@ import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.AdvancedPlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.PlayerDTO;
 import edu.baylor.ecs.athleticstorm.DTO.player.RosterPlayerDTO;
-import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
 import edu.baylor.ecs.athleticstorm.DTO.team.TeamDTO;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
@@ -50,55 +49,82 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static edu.baylor.ecs.athleticstorm.startUp.Constants.*;
+import static edu.baylor.ecs.athleticstorm.startUp.URL_Constants.*;
 
 /**
  * populates initial data in the DB
+ *
+ * @author Ian Laird
  */
 @Component
 public class DataPopulator implements ApplicationListener<ContextRefreshedEvent> {
 
+    // rest template
     @Autowired
     private RestTemplate restTemplate;
 
+    // logger
     Logger logger = LoggerFactory.logger(DataPopulator.class);
 
     // shows if the DB setup is done
     private static boolean setupComplete = false;
 
+    // jpa team repo
     @Autowired
     private TeamRepository teamRepository;
 
+    // jpa player repo
     @Autowired
     private PlayerRepository playerRepository;
 
+    // jpa coach repo
     @Autowired
     private CoachRepository coachRepository;
 
+    // jpa roster player repo
     @Autowired
     private RosterPlayerRepository rosterPlayerRepository;
 
+    // jpa usage repo
     @Autowired
     private UsageRepository usageRepository;
 
+    // jpa rating repo
     @Autowired
     private RatingRepository ratingRepository;
 
+    // rating service
     @Autowired
     private RatingService ratingService;
 
+    // jpa coordinator repo
     @Autowired
     private CoordinatorRepository coordinatorRepository;
 
+    // resource loader
     @Autowired
     private ResourceLoader resourceLoader;
 
+    // all teams
     private Set<Team> teams = null;
+
+    // all players
     private Set<Player> players = null;
+
+    // all coaches
     private Set<Coach> coaches = null;
+
+    // all roster players
     private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
+
+    // all seasons
     private Set<Season> seasons = new TreeSet<>();
 
+    /**
+     * populates the DB if empty on Context Refreshed Event
+     *
+     * @param event the refresh events
+     */
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -112,9 +138,14 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         logger.info("This process can take upwards of 20 minutes.");
         logger.info("Please be patient.");
 
+        // setup the DB
+        // keep in mind this is transactional
         setup();
     }
 
+    /**
+     * setups the DB
+     */
     @Transactional
     public void setup() {
 
@@ -135,15 +166,23 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         // get all of the usage stats for players
         getPlayerUsage();
 
+        // gets all coorinators
         getCoordinators();
 
+        // get ratings
         getRatings();
 
         logger.info("End Setup");
 
+        // set this so that this does not run again while the server is running
         setupComplete = true;
     }
 
+    /**
+     * gets all teams
+     *
+     * @return all teams
+     */
     @Transactional
     public Set<Team> getTeams(){
         logger.info("Getting Teams ... ");
@@ -158,6 +197,11 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    /**
+     * gets all coaches
+     *
+     * @return all coaches
+     */
     @Transactional
     public Set<Coach> getCoaches(){
         logger.info("Getting Coaches ... ");
@@ -174,10 +218,17 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    /**
+     * associates coaches with current teams
+     */
     @Transactional
     public void saveSeasons(){
         logger.info("Getting Seasons ... ");
+
+        // for each coach
         for(Coach c: coaches){
+
+            // get the season for the current year
             Season record = c.getSeasons().stream().filter(x -> x.getYear() == 2019).findAny().orElse(null);
             if(Objects.isNull(record) || c.getSeasons().isEmpty()){
                 continue;
@@ -187,13 +238,20 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             Season finalRecord = record;
             Team t = teams.stream().filter(x -> x.getSchool().equals(finalRecord.getSchool())).findFirst().orElse(null);
 
+            // set the team for coach
             c.setTeam(t);
             assert t != null;
+
+            // add coach to the team
             t.getCoaches().add(c);
         }
     }
 
 
+    /**
+     * gets all players from either the DB or the online API
+     * @return all players
+     */
     @Transactional
     public Set<Player> getPlayers(){
         logger.info("Getting Players ... ");
@@ -210,6 +268,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         return new TreeSet<>(playerRepository.findAll());
     }
 
+    /**
+     * get rosters for every team
+     */
     @Transactional
     public void getTeamRosters(){
         logger.info("Getting Rosters ... ");
@@ -242,8 +303,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         rosterPlayerRepository.flush();
     }
 
-
-
+    /**
+     * gets usage(s) for every player
+     */
     @Transactional
     public void getPlayerUsage(){
 
@@ -268,6 +330,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         usageRepository.flush();
     }
 
+    /**
+     * gets all coordinators
+     */
     @Transactional
     public void getCoordinators() {
         logger.info("Getting Coordinators ... ");
@@ -297,6 +362,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    /**
+     * helper method to parse a file
+     * @param sc the scanner object
+     * @param coordinators the coodinator set that new ones should be added to
+     * @param key the key
+     */
     private void parseFile(Scanner sc, Set<Coordinator> coordinators, String key){
         while (sc.hasNextLine()) {
             String line = sc.nextLine();
@@ -323,6 +394,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    /**
+     * helper method to populate years
+     * @param nameToYears maps names to years
+     * @param coordinators the array of coorinator names
+     * @param year the year
+     */
     private void populateYears(Map<String, List<Integer>> nameToYears, String[] coordinators, int year){
         for(String s : coordinators) {
             List<Integer> yearsOrDefault = nameToYears.getOrDefault(s, new ArrayList<>());
@@ -331,6 +408,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
     }
 
+    /**
+     * gets ratings
+     */
     @Transactional
     public void getRatings() {
         logger.info("Getting Ratings ... ");
@@ -431,6 +511,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         ratingRepository.saveAll(ratings);
     }
 
+    /**
+     * scales the rating
+     * @param currentRating the current rating
+     * @param weeklyRating the new rating for the week
+     * @return the scaled rating
+     */
     private double scaleRating(double currentRating, double weeklyRating){
         final double SCALE = 1.0;
         double weeklyRatingFinal = weeklyRating;

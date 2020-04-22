@@ -4,6 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * SPDefense
+ *
+ * @author Andrew Walker
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

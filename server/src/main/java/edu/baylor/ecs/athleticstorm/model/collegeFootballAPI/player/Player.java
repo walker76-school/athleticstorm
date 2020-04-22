@@ -27,7 +27,6 @@ import java.util.TreeSet;
  *
  * Represents a Player on a College Football Team
  */
-
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
