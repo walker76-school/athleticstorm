@@ -92,6 +92,12 @@ class School extends Component {
                     let teamsVisited = cookies.get('Teams_visited');
                     teamsVisited.push(result.data.school);
                     cookies.set('Teams_visited', teamsVisited, {path: '/'});
+
+                    // Show notification for how many teams remain in subscription package
+                    notification.info({
+                        message: 'Athletic Storm',
+                        description: 'Your subscription allows you to view ' + cookies.get('Num_teams') + ' more teams.'
+                    });
                 } else{
                     unlocked = false;
                 }

@@ -88,15 +88,24 @@ class SchoolList extends Component {
         return (
             <div style={{flexGrow: 1}} >
                 <br/>
-                <input type="text" placeholder="Search" onChange={(event) => {this.filterTeams(event.target.value)}}/>
+                <div style={{ display: 'flex' }}>
+                    <input type="text" placeholder="Search" onChange={(event) => {this.filterTeams(event.target.value)}}/>
+
+                </div>
                 <br/>
-                <br/>
+                <h6>* indicates a viewed team ({cookies.get('Num_teams')} remaining)</h6>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} >
                     {
                         this.state.teams.length > 0 ?
                             this.state.teams.map((team, ndx) => {
 
                                 let unlocked = (cookies.get('Num_teams') > 0 || cookies.get('Teams_visited').find(element => element === team.school));
+
+                                let visited = '';
+                                if (cookies.get('Teams_visited').find(element => element === team.school)) {
+                                    visited = '*';
+                                }
+
                                 return (
                                     <Grid item xs={3}>
                                         { unlocked &&
@@ -111,7 +120,7 @@ class SchoolList extends Component {
                                             >
                                                 <StyledPaper classes={classes}>
                                                     <Avatar className={classes.logo} src={team.logos[0]}/>
-                                                    <Typography>{team.school}</Typography>
+                                                    <Typography>{team.school + visited}</Typography>
                                                 </StyledPaper>
                                             </Link>
                                         }
@@ -119,7 +128,7 @@ class SchoolList extends Component {
                                             <div style={{cursor:'pointer'}} onClick={this.onClickLock}>
                                                 <StyledPaper classes={classes}>
                                                     <Avatar className={classes.logo} src={LockIcon}/>
-                                                    <Typography>{team.school}</Typography>
+                                                    <Typography>{team.school + visited}</Typography>
                                                 </StyledPaper>
                                             </div>
                                         }

@@ -17,8 +17,6 @@ export default class WelcomePage extends Component {
                     </div>
                 </div>
 
-                {/*<img src={BleachersPic} style={{ width: '100%' }}/>*/}
-
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}>
                     <h5>Sign up for a subscription tier to view coach ratings!</h5>
                 </div>
@@ -27,7 +25,6 @@ export default class WelcomePage extends Component {
                 </Link>
                 <h5 style={{ display: 'flex', justifyContent: 'center' }}>Athletic Storm is a college football coach rating system that uses our [name of rating system] algorithm to objectively determine the best coaches in the FBS.</h5>
 
-                {/*<img src={CoachPic} style={{ width: '100%' }}>*/}
                 <div style={{ marginTop: '25px', backgroundImage: `url(${CoachPic})`, backgroundPosition: 'center center', backgroundAttachment: 'fixed', backgroundSize: 'auto', backgroundRepeat: 'no-repeat', width: '100%' }}>
                     <h1 style={{ paddingLeft: '50px', paddingTop: '200px', paddingBottom: '200px' }}>Coach rating system</h1>
                 </div>
