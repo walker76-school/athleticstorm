@@ -61,6 +61,11 @@ public class Coach implements Comparable<Coach> {
     @EqualsAndHashCode.Exclude
     private Team team = null;
 
+    /**
+     * {@inheritDoc}
+     * @param coach the coach being compared to
+     * @return the comparison of this coach and the other coach
+     */
     @Override
     public int compareTo(Coach coach) {
         return this.name.compareTo(coach.getName());

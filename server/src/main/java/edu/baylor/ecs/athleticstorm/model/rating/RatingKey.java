@@ -21,6 +21,12 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+/**
+ * the id of a rating
+ *
+ * @author Andrew Walker
+ */
+
 @Embeddable
 @EqualsAndHashCode
 @Data

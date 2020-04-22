@@ -31,6 +31,8 @@ import java.util.TreeSet;
  * Team
  *
  * represents a College Football Team
+ *
+ * @author Ian Laird
  */
 
 @AllArgsConstructor
@@ -117,6 +119,11 @@ public class Team implements Comparable<Team>{
     @EqualsAndHashCode.Exclude
     private Set<Coordinator> coordinators = new TreeSet<>();
 
+    /**
+     * {@inheritDoc}
+     * @param team the team being compared to
+     * @return the comparison of the teams
+     */
     @Override
     public int compareTo(Team team) {
         return this.id.compareTo(team.getId());

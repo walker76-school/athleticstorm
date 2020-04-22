@@ -18,6 +18,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Rating for a person
+ */
+
 @Entity
 @Table(name = "RATING")
 @Data
@@ -34,6 +38,12 @@ public class Rating implements Comparable<Rating>{
     @Enumerated(EnumType.STRING)
     private PersonType type;
 
+    /**
+     * {@inheritDoc}
+     * compares the ratings of two people
+     * @param o the other rating
+     * @return the comparison
+     */
     @Override
     public int compareTo(Rating o) {
         if(key.getYear().equals(o.getKey().getYear())){

@@ -4,6 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * SPRating
+ *
+ * @author Andrew Walker
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

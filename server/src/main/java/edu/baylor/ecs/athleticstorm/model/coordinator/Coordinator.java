@@ -1,6 +1,5 @@
 package edu.baylor.ecs.athleticstorm.model.coordinator;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +9,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Coordinator
+ *
+ * represents a college football coordinator
+ *
+ * @author Andrew Walker
+ */
 @Entity
 @Table(name = "COORDINATOR")
 @Data
@@ -19,6 +25,11 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class Coordinator implements Comparable<Coordinator>{
 
+    /**
+     * the id of a coordinator
+     *
+     * @author Andrew Walker
+     */
     @Data
     public static class CoordinatorID implements Serializable {
         private String name;
@@ -50,6 +61,11 @@ public class Coordinator implements Comparable<Coordinator>{
     @EqualsAndHashCode.Exclude
     private Team team = null;
 
+    /**
+     * {@inheritDoc}
+     * @param o the coordinator being compared to
+     * @return the comparison of the two coordinators
+     */
     @Override
     public int compareTo(Coordinator o) {
         if(!this.name.equalsIgnoreCase(o.getName())) {

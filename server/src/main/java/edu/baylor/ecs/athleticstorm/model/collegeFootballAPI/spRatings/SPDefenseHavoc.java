@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * DPDefenseHavoc
+ *
+ * @author Andrew Walker
  */
 
 @Data
