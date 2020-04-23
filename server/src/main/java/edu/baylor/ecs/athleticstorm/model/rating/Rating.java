@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Rating.java
- *
- * author: Ian laird
- *
- * Created 2/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Rating.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.rating;
 
@@ -20,6 +14,8 @@ import javax.persistence.*;
 
 /**
  * Rating for a person
+ *
+ * @author Andrew Walker
  */
 
 @Entity
@@ -40,7 +36,6 @@ public class Rating implements Comparable<Rating>{
 
     /**
      * {@inheritDoc}
-     * compares the ratings of two people
      * @param o the other rating
      * @return the comparison
      */

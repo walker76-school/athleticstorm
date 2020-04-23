@@ -1,14 +1,10 @@
-package edu.baylor.ecs.athleticstorm.DTO.team; /******************************************************************************
- *
- * TeamDTO.java
- *
- * author: Ian laird
- *
- * Created 3/29/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: TeamDTO
+ * Author: Ian Laird
+ * Date Last Modified: 3/30/2020
+ */
+
+package edu.baylor.ecs.athleticstorm.DTO.team;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
@@ -18,6 +14,11 @@ import lombok.NoArgsConstructor;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * DTO for a Team
+ *
+ * @autho Ian Laird
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -35,6 +36,10 @@ public class TeamDTO {
     private String alt_color;
     private List<String> logos;
 
+    /**
+     * Constructs a TeamDTO from a Team
+     * @param team a Team
+     */
     public TeamDTO(Team team){
         this.id = team.getId();
         this.school = team.getSchool();

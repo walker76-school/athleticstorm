@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * PlayerService.java
- *
- * author: Ian laird
- *
- * Created 3/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: PlayerService.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
@@ -24,7 +18,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * service for interacting with players
+ * Service for interacting with players
  *
  * @author Ian Laird
  */
@@ -40,8 +34,7 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     /**
-     * get the current team roster
-     *
+     * Get the current team roster
      * @param teamId the id of the team
      * @return all roster players
      */
@@ -50,8 +43,7 @@ public class PlayerService {
     }
 
     /**
-     * gets the team roster for a specific year
-     *
+     * Gets the team roster for a specific year
      * @param teamId the id of the team
      * @param year the year
      * @return all roster players for indicated team and year
@@ -60,13 +52,8 @@ public class PlayerService {
         return convertToDTO(rosterPlayerRepository.findAllByYearAndTeam(year, teamId));
     }
 
-//    public List<RosterPlayerDTO> getSeasonRoster(Long teamId, Long year) {
-//        return roster(teamId, year);
-//    }
-
     /**
-     * gets all available stats for a player
-     *
+     * Gets all available stats for a player
      * @param firstName the first name of the player
      * @param lastName the last name of the player
      * @param year the year desired
@@ -82,7 +69,7 @@ public class PlayerService {
     }
 
     /**
-     * converts a collection of {@link RosterPlayer} to {@link RosterPlayerDTO}
+     * Converts a collection of {@link RosterPlayer} to {@link RosterPlayerDTO}
      * @param rosterPlayer the collection of roster players
      * @return the list of dto
      */

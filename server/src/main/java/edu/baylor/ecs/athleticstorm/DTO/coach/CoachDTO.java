@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * CoachDTO.java
- *
- * author: Ian laird
- *
- * Created 3/29/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: CoachDTO.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/17/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.DTO.coach;
 
@@ -23,6 +17,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * DTO for a Coach
+ *
+ * @author Ian Laird
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -36,6 +35,10 @@ public class CoachDTO {
 
     private List<SeasonDTO> seasons;
 
+    /**
+     * Creates a CoachDTO from a given Coach
+     * @param c the given Coach
+     */
     public CoachDTO(Coach c){
         this.first_name = c.getName().split("\\s+")[0];
         this.last_name = c.getName().split("\\s+")[1];

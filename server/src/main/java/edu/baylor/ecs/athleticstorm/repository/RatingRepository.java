@@ -1,31 +1,28 @@
+/*
+ * Filename: RatingRepository.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/19/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.repository;
 
-import edu.baylor.ecs.athleticstorm.model.rating.PersonType;
 import edu.baylor.ecs.athleticstorm.model.rating.Rating;
 import edu.baylor.ecs.athleticstorm.model.rating.RatingKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-/******************************************************************************
+/**
+ * Repository for Rating data
  *
- * RatingRepository.java
- *
- * author: Ian laird
- *
- * Created 2/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+ * @author Ian Laird
+ */
 public interface RatingRepository extends JpaRepository<Rating, RatingKey> {
 
-    public Optional<Rating> findByKeyNameAndKeyYear(String name, Integer year);
-
-    public List<Rating> findAllByKeyYearAndType(Integer year, PersonType personType);
-
-    public List<Rating> findAllByKeyYear(Integer year);
-
-    public List<Rating> findAllByKey_Name(String name);
+    /**
+     * Find Rating by name
+     * @param name name
+     * @return a Rating by name
+     */
+     List<Rating> findAllByKey_Name(String name);
 }

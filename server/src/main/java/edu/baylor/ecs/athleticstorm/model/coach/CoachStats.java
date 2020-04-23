@@ -1,16 +1,24 @@
+/*
+ * Filename: CoachStats.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/19/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.coach;
 
-import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.RatedCoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Condensed stats for a Coach
+ *
+ * @author Andrew Walker
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +32,10 @@ public class CoachStats {
     private double winPercentage;
     private double rating;
 
+    /**
+     * Creates a CoachStats from a given RatedCoachDTO
+     * @param coach a given coach
+     */
     public CoachStats(RatedCoachDTO coach){
         this.first_name = coach.getFirst_name();
         this.last_name = coach.getLast_name();

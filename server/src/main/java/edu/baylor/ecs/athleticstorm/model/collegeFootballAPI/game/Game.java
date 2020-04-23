@@ -1,9 +1,18 @@
+/*
+ * Filename: Game.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/18/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data for a Game from CollegeFootballAPI
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

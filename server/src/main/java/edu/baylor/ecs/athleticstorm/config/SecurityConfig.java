@@ -1,3 +1,9 @@
+/*
+ * Filename: SecurityConfig.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/17/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.config;
 
 import edu.baylor.ecs.athleticstorm.security.CustomUserDetailsService;
@@ -18,11 +24,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-
-/**
- * Created by rajeevkumarsingh on 01/08/17.
- */
 
 @Configuration
 @EnableWebSecurity

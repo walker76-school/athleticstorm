@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * RosterPlayer.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: RosterPlayer.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
@@ -22,8 +16,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Roster Player
- *
  * Relates a player to team for a specific year
  *
  * @author Ian Laird
@@ -63,7 +55,7 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     private Team team;
 
     /**
-     * constuctor
+     * Constructs a RosterPlayer from a Player and Team
      * @param p the player
      * @param t the team
      */
@@ -73,7 +65,7 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     }
 
     /**
-     * compares player to another player
+     * Compares player to another player
      * @param rosterPlayer the other player
      * @return comparison
      *

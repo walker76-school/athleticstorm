@@ -1,3 +1,9 @@
+/*
+ * Filename: JwtAuthenticationFilter.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.security;
 
 import org.slf4j.Logger;
@@ -17,7 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * Filter for JWT
+ *
+ * @author Andrew Walker
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,6 +37,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
+    /**
+     * Filters with JWT
+     * @param request request
+     * @param response response
+     * @param filterChain chain of filters
+     * @throws ServletException if error
+     * @throws IOException if error
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -55,6 +71,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * Returns JWT token
+     * @param request request
+     * @return JWT token
+     */
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {

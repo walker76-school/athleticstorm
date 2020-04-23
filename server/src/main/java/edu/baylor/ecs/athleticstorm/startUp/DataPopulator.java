@@ -1,15 +1,8 @@
-/******************************************************************************
- *
- * DataPopulator.java
- *
- * author: Ian laird
- *
- * Created 4/4/20
- *
- * © 2020
- *
- ******************************************************************************/
-
+/*
+ * Filename: DataPopulator.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.startUp;
 
@@ -49,10 +42,10 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static edu.baylor.ecs.athleticstorm.startUp.URL_Constants.*;
+import static edu.baylor.ecs.athleticstorm.startUp.URLConstants.*;
 
 /**
- * populates initial data in the DB
+ * Populates initial data in the DB
  *
  * @author Ian Laird
  */
@@ -121,8 +114,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     private Set<Season> seasons = new TreeSet<>();
 
     /**
-     * populates the DB if empty on Context Refreshed Event
-     *
+     * Populates the DB if empty on Context Refreshed Event
      * @param event the refresh events
      */
     @Override
@@ -144,7 +136,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * setups the DB
+     * Setups the DB
      */
     @Transactional
     public void setup() {
@@ -179,8 +171,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * gets all teams
-     *
+     * Gets all teams
      * @return all teams
      */
     @Transactional
@@ -198,8 +189,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * gets all coaches
-     *
+     * Gets all coaches
      * @return all coaches
      */
     @Transactional
@@ -219,7 +209,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * associates coaches with current teams
+     * Associates coaches with current teams
      */
     @Transactional
     public void saveSeasons(){
@@ -249,7 +239,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
 
     /**
-     * gets all players from either the DB or the online API
+     * Gets all players from either the DB or the online API
      * @return all players
      */
     @Transactional
@@ -269,7 +259,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * get rosters for every team
+     * Get rosters for every team
      */
     @Transactional
     public void getTeamRosters(){
@@ -304,7 +294,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * gets usage(s) for every player
+     * Gets usage(s) for every player
      */
     @Transactional
     public void getPlayerUsage(){
@@ -331,7 +321,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * gets all coordinators
+     * Gets all coordinators
      */
     @Transactional
     public void getCoordinators() {
@@ -363,9 +353,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * helper method to parse a file
+     * Helper method to parse a file
      * @param sc the scanner object
-     * @param coordinators the coodinator set that new ones should be added to
+     * @param coordinators the coordinator set that new ones should be added to
      * @param key the key
      */
     private void parseFile(Scanner sc, Set<Coordinator> coordinators, String key){
@@ -395,7 +385,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * helper method to populate years
+     * Helper method to populate years
      * @param nameToYears maps names to years
      * @param coordinators the array of coorinator names
      * @param year the year
@@ -409,7 +399,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * gets ratings
+     * Gets ratings
      */
     @Transactional
     public void getRatings() {
@@ -512,7 +502,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     }
 
     /**
-     * scales the rating
+     * Scales the rating
      * @param currentRating the current rating
      * @param weeklyRating the new rating for the week
      * @return the scaled rating

@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * CoachService.java
- *
- * author: Ian laird
- *
- * Created 3/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: CoachService.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
@@ -28,8 +22,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * CoachService
- *
  * Service for interacting with coaches
  *
  * @author Ian Laird
@@ -46,8 +38,7 @@ public class CoachService {
     private TeamRepository teamRepository;
 
     /**
-     * gets all coaches in the DB
-     *
+     * Gets all coaches in the DB
      * @return all coaches
      */
     public List<CoachDTO> getAllCoaches() {
@@ -55,8 +46,7 @@ public class CoachService {
     }
 
     /**
-     * get all current coaches for a team
-     *
+     * Get all current coaches for a team
      * @param teamId the id of the team
      * @return all current coaches for a team
      */
@@ -66,8 +56,7 @@ public class CoachService {
     }
 
     /**
-     * get every coach that has ever coached a team
-     *
+     * Get every coach that has ever coached a team
      * @param teamId the id of the team
      * @return the id of the team
      */
@@ -77,8 +66,7 @@ public class CoachService {
     }
 
     /**
-     * get coach of a specific name
-     *
+     * Get coach of a specific name
      * @param name the name of the coach
      * @return coach
      */
@@ -87,7 +75,7 @@ public class CoachService {
     }
 
     /**
-     * converts a collection of {@link Coach} to {@link CoachDTO}
+     * Converts a collection of {@link Coach} to {@link CoachDTO}
      * @param coaches the coach collection
      * @return the coach dto collection
      */
@@ -99,8 +87,7 @@ public class CoachService {
     }
 
     /**
-     * builds a complete coach record
-     *
+     * Builds a complete coach record
      * @param coach the coach dto
      * @return the coach record
      */

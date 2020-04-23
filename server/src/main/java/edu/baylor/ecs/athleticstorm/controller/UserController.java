@@ -1,3 +1,9 @@
+/*
+ * Filename: UserController
+ * Author: Andrew Walker
+ * Date Last Modified: 4/13/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.controller;
 
 import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
@@ -18,6 +24,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for User data
+ *
+ * @author Andrew Walker
+ */
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -25,6 +36,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Returns the current user
+     * @param currentUser the current user's identifier
+     * @return the current user
+     */
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
@@ -34,12 +50,22 @@ public class UserController {
         return new UserSummary(currentUser.getId(), currentUser.getUsername(), roleNameSet);
     }
 
+    /**
+     * Checks a username's availability
+     * @param username a username to check
+     * @return a username's availability
+     */
     @GetMapping("/user/checkUsernameAvailability")
     public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
         Boolean isAvailable = !userRepository.existsByUsername(username);
         return new UserIdentityAvailability(isAvailable);
     }
 
+    /**
+     * Returns a user's data from a username
+     * @param username a username
+     * @return a user's data from a username
+     */
     @GetMapping("/users/{username}")
     public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
         User user = userRepository.findByUsername(username)

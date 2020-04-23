@@ -1,3 +1,9 @@
+/*
+ * Filename: Coordinator.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.coordinator;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
@@ -10,9 +16,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Coordinator
- *
- * represents a college football coordinator
+ * Represents a college football coordinator
  *
  * @author Andrew Walker
  */
@@ -26,7 +30,7 @@ import java.io.Serializable;
 public class Coordinator implements Comparable<Coordinator>{
 
     /**
-     * the id of a coordinator
+     * The id of a coordinator
      *
      * @author Andrew Walker
      */

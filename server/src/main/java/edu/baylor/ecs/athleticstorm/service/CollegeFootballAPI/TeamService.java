@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * TeamService.java
- *
- * author: Ian laird
- *
- * Created 3/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: TeamService.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
@@ -42,8 +36,7 @@ public class TeamService {
     private ResourceLoader resourceLoader;
 
     /**
-     * gets all teams in the db
-     *
+     * Gets all teams in the db
      * @return all teams
      */
     public List<TeamDTO> getAllTeams() {
@@ -51,8 +44,7 @@ public class TeamService {
     }
 
     /**
-     * gets a team by name
-     *
+     * Gets a team by name
      * @param name the name of the name
      * @return the team
      */
@@ -62,8 +54,7 @@ public class TeamService {
     }
 
     /**
-     * gets all FBS teams in the DB
-     *
+     * Gets all FBS teams in the DB
      * this is determined by the conference of the team
      * @return all FBS teams
      */
@@ -72,7 +63,7 @@ public class TeamService {
     }
 
     /**
-     * get all teams by id
+     * Get all teams by id
      * @param id the id of the team
      * @return the team
      */
@@ -81,7 +72,7 @@ public class TeamService {
     }
 
     /**
-     * converts a collection of {@link Team} to {@link TeamDTO}
+     * Converts a collection of {@link Team} to {@link TeamDTO}
      * @param teams the collection of teams
      * @return the list of dto
      */
@@ -90,8 +81,7 @@ public class TeamService {
     }
 
     /**
-     * gets all videos for a team
-     *
+     * Gets all videos for a team
      * @param teamName the name of the team
      * @return the urls of the videos
      */

@@ -1,3 +1,9 @@
+/*
+ * Filename: CustomUserDetailsService.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.security;
 
 import edu.baylor.ecs.athleticstorm.exception.ResourceNotFoundException;
@@ -11,15 +17,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Service for managing User credentials
+ *
+ * @author Andrew Walker
  */
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Load user details by username
+     * @param username username
+     * @return user details
+     * @throws UsernameNotFoundException if username doesn't exist
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username)
@@ -33,6 +46,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         return UserPrincipal.create(user);
     }
 
+    /**
+     * Load user details by user id
+     * @param id user id
+     * @return user details
+     */
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(

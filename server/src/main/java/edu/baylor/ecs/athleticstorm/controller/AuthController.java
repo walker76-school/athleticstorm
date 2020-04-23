@@ -1,3 +1,9 @@
+/*
+ * Filename: AuthController.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/18/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.controller;
 
 import edu.baylor.ecs.athleticstorm.payload.ApiResponse;
@@ -32,7 +38,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * Controller for Auth data
+ *
+ * @author Andrew Walker
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -53,6 +61,11 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    /**
+     * Signs in the user
+     * @param loginRequest a request to login
+     * @return if successful then token
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -69,6 +82,11 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
+    /**
+     * Signs up a user given a request
+     * @param signUpRequest a sign up request
+     * @return if successful
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
