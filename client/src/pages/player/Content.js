@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import LoadingIndicator from "../../common/LoadingIndicator";
-import axios from "axios";
 import {notification} from "antd";
+import {getPlayerStats} from "./API";
 
 export default class Content extends Component {
 
@@ -15,35 +15,43 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
-        let request = {
+        let statsRequest = {
             firstName: this.props.selectedPlayer.first_name,
             lastName: this.props.selectedPlayer.last_name,
             year: this.props.selectedPlayer.year
         };
-        console.log(request);
+        console.log(statsRequest);
 
-        axios.post("http://localhost:8080/api/player/getStats/", request)
-            .then(result => {
-                console.log(result);
-                this.setState({
-                    completed: true,
-                    playerData: result.data
-                }, () => {
-                    this.props.setPlayerData(result.data);
-                });
-            })
-            .catch(error => {
-                notification.error({
-                    message: 'Athletic Storm',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
-                });
-                this.props.onClose();
-            })
+        getPlayerStats(statsRequest)
+        .then(result => {
+            console.log(result);
+            this.setState({
+                completed: true,
+                playerData: result
+            }, () => {
+                this.props.setPlayerData(result);
+            });
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Athletic Storm',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.props.onClose();
+        })
     }
 
     render() {
 
         if (this.state.completed) {
+
+            if(this.state.playerData === null){
+                return (
+                    <div style={{"text-align": "center"}}>
+                        <h1>Couldn't load data for {this.props.selectedPlayer.first_name} {this.props.selectedPlayer.last_name}.</h1>
+                    </div>
+                );
+            }
 
             return (
                 <div style={{"textAlign": "center"}}>
