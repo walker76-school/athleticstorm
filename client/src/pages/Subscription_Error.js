@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../common/AppHeader.css';
 import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import SubscriptionList from "../user/signup/subscriptions/SubscriptionList";
 import {changeSubscription} from '../util/APIUtils';
 import Cookies from 'universal-cookie';
@@ -67,9 +67,15 @@ class SubscriptionError extends Component {
                         message: 'Athletic Storm',
                         description: "Your subscription tier has been changed!",
                     });
+                    if(SUBSCRIPTION_TEAM_MAPPING.get(cookies.get('Role')) < SUBSCRIPTION_TEAM_MAPPING.get(roleVal)) {
+                        let num_teams_difference = SUBSCRIPTION_TEAM_MAPPING.get(roleVal) - SUBSCRIPTION_TEAM_MAPPING.get(cookies.get('Role'));
+                        let curr_num_teams = parseInt(cookies.get('Num_teams'));
+                        cookies.set('Num_teams', (curr_num_teams + num_teams_difference), {path: '/'});
+                    } else{
+                        cookies.set('Num_teams', SUBSCRIPTION_TEAM_MAPPING.get(roleVal), {path: '/'});
+                    }
                     cookies.set('Role', roleVal, {path: '/'});
                     cookies.set('Num_players', SUBSCRIPTION_PLAYER_MAPPING.get(roleVal), {path: '/'});
-                    cookies.set('Num_teams', SUBSCRIPTION_TEAM_MAPPING.get(roleVal), {path: '/'});
                     this.props.history.push("/");
 
                 }).catch(error => {
@@ -79,8 +85,6 @@ class SubscriptionError extends Component {
                 });
                 this.props.history.push("/");
             });
-
-            // Account for change to number of teams accessible and number of players (and role). Leave teamsvisited unchanged
         }
     }
 
@@ -98,12 +102,11 @@ class SubscriptionError extends Component {
                     paddingBottom: '150px',
                     border: '5px solid blue'
                 }}>
-                    <div style={{fontSize: '40px', paddingBottom: '30px'}}>You must upgrade your subscription plan to
-                        access this content.
+                    <div style={{fontSize: '40px', paddingBottom: '30px'}}>Access more content by upgrading your subscription!
                     </div>
                     <SubscriptionButton onClick={this.loadChangeSubscription} size="medium" variant="contained"
                                         color="secondary">
-                        Upgrade Your Subscription Plan
+                        Update Your Subscription Plan
                     </SubscriptionButton>
                     <br/><br/><br/>
                     <Link to='/'>

@@ -6,6 +6,7 @@ import tier2 from './images/tier2.jpg'
 import tier3 from './images/tier3.jpg'
 import {Button} from "antd";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {withRouter} from "react-router-dom";
 
 class SubscriptionList extends React.Component {
 
@@ -115,4 +116,4 @@ class SubscriptionList extends React.Component {
     }
 }
 
-export default SubscriptionList;
+export default withRouter(SubscriptionList);

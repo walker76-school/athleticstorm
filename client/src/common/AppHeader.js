@@ -19,6 +19,9 @@ class AppHeader extends Component {
       if(key === "logout") {
         this.props.onLogout();
       }
+      if(key === "subchange") {
+          this.props.history.push("/SubscriptionError");
+      }
     }
 
     render() {
@@ -82,7 +85,11 @@ function ProfileDropdownMenu(props) {
         </div>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="logout" className="dropdown-item">
+        <Menu.Item key="subchange" className="dropdown-item">
+            Change Subscription Plan
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="logout" className="dropdown-item">
         Logout
       </Menu.Item>
     </Menu>

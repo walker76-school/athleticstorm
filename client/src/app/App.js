@@ -26,6 +26,7 @@ import {Layout, notification} from 'antd';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
 import PrivateRoute from "../common/PrivateRoute";
+import Redirect from "react-router-dom/Redirect";
 const {Content} = Layout;
 const cookies = new Cookies();
 
@@ -164,7 +165,8 @@ class App extends Component {
                 <Layout className="app-container">
                 <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout}/>
+                           onLogout={this.handleLogout}
+                           onSubChange={this.onSubChange}/>
 
                 <Content className="app-content">
                     <div className="container">
