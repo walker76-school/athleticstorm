@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
-import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import LoadingIndicator from "../../common/LoadingIndicator";
@@ -12,6 +11,8 @@ import {notification} from "antd";
 import {Avatar} from "@material-ui/core";
 import LockIcon from "../../common/LockIcon.png";
 import Cookies from 'universal-cookie';
+import {getCoachRankings} from "./API";
+import Button from "@material-ui/core/Button";
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -71,10 +72,10 @@ class Ranking extends Component {
 
     componentDidMount() {
         
-        axios.get('http://localhost:8080/api/coaches/allStats')
+        getCoachRankings()
         .then(res => {
             this.setState({
-                allRecords: res.data,
+                allRecords: res,
                 loaded: true
             });
         })
@@ -106,6 +107,19 @@ class Ranking extends Component {
 
         if(!this.state.loaded){
             return <LoadingIndicator/>
+        }
+
+        if(this.state.allRecords.length === 0){
+            return (
+                <div style={{"text-align": "center"}}>
+                    <h1>Couldn't load data for coach rankings.</h1>
+                    <Link to='/'>
+                        <Button size="medium" variant="contained" color="secondary">
+                            Return to Teams Page
+                        </Button>
+                    </Link>
+                </div>
+            );
         }
 
         return (

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import '../../common/AppHeader.css';
-import axios from 'axios';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import {Avatar} from "@material-ui/core";
@@ -12,7 +11,7 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import Paper from "@material-ui/core/Paper";
 import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
-
+import {getFBSTeams} from "./API";
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -46,11 +45,12 @@ class SchoolList extends Component {
 
     componentDidMount() {
         // Get List Of FBS Teams From API
-        axios.get('http://localhost:8080/api/teams/fbs')
+        getFBSTeams()
         .then(res => {
+            console.log(res);
             this.setState({
-                teams: res.data,
-                allTeams: res.data,
+                teams: res,
+                allTeams: res,
                 loaded: true
             });
         })
@@ -85,6 +85,14 @@ class SchoolList extends Component {
             return <LoadingIndicator/>
         }
 
+        if(this.state.teams.length === 0){
+            return (
+                <div style={{"text-align": "center"}}>
+                    <h1>Couldn't load data for teams.</h1>
+                </div>
+            );
+        }
+
         return (
             <div style={{flexGrow: 1}} >
                 <br/>
@@ -93,7 +101,7 @@ class SchoolList extends Component {
 
                 </div>
                 <br/>
-                <h6>* indicates a viewed team ({cookies.get('Num_teams')} remaining)</h6>
+                <h6>* indicates a viewed team {cookies.get('Role') !== 'ROLE_MVP' ? "(" + cookies.get('Num_teams') + " remaining)" : ""}</h6>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} >
                     {
                         this.state.teams.length > 0 ?
