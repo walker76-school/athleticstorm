@@ -7,7 +7,12 @@ import './AppHeader.css';
 import logo from './AthleticStormLogo.png'
 import rankingIcon from '../logo.svg';
 import { Layout, Menu, Dropdown, Icon } from 'antd';
+import {ACCESS_TOKEN, SUBSCRIPTION_PLAYER_MAPPING, SUBSCRIPTION_TEAM_MAPPING} from "../constants";
+import {getCurrentUser} from "../util/APIUtils";
+import Cookies from 'universal-cookie';
 const Header = Layout.Header;
+
+const cookies = new Cookies();
     
 class AppHeader extends Component {
     constructor(props) {
@@ -45,6 +50,34 @@ class AppHeader extends Component {
             </Menu.Item>
           ]; 
         } else {
+            if(localStorage.getItem(ACCESS_TOKEN)) {
+                getCurrentUser().then(response => {
+                    console.log(response);
+                    this.setState({
+                        currentUser: response,
+                        isAuthenticated: true,
+                        isLoading: false
+                    });
+                    let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
+                    let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
+                    let role = this.state.currentUser.roleName[0];
+                    if(!numTeams) {
+                        numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
+                        numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
+                        role = this.state.currentUser.roleName[1];
+                    }
+                    console.log(numTeams);
+                    cookies.set('Num_teams', numTeams, {path: '/'});
+                    cookies.set('Teams_visited', [], {path: '/'});
+                    cookies.set('Num_players', numPlayers,{path: '/'});
+                    cookies.set('Role', role,{path: '/'});
+                }).catch(error => {
+                    console.log('error baby');
+                    this.setState({
+                        isLoading: false
+                    });
+                });
+            }
           menuItems = [
             <Menu.Item key="/login">
               <Link to="/login">Login</Link>

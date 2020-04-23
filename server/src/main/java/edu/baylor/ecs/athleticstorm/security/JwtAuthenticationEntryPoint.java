@@ -1,3 +1,9 @@
+/*
+ * Filename: JwtAuthenticationEntryPoint.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.security;
 
 import org.slf4j.Logger;
@@ -12,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by rajeevkumarsingh on 07/12/17.
+ * Handles JWT unauthorized
+ *
+ * @author Andrew Walker
  */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {

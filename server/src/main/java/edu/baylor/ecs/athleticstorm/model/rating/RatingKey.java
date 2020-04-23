@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * RatingKey.java
- *
- * author: Ian laird
- *
- * Created 2/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: RatingKey.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.rating;
 
@@ -20,6 +14,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+
+/**
+ * The id of a rating
+ *
+ * @author Andrew Walker
+ */
 
 @Embeddable
 @EqualsAndHashCode

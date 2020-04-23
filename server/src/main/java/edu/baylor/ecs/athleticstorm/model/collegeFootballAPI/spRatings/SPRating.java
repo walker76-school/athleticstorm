@@ -1,8 +1,20 @@
+/*
+ * Filename: SPRating.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.spRatings;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/**
+ * SP+ rating from CollegeFootballAPI
+ *
+ * @author Andrew Walker
+ */
 
 @Data
 @NoArgsConstructor

@@ -1,6 +1,11 @@
+/*
+ * Filename: Coordinator.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.coordinator;
 
-import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Coach;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +15,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Represents a college football coordinator
+ *
+ * @author Andrew Walker
+ */
 @Entity
 @Table(name = "COORDINATOR")
 @Data
@@ -19,6 +29,11 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class Coordinator implements Comparable<Coordinator>{
 
+    /**
+     * The id of a coordinator
+     *
+     * @author Andrew Walker
+     */
     @Data
     public static class CoordinatorID implements Serializable {
         private String name;
@@ -50,6 +65,11 @@ public class Coordinator implements Comparable<Coordinator>{
     @EqualsAndHashCode.Exclude
     private Team team = null;
 
+    /**
+     * {@inheritDoc}
+     * @param o the coordinator being compared to
+     * @return the comparison of the two coordinators
+     */
     @Override
     public int compareTo(Coordinator o) {
         if(!this.name.equalsIgnoreCase(o.getName())) {

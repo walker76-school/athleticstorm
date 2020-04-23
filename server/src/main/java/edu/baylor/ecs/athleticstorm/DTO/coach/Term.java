@@ -1,3 +1,9 @@
+/*
+ * Filename: Term.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/13/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.DTO.coach;
 
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
@@ -13,6 +19,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A coach's term
+ *
+ * @author Andrew Walker
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -26,6 +37,10 @@ public class Term {
     private int end_year;
     private List<SeasonDTO> seasons;
 
+    /**
+     * Sets the seasons of a term
+     * @param seasonSet set of seasons to add to term
+     */
     public void setSeasons(Set<SeasonDTO> seasonSet){
         seasons = new ArrayList<>(seasonSet);
         seasons.sort(Comparator.comparingLong(SeasonDTO::getYear).reversed());

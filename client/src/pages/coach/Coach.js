@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import axios from 'axios';
 import Grid from "@material-ui/core/Grid";
 import {Paper} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +8,8 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import LockIcon from "../../common/LockIcon.png";
 import Cookies from 'universal-cookie';
 import {notification} from "antd";
+import {coachByName} from "./API";
+import Button from "@material-ui/core/Button";
 
 const cookies = new Cookies();
 
@@ -26,15 +27,25 @@ class Coach extends Component {
 
     componentDidMount() {
         // Get coach name from url
-        axios.get('http://localhost:8080/api/coaches/record/byName/' + this.props.match.params.coachName)
+        coachByName(this.props.match.params.coachName)
         .then(result => {
-            console.log(result.data);
+            console.log(result);
             this.setState({
                 loading: false,
-                name: result.data.name,
-                record: result.data
+                name: result.name,
+                record: result
             });
         })
+            .catch(error => {
+                notification.error({
+                    message: 'Athletic Storm',
+                    description: "Couldn't load data for " + this.props.match.params.coachName  + "."
+                });
+
+                this.setState({
+                    loading: false,
+                });
+            })
     }
 
     perc2color(perc) {
@@ -53,6 +64,19 @@ class Coach extends Component {
 
     render() {
         if (!this.state.loading) {
+
+            if(this.state.record === null){
+                return (
+                  <div style={{"text-align": "center"}}>
+                      <h1>Couldn't load data for {this.props.match.params.coachName}.</h1>
+                      <Link to='/'>
+                          <Button size="medium" variant="contained" color="secondary">
+                              Return to Teams Page
+                          </Button>
+                      </Link>
+                  </div>
+                );
+            }
 
             let ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>;
             if(cookies.get('Role') === 'ROLE_REDSHIRT') {

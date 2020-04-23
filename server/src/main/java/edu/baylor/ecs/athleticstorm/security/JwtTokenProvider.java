@@ -1,3 +1,9 @@
+/*
+ * Filename: JwtTokenProvider.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.security;
 
 import io.jsonwebtoken.*;
@@ -10,7 +16,9 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * Provider for JWT token
+ *
+ * @author Andrew Walker
  */
 @Component
 public class JwtTokenProvider {
@@ -23,6 +31,11 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
+    /**
+     * Generates token from authentication
+     * @param authentication authentication
+     * @return a generated token
+     */
     public String generateToken(Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -38,6 +51,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * Returns user id from JWT token
+     * @param token JWT token
+     * @return user id from JWT token
+     */
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -47,6 +65,11 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
+    /**
+     * Validates JWT token
+     * @param authToken token
+     * @return if valid token
+     */
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);

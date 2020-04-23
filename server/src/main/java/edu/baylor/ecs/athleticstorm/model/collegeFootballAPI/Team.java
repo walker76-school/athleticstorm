@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Team.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Team.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
@@ -28,9 +22,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Team
+ * Represents a College Football Team
  *
- * represents a College Football Team
+ * @author Ian Laird
  */
 
 @AllArgsConstructor
@@ -117,6 +111,11 @@ public class Team implements Comparable<Team>{
     @EqualsAndHashCode.Exclude
     private Set<Coordinator> coordinators = new TreeSet<>();
 
+    /**
+     * {@inheritDoc}
+     * @param team the team being compared to
+     * @return the comparison of the teams
+     */
     @Override
     public int compareTo(Team team) {
         return this.id.compareTo(team.getId());

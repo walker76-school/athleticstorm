@@ -1,3 +1,9 @@
+/*
+ * Filename: AdvancedPlayerDTO.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/14/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.DTO.player;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
@@ -6,12 +12,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO for an advanced player with usage
+ *
+ * @author Ian Laird
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-
 public class AdvancedPlayerDTO {
 
+    /**
+     * DTO for Usage
+     *
+     * @author Ian Laird
+     */
     @AllArgsConstructor
     @Data
     @NoArgsConstructor
@@ -45,6 +60,11 @@ public class AdvancedPlayerDTO {
     private String conference;
     private UsageDTO usage;
 
+    /**
+     * Creates an advanced player from a player and usage
+     * @param p a player
+     * @param u a player's usage
+     */
     public AdvancedPlayerDTO(Player p, Usage u){
         this.id = p.getId();
         this.name = p.getName();

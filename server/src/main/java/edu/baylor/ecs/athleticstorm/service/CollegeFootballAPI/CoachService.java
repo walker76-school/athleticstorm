@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * CoachService.java
- *
- * author: Ian laird
- *
- * Created 3/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: CoachService.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
@@ -27,33 +21,64 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for interacting with coaches
+ *
+ * @author Ian Laird
+ */
 @Service
 public class CoachService {
 
+    // coach jpa repository
     @Autowired
     private CoachRepository coachRepository;
 
+    // team jpa repository
     @Autowired
     private TeamRepository teamRepository;
 
+    /**
+     * Gets all coaches in the DB
+     * @return all coaches
+     */
     public List<CoachDTO> getAllCoaches() {
         return convertToDTO(coachRepository.findAll());
     }
 
+    /**
+     * Get all current coaches for a team
+     * @param teamId the id of the team
+     * @return all current coaches for a team
+     */
     public List<CoachDTO> getCoachesByTeamId(Long teamId) {
         Team team = teamRepository.getOne(teamId);
         return convertToDTO(team.getCoaches());
     }
 
+    /**
+     * Get every coach that has ever coached a team
+     * @param teamId the id of the team
+     * @return the id of the team
+     */
     public List<CoachDTO> getHistoricalCoachesByTeamId(Long teamId) {
         String teamName = teamRepository.getOne(teamId).getSchool();
         return convertToDTO(coachRepository.findHistoricalCoachesByTeam(teamName));
     }
 
+    /**
+     * Get coach of a specific name
+     * @param name the name of the coach
+     * @return coach
+     */
     public CoachDTO getCoachByName(String name) {
         return new CoachDTO(coachRepository.findCoachByNameEquals(name).get());
     }
 
+    /**
+     * Converts a collection of {@link Coach} to {@link CoachDTO}
+     * @param coaches the coach collection
+     * @return the coach dto collection
+     */
     private List<CoachDTO> convertToDTO(Collection<Coach> coaches){
         return coaches
                 .stream()
@@ -61,6 +86,11 @@ public class CoachService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Builds a complete coach record
+     * @param coach the coach dto
+     * @return the coach record
+     */
     public CoachRecord buildRecordFromCoach(CoachDTO coach){
         CoachRecord record = new CoachRecord(coach);
 

@@ -1,3 +1,9 @@
+/*
+ * Filename: RatingService
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.service;
 
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.ppa.PPA;
@@ -10,11 +16,17 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
-import static edu.baylor.ecs.athleticstorm.startUp.Constants.*;
+import static edu.baylor.ecs.athleticstorm.startUp.URLConstants.*;
 
+/**
+ * Service for getting player ratings
+ *
+ * @author Andrew Walker
+ */
 @Service
 public class RatingService {
 
+    // rest template
     @Autowired
     private RestTemplate restTemplate;
 
@@ -34,6 +46,9 @@ public class RatingService {
 
     static boolean isInit = false;
 
+    /**
+     * Inits the static stored SP+ and PPA Ratings
+     */
     @Transactional
     public void init(){
         if(SP_RATINGS.size() == 0){
@@ -62,6 +77,15 @@ public class RatingService {
         isInit = true;
     }
 
+    /**
+     * Gets ratings for a team on a given year and week
+     * @param team team name
+     * @param year year
+     * @param week week
+     * @param hwp home win percentage
+     * @param awp away win percentage
+     * @return a RatingComposite of OC/DC/Coach ratings for the week and year
+     */
     public RatingComposite getRatings(String team, int year, int week, double hwp, double awp){
 
         if(!isInit){

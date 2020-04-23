@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
 import logo from './football.jpeg'
-import axios from 'axios';
 import {Link, withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Avatar} from "@material-ui/core";
@@ -15,6 +14,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {notification} from 'antd';
 import Redirect from "react-router-dom/Redirect";
 import YouTube from 'react-youtube';
+import {getCoachesByTeamId, getCoordinatorsByTeamId, getRoster, getTeamByName, getVideosByTeamName} from "./API";
 
 const styles = makeStyles(theme => ({
     paper: {
@@ -70,14 +70,15 @@ class School extends Component {
 
     componentDidMount() {
         unlocked = true;
-        axios.get('http://localhost:8080/api/teams/byName/' + this.props.match.params.schoolName)
+
+        getTeamByName(this.props.match.params.schoolName)
         .then(result => {
             this.setState({
-                teamId: result.data.id,
-                schoolName: result.data.school,
-                logo: result.data.logos[0],
-                primaryColor: result.data.color,
-                secondaryColor: result.data.alt_color
+                teamId: result.id,
+                schoolName: result.school,
+                logo: result.logos[0],
+                primaryColor: result.color,
+                secondaryColor: result.alt_color
             }, () => {
                 this.loadCoaches();
                 this.loadVideos();
@@ -86,12 +87,21 @@ class School extends Component {
             });
             // Add team to teams_visited if it's not already there and decrease teams available to visit.
             // If team has already been visited by user, no change is necessary
-            if(!cookies.get('Teams_visited').find(element => element === result.data.school)) {
+            if(!cookies.get('Teams_visited').find(element => element === result.school)) {
                 if(cookies.get('Num_teams') > 0) {
                     cookies.set('Num_teams', cookies.get('Num_teams') - 1,{path: '/'});
                     let teamsVisited = cookies.get('Teams_visited');
-                    teamsVisited.push(result.data.school);
+                    teamsVisited.push(result.school);
                     cookies.set('Teams_visited', teamsVisited, {path: '/'});
+
+                    if(cookies.get('Role') !== 'ROLE_MVP'){
+                        // Show notification for how many teams remain in subscription package
+                        notification.info({
+                            message: 'Athletic Storm',
+                            description: 'Your subscription allows you to view ' + cookies.get('Num_teams') + ' more teams.'
+                        });
+                    }
+
                 } else{
                     unlocked = false;
                 }
@@ -101,11 +111,11 @@ class School extends Component {
 
     loadVideos(){
         // Get List Of Coaches From API
-        axios.get('http://localhost:8080/api/teams/videos/byName/' + this.state.schoolName)
+        getVideosByTeamName(this.state.schoolName)
         .then(result => {
-            console.log(result.data);
+            console.log(result);
             this.setState({
-                videos: result.data,
+                videos: result,
                 loadedVideos: true
             });
         })
@@ -118,36 +128,36 @@ class School extends Component {
 
     loadCoaches(){
         // Get List Of Coaches From API
-        axios.get('http://localhost:8080/api/coaches/byTeamId/' + this.state.teamId)
-            .then(result => {
-                console.log(result.data);
-                this.setState({
-                    coaches: result.data,
-                    allCoaches: result.data,
-                    loadedCoaches: true
-                }, () => {
-                    this.headCoachSort('Most Recent');
-                });
+        getCoachesByTeamId(this.state.teamId)
+        .then(result => {
+            console.log(result);
+            this.setState({
+                coaches: result,
+                allCoaches: result,
+                loadedCoaches: true
+            }, () => {
+                this.headCoachSort('Most Recent');
             });
+        });
     }
 
     loadCoordinators(){
         // Get List Of Coaches From API
-        axios.get('http://localhost:8080/api/coordinators/byTeamId/' + this.state.teamId)
-            .then(result => {
-                let oc = result.data.filter(x => x.position === "OC");
-                let dc = result.data.filter(x => x.position === "DC");
-                this.setState({
-                    OC: oc,
-                    allOC: oc,
-                    DC: dc,
-                    allDC: dc,
-                    loadedCoordinators: true
-                }, () => {
-                    this.OCSort('Most Recent');
-                    this.DCSort('Most Recent');
-                });
+        getCoordinatorsByTeamId(this.state.teamId)
+        .then(result => {
+            let oc = result.filter(x => x.position === "OC");
+            let dc = result.filter(x => x.position === "DC");
+            this.setState({
+                OC: oc,
+                allOC: oc,
+                DC: dc,
+                allDC: dc,
+                loadedCoordinators: true
+            }, () => {
+                this.OCSort('Most Recent');
+                this.DCSort('Most Recent');
             });
+        });
     }
 
     loadPlayers(newYear){
@@ -156,20 +166,27 @@ class School extends Component {
                 year: newYear
             }, () => {
                 // Get List Of Players From API
-                axios.get('http://localhost:8080/api/roster/' + this.state.teamId + '/' + this.state.year)
-                    .then(result => {
-                        let tempPlayers = [];
-                        for (var x = 0; x < result.data.length; x++) {
-                            if (result.data[x].first_name !== null && result.data[x].last_name !== null && result.data[x].position !== null) {
-                                tempPlayers.push(result.data[x]);
-                            }
+                getRoster(this.state.teamId, this.state.year)
+                .then(result => {
+                    console.log(result);
+                    let tempPlayers = [];
+                    for (var x = 0; x < result.length; x++) {
+                        if (result[x].first_name !== null && result[x].last_name !== null && result[x].position !== null) {
+                            tempPlayers.push(result[x]);
                         }
-                        this.setState({
-                            players: tempPlayers,
-                            allPlayers: tempPlayers,
-                            loadedPlayers: true
-                        });
-                    })
+                    }
+                    this.setState({
+                        players: tempPlayers,
+                        allPlayers: tempPlayers,
+                        loadedPlayers: true
+                    });
+                })
+                .catch(error => {
+                    notification.error({
+                        message: 'Athletic Storm',
+                        description: 'Error fetching players.'
+                    });
+                })
             });
         } else{
                 notification.error({

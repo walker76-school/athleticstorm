@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * TeamService.java
- *
- * author: Ian laird
- *
- * Created 3/25/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: TeamService.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
@@ -25,36 +19,72 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service for interacting with teams
+ *
+ * @author Ian Laird
+ */
 @Service
 public class TeamService {
 
+    // jpa repo for teams
     @Autowired
     private TeamRepository teamRepository;
 
+    // resource loader
     @Autowired
     private ResourceLoader resourceLoader;
 
+    /**
+     * Gets all teams in the db
+     * @return all teams
+     */
     public List<TeamDTO> getAllTeams() {
         return convertToDTO(teamRepository.findAll());
     }
 
+    /**
+     * Gets a team by name
+     * @param name the name of the name
+     * @return the team
+     */
     public TeamDTO getTeamByName(String name){
         Optional<Team> response = teamRepository.findTeamBySchool(name);
         return response.isPresent() ? new TeamDTO(response.get()) : null;
     }
 
+    /**
+     * Gets all FBS teams in the DB
+     * this is determined by the conference of the team
+     * @return all FBS teams
+     */
     public List<TeamDTO> getAllFBSTeams() {
         return convertToDTO(teamRepository.findAllFBS());
     }
 
+    /**
+     * Get all teams by id
+     * @param id the id of the team
+     * @return the team
+     */
     public TeamDTO getTeamById(Long id){
         return new TeamDTO(teamRepository.getOne(id));
     }
 
+    /**
+     * Converts a collection of {@link Team} to {@link TeamDTO}
+     * @param teams the collection of teams
+     * @return the list of dto
+     */
     public List<TeamDTO> convertToDTO(Collection<Team> teams){
         return teams.stream().map(TeamDTO::new).collect(Collectors.toList());
     }
 
+    /**
+     * Gets all videos for a team
+     * @param teamName the name of the team
+     * @return the urls of the videos
+     */
     public List<String> getVideosByName(String teamName) {
         try {
             Resource resource = resourceLoader.getResource("classpath:data/Videos.csv");

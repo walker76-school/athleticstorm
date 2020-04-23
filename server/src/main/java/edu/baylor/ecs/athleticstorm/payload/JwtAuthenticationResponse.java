@@ -1,29 +1,27 @@
+/*
+ * Filename: JwtAuthenticationResponse.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.payload;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * An access token JWT response
  */
+@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class JwtAuthenticationResponse {
     private String accessToken;
     private String tokenType = "Bearer";
 
     public JwtAuthenticationResponse(String accessToken) {
         this.accessToken = accessToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
     }
 }

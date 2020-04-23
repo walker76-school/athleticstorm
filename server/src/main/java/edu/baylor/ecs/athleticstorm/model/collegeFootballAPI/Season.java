@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Season.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Season.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
@@ -24,9 +18,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Season
+ * Represents how a team in a specific year
  *
- * Represents a season which is a year for a specific team
+ * @author Ian laird
  */
 
 @AllArgsConstructor
@@ -38,6 +32,11 @@ import java.util.TreeSet;
 @EqualsAndHashCode
 public class Season implements Comparable<Season> {
 
+    /**
+     * The id of a season
+     *
+     * @author Ian Laird
+     */
     @Data
     public static class SeasonID implements Serializable {
         private String school;
@@ -91,6 +90,11 @@ public class Season implements Comparable<Season> {
     @EqualsAndHashCode.Exclude
     private int postseason_rank;
 
+    /**
+     * {@inheritDoc}
+     * @param season the season being compared to
+     * @return the comparison of this and that season
+     */
     @Override
     public int compareTo(Season season) {
         int schoolCompare = this.school.compareTo(season.getSchool());
@@ -98,7 +102,7 @@ public class Season implements Comparable<Season> {
     }
 
     /**
-     * creates a Season from a DTO
+     * Creates a Season from a DTO
      * @param s the data
      */
     public Season(SeasonDTO s){

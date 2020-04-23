@@ -1,3 +1,9 @@
+/*
+ * Filename: AuditingConfig.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/30/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.config;
 
 import edu.baylor.ecs.athleticstorm.security.UserPrincipal;
