@@ -1,4 +1,5 @@
 .DS_Store
 .idea/
 node_modules
-ssl/*
+ssl/certs/*.crt
+ssl/keys/*.key
