@@ -7,6 +7,7 @@
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.season.SeasonDTO;
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,6 +55,11 @@ public class Season implements Comparable<Season> {
     @Column(name = "YEAR", insertable = false, updatable = false)
     @EqualsAndHashCode.Include
     private Integer year;
+
+    // the players for the current season of the team
+    @OneToMany(mappedBy = "season")
+    @EqualsAndHashCode.Exclude
+    private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
 
     // the coaches for this season
     @ManyToMany(mappedBy = "seasons", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

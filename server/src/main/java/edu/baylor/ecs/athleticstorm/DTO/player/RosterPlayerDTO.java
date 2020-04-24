@@ -44,7 +44,7 @@ public class RosterPlayerDTO {
         this.height = rosterPlayer.getPlayer().getHeight();
         this.weight = rosterPlayer.getPlayer().getWeight();
         this.jersey = rosterPlayer.getPlayer().getJersey();
-        this.year = rosterPlayer.getYear();
+        this.year = rosterPlayer.getSeason().getYear();
         this.position = rosterPlayer.getPlayer().getPosition();
         this.city = rosterPlayer.getPlayer().getHometown();
     }

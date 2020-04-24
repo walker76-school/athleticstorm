@@ -22,9 +22,9 @@ public interface RosterPlayerRepository extends JpaRepository<RosterPlayer, Rost
     /**
      * Get a player roster by year and team
      * @param year year
-     * @param teamId team id
+     * @param teamName team name
      * @return a player roster by year and team
      */
-    @Query("SELECT rp from RosterPlayer rp join rp.team t where rp.year = :year and t.id = :teamId")
-    List<RosterPlayer> findAllByYearAndTeam(Integer year, Long teamId);
+    @Query("SELECT rp from RosterPlayer rp join fetch rp.season where rp.season.year = :year and rp.season.school = :teamName")
+    List<RosterPlayer> findAllByYearAndTeam(Integer year, String teamName);
 }

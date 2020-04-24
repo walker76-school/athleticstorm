@@ -62,6 +62,8 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     // shows if the DB setup is done
     private static boolean setupComplete = false;
 
+    private static String [] ACTIVE_YEARS = new String[]{"2017","2018","2019"};
+
     // jpa team repo
     @Autowired
     private TeamRepository teamRepository;
@@ -268,25 +270,28 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             rosterPlayers = new TreeSet<>(rosterPlayerRepository.findAll());
             return;
         }
-        for(Team t : teams){
-            String url = Objects.requireNonNull(rosterByTeamAndYear(t.getSchool(), null));
-            RosterPlayerDTO[] rosterPlayerDTOS = restTemplate.getForObject(url, RosterPlayerDTO[].class);
+        for(String year: ACTIVE_YEARS) {
+            for (Team t : teams) {
+                Season s = seasons.stream().filter(x -> x.getSchool().equals(t.getSchool())).findAny().get();
+                String url = Objects.requireNonNull(rosterByTeamAndYear(t.getSchool(), year));
+                RosterPlayerDTO[] rosterPlayerDTOS = restTemplate.getForObject(url, RosterPlayerDTO[].class);
 
-            // for each roster player associate it with the correct player
-            List<RosterPlayerDTO> rosterPlayerList = Arrays.asList(rosterPlayerDTOS);
+                // for each roster player associate it with the correct player
+                List<RosterPlayerDTO> rosterPlayerList = Arrays.asList(rosterPlayerDTOS);
 
-            for(RosterPlayerDTO rosterPlayer : rosterPlayerList){
+                for (RosterPlayerDTO rosterPlayer : rosterPlayerList) {
 
-                // get the correct player for this roster player
-                String fullName = rosterPlayer.getFirst_name() + " " + rosterPlayer.getLast_name();
-                Player p = players.stream().filter(x -> x.getName().equalsIgnoreCase(fullName)).findAny().orElse(null);
-                if(Objects.isNull(p)){
-                    continue;
+                    // get the correct player for this roster player
+                    String fullName = rosterPlayer.getFirst_name() + " " + rosterPlayer.getLast_name();
+                    Player p = players.stream().filter(x -> x.getName().equalsIgnoreCase(fullName)).findAny().orElse(null);
+                    if (Objects.isNull(p)) {
+                        continue;
+                    }
+                    RosterPlayer rp = new RosterPlayer(p, s);
+                    s.getRosterPlayers().add(rp);
+                    p.getRosterPlayerList().add(rp);
+                    rosterPlayers.add(rp);
                 }
-                RosterPlayer rp = new RosterPlayer(2019, p, t);
-                t.getRosterPlayers().add(rp);
-                p.getRosterPlayerList().add(rp);
-                rosterPlayers.add(rp);
             }
         }
         rosterPlayerRepository.saveAll(rosterPlayers);
@@ -305,7 +310,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             return;
         }
 
-        for(String year : new String[]{"2017","2018","2019"}){
+        for(String year : ACTIVE_YEARS){
             AdvancedPlayerDTO [] usages = restTemplate.getForObject(playerUsage(year, null), AdvancedPlayerDTO[].class);
 
             Long yearLong = new Long(year);

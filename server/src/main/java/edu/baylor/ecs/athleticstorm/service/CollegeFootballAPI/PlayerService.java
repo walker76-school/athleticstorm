@@ -11,6 +11,7 @@ import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.Player;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player.RosterPlayer;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.PlayerRepository;
 import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.RosterPlayerRepository;
+import edu.baylor.ecs.athleticstorm.repository.CollegeFootballAPIRepositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,9 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
+    @Autowired
+    private TeamRepository teamRepository;
+
     /**
      * Get the current team roster
      * @param teamId the id of the team
@@ -49,7 +53,7 @@ public class PlayerService {
      * @return all roster players for indicated team and year
      */
     public List<RosterPlayerDTO> roster(Long teamId, Integer year){
-        return convertToDTO(rosterPlayerRepository.findAllByYearAndTeam(year, teamId));
+        return convertToDTO(rosterPlayerRepository.findAllByYearAndTeam(year, teamRepository.getOne(teamId).getSchool()));
     }
 
     /**

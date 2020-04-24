@@ -6,6 +6,7 @@
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
+import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Season;
 import edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.Team;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,13 +36,8 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode
     public static class RosterPlayerId implements Serializable {
         private Long player;
-        private int year;
+        private Season.SeasonID season;
     }
-
-    @Id
-    @Column(name = "YEAR", insertable = false, updatable = false)
-    @EqualsAndHashCode.Include
-    private Integer year;
 
     @Id
     @ManyToOne
@@ -49,20 +45,15 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @EqualsAndHashCode.Exclude
     private Player player;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "TEAM_ID", referencedColumnName = "ID")
+    @JoinColumns({
+            @JoinColumn(name = "YEAR", referencedColumnName = "YEAR"),
+            @JoinColumn(name = "SCHOOL", referencedColumnName = "SCHOOL")
+    })
     @EqualsAndHashCode.Exclude
-    private Team team;
+    private Season season;
 
-    /**
-     * Constructs a RosterPlayer from a Player and Team
-     * @param p the player
-     * @param t the team
-     */
-    public RosterPlayer(Player p, Team t) {
-        this.player = p;
-        this.team = t;
-    }
 
     /**
      * Compares player to another player
@@ -75,6 +66,6 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     @Override
     public int compareTo(RosterPlayer rosterPlayer) {
         int idCompare = this.player.compareTo(rosterPlayer.getPlayer());
-        return idCompare != 0 ? idCompare : this.year.compareTo(rosterPlayer.getYear());
+        return idCompare != 0 ? idCompare : this.season.compareTo(rosterPlayer.getSeason());
     }
 }

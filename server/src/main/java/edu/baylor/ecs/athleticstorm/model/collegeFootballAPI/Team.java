@@ -101,11 +101,6 @@ public class Team implements Comparable<Team>{
     @EqualsAndHashCode.Exclude
     private Set<Coach> coaches = new TreeSet<>();
 
-    // the players for the current season of the team
-    @OneToMany(mappedBy = "team")
-    @EqualsAndHashCode.Exclude
-    private Set<RosterPlayer> rosterPlayers = new TreeSet<>();
-
     // the players for the current coordinators of the team
     @OneToMany(mappedBy = "team")
     @EqualsAndHashCode.Exclude
