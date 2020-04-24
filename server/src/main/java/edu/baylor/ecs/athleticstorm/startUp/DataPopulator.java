@@ -272,7 +272,12 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         }
         for(String year: ACTIVE_YEARS) {
             for (Team t : teams) {
-                Season s = seasons.stream().filter(x -> x.getSchool().equals(t.getSchool())).findAny().get();
+                Optional<Season> optional = seasons.stream().filter(x -> x.getSchool().equalsIgnoreCase(t.getSchool()) && x.getYear() == Integer.parseInt(year)).findAny();
+                if(!optional.isPresent()){
+                    //logger.info("No present" + t.getSchool());
+                    continue;
+                }
+                Season s = optional.get();
                 String url = Objects.requireNonNull(rosterByTeamAndYear(t.getSchool(), year));
                 RosterPlayerDTO[] rosterPlayerDTOS = restTemplate.getForObject(url, RosterPlayerDTO[].class);
 

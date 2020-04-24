@@ -72,8 +72,9 @@ public class Coordinator implements Comparable<Coordinator>{
      */
     @Override
     public int compareTo(Coordinator o) {
-        if(!this.name.equalsIgnoreCase(o.getName())) {
-            return this.name.compareTo(o.getName());
+        int comp = this.name.compareTo(o.getName());
+        if(comp != 0){
+            return comp;
         }
         return Integer.compare(this.startYear, o.getStartYear());
     }
