@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Team.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Team.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
@@ -28,9 +22,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Team
- *
- * represents a College Football Team
+ * Represents a College Football Team
  *
  * @author Ian Laird
  */

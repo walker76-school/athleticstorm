@@ -1,3 +1,9 @@
+/*
+ * Filename: SPOffense.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.spRatings;
 
 import lombok.AllArgsConstructor;
@@ -5,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * SPOffense
+ * SP+ offense stats
  *
  * @author Andrew Walker
  */

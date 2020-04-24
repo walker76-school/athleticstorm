@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * RosterPlayerDTO.java
- *
- * author: Ian laird
- *
- * Created 3/27/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: RosterPlayerDTO
+ * Author: Ian Laird
+ * Date Last Modified: 4/14/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.DTO.player;
 
@@ -17,6 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO for a RosterPlayer
+ *
+ * @author Ian Laird
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -34,6 +33,10 @@ public class RosterPlayerDTO {
     //private String state;
     //private String country;
 
+    /**
+     * Constructs a RosterPlayerDTO from a RosterPlayer
+     * @param rosterPlayer a RosterPlayer
+     */
     public RosterPlayerDTO(RosterPlayer rosterPlayer){
         this.id = rosterPlayer.getPlayer().getId();
         this.first_name = rosterPlayer.getPlayer().getFirstName();

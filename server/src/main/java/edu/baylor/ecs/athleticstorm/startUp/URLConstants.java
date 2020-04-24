@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Constants.java
- *
- * author: Ian laird
- *
- * Created 3/27/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: URLConstants.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.startUp;
 
@@ -19,8 +13,8 @@ import java.util.Objects;
  *
  * @author Ian Laird
  */
-public final class URL_Constants {
-    private URL_Constants(){}
+public final class URLConstants {
+    private URLConstants(){}
 
     // the base url of the API
     public static final String BASE_URL = "https://api.collegefootballdata.com";
@@ -38,8 +32,7 @@ public final class URL_Constants {
     public static final String PLAYER_URL = BASE_URL + "/player";
 
     /**
-     * gets the coaches for specified team
-     *
+     * Gets the coaches for specified team
      * @param teamName the name of the team
      */
     public static String coachByTeamId(String teamName){
@@ -47,7 +40,7 @@ public final class URL_Constants {
     }
 
     /**
-     * creates roster url for team and year
+     * Creates roster URL for team and year
      * @param team the team
      * @param year the year
      * @return the url
@@ -57,7 +50,7 @@ public final class URL_Constants {
     }
 
     /**
-     * url for coach by first and last name
+     * URL for coach by first and last name
      * @param firstName the first name
      * @param lastName the last name
      * @return the url
@@ -67,7 +60,7 @@ public final class URL_Constants {
     }
 
     /**
-     * player url by full name and team
+     * Player URL by full name and team
      * @param name the name of the player
      * @param team the team name
      * @return the url
@@ -77,7 +70,7 @@ public final class URL_Constants {
     }
 
     /**
-     * url for player usage
+     * URL for player usage
      * @param year the year
      * @param playerId the id of the player
      * @return the url
@@ -87,7 +80,7 @@ public final class URL_Constants {
     }
 
     /**
-     * url for team games
+     * URL for team games
      * @param year the year
      * @param team the team name
      * @return url
@@ -97,7 +90,7 @@ public final class URL_Constants {
     }
 
     /**
-     * sp ratings
+     * SP+ ratings
      * @param year the year
      * @return the url
      */
@@ -106,7 +99,7 @@ public final class URL_Constants {
     }
 
     /**
-     * ppa ratings
+     * PPA ratings
      * @param year the year
      * @return the url
      */

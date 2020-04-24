@@ -1,21 +1,30 @@
-package edu.baylor.ecs.athleticstorm.controller.collegeFootballAPI;
+/*
+ * Filename: CoachController.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/19/2020
+ */
+
+package edu.baylor.ecs.athleticstorm.controller.data;
 
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachDTO;
 import edu.baylor.ecs.athleticstorm.DTO.coach.CoachRecord;
 import edu.baylor.ecs.athleticstorm.DTO.coach.RatedCoachDTO;
 import edu.baylor.ecs.athleticstorm.model.coach.CoachStats;
 import edu.baylor.ecs.athleticstorm.model.rating.Rating;
-import edu.baylor.ecs.athleticstorm.model.rating.RatingKey;
 import edu.baylor.ecs.athleticstorm.repository.RatingRepository;
 import edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI.CoachService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for Coach data
+ *
+ * @author Ian Laird
+ */
 @RestController
 @RequestMapping("/api/coaches")
 public class CoachController {
@@ -26,11 +35,20 @@ public class CoachController {
     @Autowired
     private RatingRepository ratingRepository;
 
+    /**
+     * Returns all coaches
+     * @return all coaches
+     */
     @GetMapping("/all")
     public List<CoachDTO> getAllCoaches(){
         return coachService.getAllCoaches();
     }
 
+    /**
+     * Returns all current coaches of a team given by a teamId
+     * @param teamId the current team's id
+     * @return all current coaches of a team given by the teamId
+     */
     @GetMapping("/currentCoaches/{teamId}" )
     public List<RatedCoachDTO> getCoachesByTeamId(@PathVariable("teamId") Long teamId){
         return coachService.getCoachesByTeamId(teamId).stream().map(x -> {
@@ -42,6 +60,11 @@ public class CoachController {
         }).collect(Collectors.toList());
     }
 
+    /**
+     * Returns all historical coaches given a teamId
+     * @param teamId the team's id
+     * @return all historical coaches given a teamId
+     */
     @GetMapping("/byTeamId/{teamId}" )
     public List<RatedCoachDTO> getHistoricalCoachesByTeamId(@PathVariable("teamId") Long teamId){
         return coachService.getHistoricalCoachesByTeamId(teamId).stream().map(x -> {
@@ -53,6 +76,11 @@ public class CoachController {
         }).collect(Collectors.toList());
     }
 
+    /**
+     * Returns a coach by name
+     * @param name the coach's name
+     * @return the coach with the given name
+     */
     @GetMapping("/byName/{name}")
     public RatedCoachDTO getCoachByName(@PathVariable("name") String name){
         CoachDTO x =  coachService.getCoachByName(name);
@@ -63,6 +91,11 @@ public class CoachController {
         return ratedCoachDTO;
     }
 
+    /**
+     * Returns a coach's record by name
+     * @param name the coach's name
+     * @return the coach's record with the given name
+     */
     @GetMapping("/record/byName/{name}" )
     public CoachRecord getCoachRecordByName(@PathVariable("name") String name){
         CoachDTO coach = coachService.getCoachByName(name);
@@ -73,6 +106,10 @@ public class CoachController {
         return record;
     }
 
+    /**
+     * Returns a list of condensed coach stats for ranking
+     * @return a list of condensed coach stats for ranking
+     */
     @GetMapping("/allStats")
     public List<CoachStats> getAllCoachRecords(){
         return coachService.getAllCoaches().parallelStream().map(x -> {
@@ -83,6 +120,4 @@ public class CoachController {
             return ratedCoachDTO;
         }).map(CoachStats::new).collect(Collectors.toList());
     }
-
-
 }

@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Season.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Season.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
@@ -24,8 +18,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Season
- *
  * Represents how a team in a specific year
  *
  * @author Ian laird
@@ -41,7 +33,7 @@ import java.util.TreeSet;
 public class Season implements Comparable<Season> {
 
     /**
-     * the id of a season
+     * The id of a season
      *
      * @author Ian Laird
      */
@@ -110,7 +102,7 @@ public class Season implements Comparable<Season> {
     }
 
     /**
-     * creates a Season from a DTO
+     * Creates a Season from a DTO
      * @param s the data
      */
     public Season(SeasonDTO s){

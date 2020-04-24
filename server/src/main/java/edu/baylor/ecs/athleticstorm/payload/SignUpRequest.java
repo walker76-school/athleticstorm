@@ -1,3 +1,9 @@
+/*
+ * Filename: SignUpRequest.java
+ * Author: Andrew Walker
+ * Date Last Modified: 3/26/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.payload;
 
 import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
@@ -8,9 +14,10 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.*;
 
 /**
- * Created by rajeevkumarsingh on 02/08/17.
+ * A request to sign up
+ *
+ * @author Andrew Walker
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

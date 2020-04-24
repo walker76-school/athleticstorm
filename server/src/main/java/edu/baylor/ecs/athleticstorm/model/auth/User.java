@@ -1,6 +1,13 @@
+/*
+ * Filename: User.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/3/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.auth;
 
 import edu.baylor.ecs.athleticstorm.model.audit.DateAudit;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,8 +16,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by rajeevkumarsingh on 01/08/17.
+ * A User
+ *
+ * @author Andrew Walker
  */
+@Getter
+@Setter
+@NoArgsConstructor
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -19,6 +31,7 @@ import java.util.Set;
         })
 })
 public class User extends DateAudit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,48 +53,13 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User() {
-
-    }
-
+    /**
+     * Creates a user from a user name and password
+     * @param username a username
+     * @param password a password
+     */
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setSubRole(String subRole) { this.subRole = subRole; }
-
-    public String getSubRole() { return subRole; }
 }

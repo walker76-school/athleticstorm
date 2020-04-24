@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Player.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Player.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
@@ -23,10 +17,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Player
- *
  * Represents a Player on a College Football Team
+ *
+ * @author Ian Laird
  */
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -90,13 +85,18 @@ public class Player implements Comparable<Player>{
     @EqualsAndHashCode.Exclude
     private Set<RosterPlayer> rosterPlayerList = new TreeSet<>();
 
+    /**
+     * Compares two Players
+     * @param player the Player to compare to
+     * @return the comaprison of the two Players
+     */
     @Override
     public int compareTo(Player player) {
         return this.id.compareTo(player.getId());
     }
 
     /**
-     * constructs a player from a DTO
+     * Constructs a Player from a DTO
      * @param player the data
      */
     public Player(PlayerDTO player){

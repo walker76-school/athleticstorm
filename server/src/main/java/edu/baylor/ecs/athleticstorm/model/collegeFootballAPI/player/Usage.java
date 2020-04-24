@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Usage.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Usage.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI.player;
 
@@ -22,7 +16,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * conatains the usage for a player in a specific year
+ * Contains the usage for a player in a specific year
  *
  * @author Ian laird
  */
@@ -37,6 +31,11 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class Usage implements Comparable<Usage>{
 
+    /**
+     * ID for Usage
+     *
+     * @author Ian Laird
+     */
     @Data
     public static class UsageId implements Serializable {
         private Long player;
@@ -86,6 +85,12 @@ public class Usage implements Comparable<Usage>{
     @EqualsAndHashCode.Exclude
     private float passingDowns;
 
+    /**
+     * Constructs a Usage from a DTO, Player and year
+     * @param usageDTO DTO
+     * @param p Player
+     * @param year year
+     */
     public Usage(AdvancedPlayerDTO.UsageDTO usageDTO, Player p, Long year){
         this.year = new Long(year);
         this.player = p;
@@ -100,6 +105,11 @@ public class Usage implements Comparable<Usage>{
         this.passingDowns = usageDTO.getPassingDowns();
     }
 
+    /**
+     * Compares two Usages
+     * @param usage another Usage
+     * @return the comparison
+     */
     @Override
     public int compareTo(Usage usage) {
         int val = this.player.compareTo(usage.getPlayer());

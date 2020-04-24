@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * PlayerDTO.java
- *
- * author: Ian laird
- *
- * Created 3/30/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: PlayerDTO.java
+ * Author: Ian Laird
+ * Date Last Modified: 4/1/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.DTO.player;
 
@@ -17,6 +11,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO for Player
+ *
+ * @author Ian Laird
+ */
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
@@ -33,6 +32,10 @@ public class PlayerDTO {
     private String hometown;
     private String teamColor;
 
+    /**
+     * Constructs a PlayerDTO from a player
+     * @param p a player
+     */
     public PlayerDTO(Player p){
         this.id = p.getId();
         this.team = p.getTeam();

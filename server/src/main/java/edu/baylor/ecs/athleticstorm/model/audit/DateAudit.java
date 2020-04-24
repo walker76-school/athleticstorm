@@ -1,3 +1,9 @@
+/*
+ * Filename: DateAudit.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/3/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +18,11 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * For managing the dates of events within an object
+ *
+ * @author Andrew Walker
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(

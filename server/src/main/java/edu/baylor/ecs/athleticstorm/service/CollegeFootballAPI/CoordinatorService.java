@@ -1,3 +1,9 @@
+/*
+ * Filename: CoordinatorService.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.service.CollegeFootballAPI;
 
 import edu.baylor.ecs.athleticstorm.DTO.coordinator.CoordinatorDTO;
@@ -11,9 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * CoordinatorService
- *
- * service for coordinators
+ * Service for interacting with coordinators
  *
  * @author Andrew walker
  */
@@ -25,8 +29,7 @@ public class CoordinatorService {
     private CoordinatorRepository coordinatorRepository;
 
     /**
-     * finds a coordinator by name
-     *
+     * Finds a coordinator by name
      * @param name the name of the coordinator
      * @return the coordinator
      */
@@ -36,8 +39,7 @@ public class CoordinatorService {
     }
 
     /**
-     * gets all coordinators for a team
-     *
+     * Gets all coordinators for a team
      * @param teamId the team id
      * @return the coordinators
      */

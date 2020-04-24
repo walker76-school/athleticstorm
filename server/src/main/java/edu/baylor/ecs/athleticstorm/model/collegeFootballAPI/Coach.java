@@ -1,14 +1,8 @@
-/******************************************************************************
- *
- * Coach.java
- *
- * author: Ian laird
- *
- * Created 3/24/20
- *
- * © 2020
- *
- ******************************************************************************/
+/*
+ * Filename: Coach.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/22/2020
+ */
 
 package edu.baylor.ecs.athleticstorm.model.collegeFootballAPI;
 
@@ -22,9 +16,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Coach
- *
  * Represents a Coach of a Team
+ *
+ * @author Ian Laird
  */
 @AllArgsConstructor
 @Data
@@ -72,7 +66,7 @@ public class Coach implements Comparable<Coach> {
     }
 
     /**
-     * creates a coach of a given name
+     * Creates a coach of a given name
      * @param name the name of the coach
      */
     public Coach(String name){
@@ -80,7 +74,7 @@ public class Coach implements Comparable<Coach> {
     }
 
     /**
-     * creates a coach from a DTO
+     * Creates a coach from a DTO
      * @param coach the data to create the coach from
      * @param seasons the set of existing seasons for ALL coaches (this is used so that seasons are not duplicated)
      */

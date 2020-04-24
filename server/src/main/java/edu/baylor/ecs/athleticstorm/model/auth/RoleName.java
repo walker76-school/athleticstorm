@@ -1,7 +1,13 @@
+/*
+ * Filename: RoleName.java
+ * Author: Andrew Walker
+ * Date Last Modified: 4/3/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.auth;
 
 /**
- * Created by rajeevkumarsingh on 07/12/17.
+ * The possible roles for a Role
  */
 public enum  RoleName {
     ROLE_USER,

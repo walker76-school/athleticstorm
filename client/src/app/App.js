@@ -28,6 +28,7 @@ import {Layout, notification} from 'antd';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
 import PrivateRoute from "../common/PrivateRoute";
+import Redirect from "react-router-dom/Redirect";
 const {Content} = Layout;
 const cookies = new Cookies();
 
@@ -95,7 +96,12 @@ class App extends Component {
     //Logout Function
     handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
+<<<<<<< HEAD
         //Clear Cookies
+=======
+
+        cookies.set('Username', '', {path: '/'});
+>>>>>>> 18f6775728d0969f17312bcf9b3e30fff729f7de
         cookies.set('Num_teams', 0,{path: '/'});
         cookies.set('Teams_visited', [],{path: '/'});
         cookies.set('Num_players', 0,{path: '/'});
@@ -130,7 +136,11 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
+<<<<<<< HEAD
             //Set subscription values
+=======
+            let username = this.state.currentUser.username;
+>>>>>>> 18f6775728d0969f17312bcf9b3e30fff729f7de
             let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
             let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
             let role = this.state.currentUser.roleName[0];
@@ -141,7 +151,11 @@ class App extends Component {
                 role = this.state.currentUser.roleName[1];
             }
             console.log(numTeams);
+<<<<<<< HEAD
             //Set Cookie values
+=======
+            cookies.set('Username', username, {path: '/'});
+>>>>>>> 18f6775728d0969f17312bcf9b3e30fff729f7de
             cookies.set('Num_teams', numTeams, {path: '/'});
             cookies.set('Teams_visited', [], {path: '/'});
             cookies.set('Num_players', numPlayers,{path: '/'});
@@ -169,7 +183,8 @@ class App extends Component {
                 <Layout className="app-container">
                 <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout}/>
+                           onLogout={this.handleLogout}
+                           onSubChange={this.onSubChange}/>
 
                 <Content className="app-content">
                     <div className="container">

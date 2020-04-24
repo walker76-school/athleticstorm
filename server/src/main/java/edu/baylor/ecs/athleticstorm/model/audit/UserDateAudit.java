@@ -1,3 +1,9 @@
+/*
+ * Filename: UserDateAudit.java
+ * Author: Andrew Walker
+ * Date Last Modified: 1/3/2020
+ */
+
 package edu.baylor.ecs.athleticstorm.model.audit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,9 +14,10 @@ import org.springframework.data.annotation.LastModifiedBy;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Created by rajeevkumarsingh on 19/08/17.
+ * For managing the dates of events within a user
+ *
+ * @author Andrew Walker
  */
-
 @MappedSuperclass
 @JsonIgnoreProperties(
         value = {"createdBy", "updatedBy"},
