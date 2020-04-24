@@ -1,3 +1,8 @@
+/*
+*   Filename: NotFound.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/23/2019
+*/
 import React, { Component } from 'react';
 import './NotFound.css';
 import { Link } from 'react-router-dom';
@@ -5,6 +10,7 @@ import { Button } from 'antd';
 
 class NotFound extends Component {
     render() {
+        //Error Page Creation
         return (
             <div className="page-not-found">
                 <h1 className="title">

@@ -1,3 +1,8 @@
+/*
+*   Filename: WelcomePage.js
+*   Author: John Eyre
+*   Date Last Modified: 4/23/2019
+*/
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import BleachersPic from "./bleachers.jpg";
@@ -5,7 +10,7 @@ import CoachPic from "./coachpicture.jpg";
 import Button from "@material-ui/core/Button";
 
 export default class WelcomePage extends Component {
-
+// Formatting and HTML for Athletic Storm information page
     render() {
         return (
             <div>

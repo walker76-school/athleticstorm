@@ -1,3 +1,4 @@
+//Import Required Libraries
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 import './App.css';
@@ -10,6 +11,7 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import {ACCESS_TOKEN, SUBSCRIPTION_TEAM_MAPPING, SUBSCRIPTION_PLAYER_MAPPING} from '../constants';
 
+//Import All Pages
 import Home from '../pages/home/Home';
 import Coach from '../pages/coach/Coach';
 import Ranking from '../pages/ranking/Ranking';
@@ -29,6 +31,7 @@ import PrivateRoute from "../common/PrivateRoute";
 const {Content} = Layout;
 const cookies = new Cookies();
 
+//Formatting
 const theme = createMuiTheme({
         palette: {
             primary: {
@@ -47,12 +50,12 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: null,
-            isAuthenticated: false,
+            currentUser: null, //Username of logged in
+            isAuthenticated: false, //Are they logged in
             isLoading: false,
-            clickedSchool: null
+            clickedSchool: null //School Selected
         };
-
+        
         this.setSchool = this.setSchool.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -70,6 +73,7 @@ class App extends Component {
         this.setState({
             isLoading: true
         });
+        //Returns logged in user
         getCurrentUser()
             .then(response => {
                 console.log('getcurr');
@@ -88,10 +92,10 @@ class App extends Component {
     componentDidMount() {
         this.loadCurrentUser();
     }
-
+    //Logout Function
     handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
-
+        //Clear Cookies
         cookies.set('Num_teams', 0,{path: '/'});
         cookies.set('Teams_visited', [],{path: '/'});
         cookies.set('Num_players', 0,{path: '/'});
@@ -118,6 +122,7 @@ class App extends Component {
         this.setState({
             isLoading: true
         });
+
         getCurrentUser().then(response => {
             console.log(response);
             this.setState({
@@ -125,15 +130,18 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
+            //Set subscription values
             let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
             let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
             let role = this.state.currentUser.roleName[0];
+            //Check if number of teams is 0
             if(!numTeams) {
                 numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
                 numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
                 role = this.state.currentUser.roleName[1];
             }
             console.log(numTeams);
+            //Set Cookie values
             cookies.set('Num_teams', numTeams, {path: '/'});
             cookies.set('Teams_visited', [], {path: '/'});
             cookies.set('Num_players', numPlayers,{path: '/'});
@@ -165,6 +173,7 @@ class App extends Component {
 
                 <Content className="app-content">
                     <div className="container">
+                        {/* Set routes for different pages */}
                         <Switch>
                             <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                             <Route path="/signup" component={Signup}/>

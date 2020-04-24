@@ -1,3 +1,8 @@
+/*
+*   Filename: AppHeader.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/23/2019
+*/
 import React, { Component } from 'react';
 import {
     Link,
@@ -20,6 +25,7 @@ class AppHeader extends Component {
         this.handleMenuClick = this.handleMenuClick.bind(this);
     }
 
+    // Logout handler
     handleMenuClick({ key }) {
       if(key === "logout") {
         this.props.onLogout();
@@ -27,6 +33,7 @@ class AppHeader extends Component {
     }
 
     render() {
+      //Creation of Menu Items and their links
         let menuItems;
         if(this.props.currentUser) {
           menuItems = [
@@ -47,6 +54,7 @@ class AppHeader extends Component {
             </Menu.Item>
           ]; 
         } else {
+          //Handle if current user is not saved
             if(localStorage.getItem(ACCESS_TOKEN)) {
                 getCurrentUser().then(response => {
                     console.log(response);
@@ -55,6 +63,7 @@ class AppHeader extends Component {
                         isAuthenticated: true,
                         isLoading: false
                     });
+                    //Set tier variables
                     let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
                     let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
                     let role = this.state.currentUser.roleName[0];
@@ -64,6 +73,7 @@ class AppHeader extends Component {
                         role = this.state.currentUser.roleName[1];
                     }
                     console.log(numTeams);
+                    //Set cookies
                     cookies.set('Num_teams', numTeams, {path: '/'});
                     cookies.set('Teams_visited', [], {path: '/'});
                     cookies.set('Num_players', numPlayers,{path: '/'});
@@ -108,6 +118,7 @@ class AppHeader extends Component {
 
 function ProfileDropdownMenu(props) {
   const dropdownMenu = (
+    //Dropdown menu creation
     <Menu onClick={props.handleMenuClick} className="profile-dropdown-menu">
       <Menu.Item key="user-info" className="dropdown-item" disabled>
         <div className="username-info">

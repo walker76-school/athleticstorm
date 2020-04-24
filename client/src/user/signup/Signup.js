@@ -1,3 +1,8 @@
+/*
+*   Filename: Signup.js
+*   Author: Andrew Walker
+*   Date Last Modified: 2/24/2019
+*/
 import React, { Component } from 'react';
 import { signup, checkUsernameAvailability } from '../../util/APIUtils';
 import './Signup.css';
@@ -47,6 +52,7 @@ class Signup extends Component {
         });
     }
 
+    //Call endpoints when user creates an account
     handleSubmit(roleVal) {
 
         if(roleVal === 'None') {

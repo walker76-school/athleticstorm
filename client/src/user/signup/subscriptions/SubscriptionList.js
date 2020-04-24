@@ -1,3 +1,8 @@
+/*
+*   Filename: SubscriptionList.js
+*   Author: Evan Baker
+*   Date Last Modified: 4/23/2019
+*/
 import React from 'react'
 import Subscription from './Subscription'
 import './styles/comparisons.css'

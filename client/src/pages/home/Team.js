@@ -1,3 +1,8 @@
+/*
+*   Filename: Team.js
+*   Author: John Eyre
+*   Date Last Modified: 4/17/2019
+*/
 import React, {Component} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {makeStyles} from "@material-ui/core/styles";
@@ -35,6 +40,7 @@ const styles = makeStyles(theme => ({
     }
 }));
 
+//Capstone Athletic Storm team information
 class Team extends Component {
 
     render() {

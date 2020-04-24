@@ -1,3 +1,8 @@
+/*
+*   Filename: Popup.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/18/2019
+*/
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,6 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import Content from "./Content";
 
+//Formatting for dialog
 const styles = (theme) => ({
     root: {
         margin: 0,
@@ -64,6 +70,7 @@ export default class Player extends Component {
     render() {
 
         let name = "";
+        //Check that player data is there
         if(this.props.selectedPlayer !== null){
             name = this.props.selectedPlayer.first_name + " " + this.props.selectedPlayer.last_name + " (" + this.props.selectedPlayer.year + ")";
         }

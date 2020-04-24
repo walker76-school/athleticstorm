@@ -1,3 +1,8 @@
+/*
+*   Filename: ServerError.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/23/2019
+*/
 import React, { Component } from 'react';
 import './ServerError.css';
 import { Link } from 'react-router-dom';
@@ -5,6 +10,7 @@ import { Button } from 'antd';
 
 class ServerError extends Component {
     render() {
+        //Server Error Page Creation
         return (
             <div className="server-error-page">
                 <h1 className="server-error-title">

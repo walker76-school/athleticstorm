@@ -1,3 +1,8 @@
+/*
+*   Filename: Coach.js
+*   Author: John Eyre
+*   Date Last Modified: 4/23/2019
+*/
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import Grid from "@material-ui/core/Grid";
@@ -47,7 +52,7 @@ class Coach extends Component {
                 });
             })
     }
-
+    //Conversion to get hash of color
     perc2color(perc) {
         var r, g, b = 0;
         if(perc < 50) {
@@ -64,7 +69,7 @@ class Coach extends Component {
 
     render() {
         if (!this.state.loading) {
-
+            //Error Page Creation
             if(this.state.record === null){
                 return (
                   <div style={{"text-align": "center"}}>
@@ -77,7 +82,7 @@ class Coach extends Component {
                   </div>
                 );
             }
-
+            //Handling insufficient subscription
             let ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>;
             if(cookies.get('Role') === 'ROLE_REDSHIRT') {
                 ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<img alt="Lock" style={{maxHeight: "75px"}} src={LockIcon} onClick={() => {
@@ -91,11 +96,13 @@ class Coach extends Component {
             // Name successfully found
             return (
                 <div>
+                    {/* Get overall wins and losses for coaches */}
                     <div style={{"text-align": "center"}}>
                         {ratingContent}
                         <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <br/>
+                    {/* Get all season records with their teams */}
                     {this.state.record.terms.map(term => (
                         <div>
                             <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>

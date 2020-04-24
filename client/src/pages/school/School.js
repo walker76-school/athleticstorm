@@ -16,6 +16,7 @@ import Redirect from "react-router-dom/Redirect";
 import YouTube from 'react-youtube';
 import {getCoachesByTeamId, getCoordinatorsByTeamId, getRoster, getTeamByName, getVideosByTeamName} from "./API";
 
+//Formatting for schools
 const styles = makeStyles(theme => ({
     paper: {
         padding: theme.spacing(2),
@@ -32,7 +33,7 @@ let unlocked = true;
 const cookies = new Cookies();
 
 class School extends Component {
-
+    //Declare needed state variables
     constructor(props){
         super(props);
         this.state = {
@@ -207,7 +208,7 @@ class School extends Component {
             selectedPlayer: player
         })
     }
-
+    //Sorting function for coaches
     headCoachSort(sortBy){
         if("Descending" === sortBy){
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name < b.last_name ? 1 : -1);
@@ -247,7 +248,7 @@ class School extends Component {
             console.log("Invalid Option " + sortBy);
         }
     }
-
+    //Sorting algorithms for Offensive Coordinators
     OCSort(sortBy){
         if("Descending" === sortBy){
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name < b.name ? 1 : -1);
@@ -286,6 +287,7 @@ class School extends Component {
         }
     }
 
+    //Defensive coordinator sorting algorithms
     DCSort(sortBy){
         if("Descending" === sortBy){
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name < b.name ? 1 : -1);
@@ -325,6 +327,7 @@ class School extends Component {
         }
     }
 
+    //Search bar functionality
     filter(filter){
         let tempCoaches = [];
         for( let x = 0; x < this.state.allCoaches.length; x++){

@@ -1,3 +1,8 @@
+/*
+*   Filename: Subscription.js
+*   Author: Evan Baker
+*   Date Last Modified: 4/17/2019
+*/
 import React from 'react'
 import './styles/subscription.css'
 
