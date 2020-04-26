@@ -69,7 +69,7 @@ class SubscriptionError extends Component {
                     });
                     if(SUBSCRIPTION_TEAM_MAPPING.get(cookies.get('Role')) < SUBSCRIPTION_TEAM_MAPPING.get(roleVal)) {
                         let num_teams_difference = SUBSCRIPTION_TEAM_MAPPING.get(roleVal) - SUBSCRIPTION_TEAM_MAPPING.get(cookies.get('Role'));
-                        let curr_num_teams = parseInt(cookies.get('Num_teams'));
+                        let curr_num_teams = parseInt(cookies.get('Num_teams'), 10);
                         cookies.set('Num_teams', (curr_num_teams + num_teams_difference), {path: '/'});
                     } else{
                         cookies.set('Num_teams', SUBSCRIPTION_TEAM_MAPPING.get(roleVal), {path: '/'});
