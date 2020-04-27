@@ -22,7 +22,6 @@ import java.io.Serializable;
  * @author Ian Laird
  */
 
-@AllArgsConstructor
 @Data
 @NoArgsConstructor
 
@@ -53,6 +52,11 @@ public class RosterPlayer implements Comparable<RosterPlayer> {
     })
     @EqualsAndHashCode.Exclude
     private Season season;
+
+    public RosterPlayer(Player p, Season s){
+        this.player = p;
+        this.season = s;
+    }
 
 
     /**
