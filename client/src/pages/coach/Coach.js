@@ -107,7 +107,7 @@ class Coach extends Component {
                         <div>
                             <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>
                                 <Grid container align="center" justify="left" spacing={3}>
-                                    <Grid item xs={2}>
+                                    <Grid item md={2} xs={12}>
                                         <Link
                                             to={{
                                                 pathname: "/school/" + term.team.school,
@@ -120,15 +120,15 @@ class Coach extends Component {
                                             <img style={{ marginLeft: 10 }} src={term.team.logos[0]} height="100" width="100" alt={term.team.school}/>
                                         </Link>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={12}>
                                         <span style={{ marginLeft: 30, color: term.team.color}}>
                                             {term.team.school} ({term.start_year}{term.end_year !== -1 && term.end_year !== term.start_year ? "-" + term.end_year : ""})
                                         </span>
                                     </Grid>
-                                    <Grid item xs={7}>
+                                    <Grid item md={7} xs={12}>
                                         <Grid container align="center" justify="left" spacing={3}>
                                             {term.seasons.map(season => (
-                                                <Grid item xs={3}>
+                                                <Grid item md={3} xs={6}>
                                                     <Paper>
                                                         <ReactMinimalPieChart
                                                             animate={true}

@@ -401,13 +401,13 @@ class School extends Component {
                         }}>&nbsp;{this.state.schoolName}</h1>
                     </div>
                     <Grid container>
-                        <Grid item xs={2}>
+                        <Grid item md={2} xs={6}>
                             <img src={this.state.logo} width="100" height="100" alt="Logo"/>
                         </Grid>
                         {
                             this.state.videos.map(videoId => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={6}>
                                         <YouTube videoId={videoId} opts={{
                                             height: "125px",
                                             width: "200px"
@@ -459,7 +459,7 @@ class School extends Component {
                                         yearRange = minYear + "-" + maxYear;
                                     }
                                     return (
-                                        <Grid item xs={3} key={ndx}>
+                                        <Grid item md={3} xs={12} key={ndx}>
                                             <Link
                                                 to={"/coach/" + coach.first_name + " " + coach.last_name}
                                                 style={{color: this.state.primaryColor}}
@@ -497,7 +497,7 @@ class School extends Component {
                             {
                                 this.state.OC.map((oc, ndx) => {
                                     return (
-                                        <Grid item xs={3} key={ndx}>
+                                        <Grid item md={3} xs={12} key={ndx}>
                                             <a style={{color: this.state.primaryColor}}
                                                onClick={() => {
                                                    this.setSelectedCoordinator(oc)
@@ -535,7 +535,7 @@ class School extends Component {
                             {
                                 this.state.DC.map((dc, ndx) => {
                                     return (
-                                        <Grid item xs={3} key={ndx}>
+                                        <Grid item md={3} xs={12} key={ndx}>
                                             <a style={{color: this.state.primaryColor}}
                                                onClick={() => {
                                                    this.setSelectedCoordinator(dc)
@@ -571,7 +571,7 @@ class School extends Component {
                         {
                             this.state.players.slice(0, cookies.get('Num_players')).map((player, ndx) => {
                                 return (
-                                    <Grid item xs={3} key={ndx}>
+                                    <Grid item md={3} xs={12} key={ndx}>
                                         <a
                                             onClick={() => {
                                                 this.setSelectedPlayer({

@@ -122,7 +122,7 @@ class SchoolList extends Component {
                                 }
 
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={12}>
                                         { unlocked &&
                                             <Link
                                                 to={{

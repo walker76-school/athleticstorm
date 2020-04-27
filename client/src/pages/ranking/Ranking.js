@@ -151,7 +151,7 @@ class Ranking extends Component {
                                 }
 
                                 return (
-                                    <Grid item xs={3} key={ndx}>
+                                    <Grid item md={3} xs={6} key={ndx}>
                                         <Link to={"/coach/" + record.first_name + " " + record.last_name}>
                                             <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
