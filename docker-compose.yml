@@ -13,6 +13,7 @@ services:
     image: gitlab.ecs.baylor.edu:5555/aars/20200143c9-athleticstorm/athleticstorm-server:5.0
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "8443:8443" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: always
     depends_on: 
       - db # This service depends on mysql. Start that first.
