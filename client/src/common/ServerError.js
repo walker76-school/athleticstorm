@@ -1,7 +1,7 @@
 /*
 *   Filename: ServerError.js
 *   Author: Andrew Walker
-*   Date Last Modified: 4/23/2019
+*   Date Last Modified: 4/13/2019
 */
 import React, { Component } from 'react';
 import './ServerError.css';

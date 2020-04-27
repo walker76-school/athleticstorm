@@ -9,7 +9,7 @@ import LoadingIndicator from "../../common/LoadingIndicator";
 import {notification} from "antd";
 import { refresh} from "./API";
 
-class Coach extends Component {
+class AdminRefresh extends Component {
 
     componentDidMount() {
         // Get coach name from url
@@ -38,4 +38,4 @@ class Coach extends Component {
     }
 }
 
-export default withRouter(Coach);
+export default withRouter(AdminRefresh);

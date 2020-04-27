@@ -1,3 +1,9 @@
+/*
+*   Filename: PrivateRoute.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/13/2019
+*/
+
 import React, {Component} from 'react';
 import {
     Route,

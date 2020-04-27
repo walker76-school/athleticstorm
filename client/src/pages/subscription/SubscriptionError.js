@@ -1,3 +1,9 @@
+/*
+*   Filename: SubscriptionError.js
+*   Author: Evan Baker
+*   Date Last Modified: 4/26/2019
+*/
+
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
 import Button from '@material-ui/core/Button';

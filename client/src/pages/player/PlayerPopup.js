@@ -1,5 +1,5 @@
 /*
-*   Filename: CoordinatorPopup.jsup.js
+*   Filename: PlayerPopup.js
 *   Author: Andrew Walker
 *   Date Last Modified: 4/18/2019
 */

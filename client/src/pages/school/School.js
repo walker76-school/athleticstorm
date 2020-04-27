@@ -1,3 +1,9 @@
+/*
+*   Filename: API.js
+*   Author: Joshua Pane
+*   Date Last Modified: 4/26/2019
+*/
+
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
 import logo from './football.jpeg'

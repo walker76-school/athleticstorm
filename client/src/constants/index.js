@@ -1,3 +1,9 @@
+/*
+*   Filename: index.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/26/2019
+*/
+
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://localhost:8443/api';
 export const ACCESS_TOKEN = 'accessToken';
 

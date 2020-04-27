@@ -1,5 +1,5 @@
 /*
-*   Filename: CoordinatorContent.js
+*   Filename: Content.js
 *   Author: Andrew Walker
 *   Date Last Modified: 4/23/2019
 */

@@ -1,3 +1,9 @@
+/*
+*   Filename: App.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/26/2019
+*/
+
 //Import Required Libraries
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
