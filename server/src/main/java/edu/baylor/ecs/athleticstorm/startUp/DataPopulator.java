@@ -419,7 +419,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
             return;
         }
 
-        List<Rating> ratings = new ArrayList<>();
+        Set<Rating> ratings = new HashSet<>();
 
         for(Coach coach : coaches){
 
@@ -492,16 +492,16 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
                     // Adjust Scores and Save
                     coachScore = scaleRating(coachScore, composite.getCoach());
-                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week), !Double.isFinite(coachScore) ? 50.0 : coachScore, PersonType.COACH));
+                    ratings.add(new Rating(new RatingKey(coach.getName(), year, week,  PersonType.COACH), !Double.isFinite(coachScore) ? 50.0 : coachScore));
 
                     for(String oc : ocRatings.keySet()) {
                         double ocScore = scaleRating(ocRatings.get(oc), composite.getOC());
-                        ratings.add(new Rating(new RatingKey(oc, year, week), !Double.isFinite(ocScore) ? 50.0 : ocScore, PersonType.OFFENSIVE));
+                        ratings.add(new Rating(new RatingKey(oc, year, week, PersonType.OFFENSIVE), !Double.isFinite(ocScore) ? 50.0 : ocScore));
                     }
 
                     for(String dc : dcRatings.keySet()) {
                         double dcScore = scaleRating(dcRatings.get(dc), composite.getDC());
-                        ratings.add(new Rating(new RatingKey(dc, year, week), !Double.isFinite(dcScore) ? 50.0 : dcScore, PersonType.DEFENSIVE));
+                        ratings.add(new Rating(new RatingKey(dc, year, week, PersonType.DEFENSIVE), !Double.isFinite(dcScore) ? 50.0 : dcScore));
                     }
 
                 }

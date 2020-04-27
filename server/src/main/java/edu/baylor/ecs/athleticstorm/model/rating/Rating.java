@@ -8,6 +8,7 @@ package edu.baylor.ecs.athleticstorm.model.rating;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -23,16 +24,16 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Rating implements Comparable<Rating>{
 
     @EmbeddedId
+    @EqualsAndHashCode.Include
     private RatingKey key;
 
     @Column(name = "RATING")
+    @EqualsAndHashCode.Exclude
     private Double rating;
-
-    @Enumerated(EnumType.STRING)
-    private PersonType type;
 
     /**
      * {@inheritDoc}
@@ -41,9 +42,6 @@ public class Rating implements Comparable<Rating>{
      */
     @Override
     public int compareTo(Rating o) {
-        if(key.getYear().equals(o.getKey().getYear())){
-            return Integer.compare(key.getWeek(), o.getKey().getWeek());
-        }
-        return Integer.compare(key.getYear(), o.getKey().getYear());
+        return key.compareTo(o.getKey());
     }
 }

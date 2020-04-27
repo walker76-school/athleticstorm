@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 
 /**
@@ -22,18 +24,42 @@ import java.io.Serializable;
  */
 
 @Embeddable
-@EqualsAndHashCode
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RatingKey implements Serializable {
+@EqualsAndHashCode
+public class RatingKey implements Serializable, Comparable<RatingKey> {
 
+    @EqualsAndHashCode.Include
     @Column(name = "NAME")
     private String name;
 
+    @EqualsAndHashCode.Include
     @Column(name = "YEAR")
     private Integer year;
 
+    @EqualsAndHashCode.Include
     @Column(name = "WEEK")
     private Integer week;
+
+    @EqualsAndHashCode.Include
+    @Enumerated(EnumType.STRING)
+    private PersonType type;
+
+    @Override
+    public int compareTo(RatingKey ratingKey) {
+        int one = this.name.compareTo(ratingKey.getName());
+        if(one != 0){
+            return one;
+        }
+        int two = this.year.compareTo(ratingKey.getYear());
+        if(two != 0){
+            return two;
+        }
+        int three = this.type.compareTo(ratingKey.getType());
+        if(three != 0){
+            return three;
+        }
+        return this.week.compareTo(ratingKey.getWeek());
+    }
 }
