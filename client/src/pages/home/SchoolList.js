@@ -114,10 +114,10 @@ class SchoolList extends Component {
                         this.state.teams.length > 0 ?
                             this.state.teams.map((team, ndx) => {
 
-                                let unlocked = (cookies.get('Num_teams') > 0 || cookies.get('Teams_visited').find(element => element === team.school));
+                                let unlocked = (cookies.get('Num_teams') > 0 || (cookies.get('Teams_visited') != null && cookies.get('Teams_visited').find(element => element === team.school)));
 
                                 let visited = '';
-                                if (cookies.get('Teams_visited').find(element => element === team.school)) {
+                                if (cookies.get('Teams_visited') != null && cookies.get('Teams_visited').find(element => element === team.school)) {
                                     visited = '*';
                                 }
 

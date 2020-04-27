@@ -1,27 +1,40 @@
 /*
  * Filename: AthleticStormApplication.java
  * Author: Andrew Walker
- * Date Last Modified: 4/1/2020
+ * Date Last Modified: 4/26/2020
  */
 
 package edu.baylor.ecs.athleticstorm;
 
+import edu.baylor.ecs.athleticstorm.exception.AppException;
+import edu.baylor.ecs.athleticstorm.model.auth.Role;
+import edu.baylor.ecs.athleticstorm.model.auth.RoleName;
+import edu.baylor.ecs.athleticstorm.model.auth.User;
+import edu.baylor.ecs.athleticstorm.repository.RoleRepository;
+import edu.baylor.ecs.athleticstorm.repository.UserRepository;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.Resource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -31,6 +44,12 @@ import java.util.TimeZone;
 @EnableJpaRepositories
 @ComponentScan(basePackages = { "edu.baylor.ecs.athleticstorm.*" })
 public class AthleticStormApplication {
+
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
 
     /**
      * Sets timezone of application
@@ -99,5 +118,52 @@ public class AthleticStormApplication {
         connector.setSecure(false);
         connector.setRedirectPort(8443);
         return connector;
+    }
+
+    /**
+     * Adds an admin account to the database
+     * @return command line runner for adding admin account
+     */
+    @Bean
+    public CommandLineRunner commandLineRunner() {
+        return new CommandLineRunner() {
+
+            @Autowired
+            private UserRepository userRepository;
+
+            @Autowired
+            private RoleRepository roleRepository;
+
+            @Autowired
+            PasswordEncoder passwordEncoder;
+
+            @Override
+            public void run(String... args) {
+
+                // create admin account if not exists
+                if (!userRepository.existsByUsername(adminUsername)) {
+                    User admin = new User();
+                    admin.setUsername(adminUsername);
+                    admin.setPassword(passwordEncoder.encode(adminPassword));
+
+                    Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                            .orElseThrow(() -> new AppException("Admin Role not set."));
+                    Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                            .orElseThrow(() -> new AppException("User Role not set."));
+                    Role mvpRole = roleRepository.findByName(RoleName.ROLE_MVP)
+                            .orElseThrow(() -> new AppException("MVP Role not set."));
+
+                    Set<Role> roles = new HashSet<>();
+                    roles.add(adminRole);
+                    roles.add(userRole);
+                    roles.add(mvpRole);
+
+                    admin.setRoles(roles);
+
+                    userRepository.save(admin);
+                }
+
+            }
+        };
     }
 }
