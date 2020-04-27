@@ -23,8 +23,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      * Get player by name
      * @param firstName first name
      * @param lastName last name
+     * @param team team name
      * @return player by name
      */
-    @Query("SELECT p FROM Player p left join p.usage where p.firstName = :firstName and p.lastName = :lastName")
-    Optional<Player> findPlayerByFirstAndLastName(String firstName, String lastName);
+    @Query("SELECT p FROM Player p left join p.usage where p.firstName = :firstName and p.lastName = :lastName and p.team = :team")
+    Optional<Player> findPlayerByFirstAndLastNameAndTeam(String firstName, String lastName, String team);
 }

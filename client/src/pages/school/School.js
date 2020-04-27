@@ -580,7 +580,7 @@ class School extends Component {
                                         <a
                                             onClick={() => {
                                                 this.setSelectedPlayer({
-                                                    teamdId: this.state.teamId,
+                                                    team: this.state.schoolName,
                                                     playerId: player.id,
                                                     first_name: player.first_name,
                                                     last_name: player.last_name,

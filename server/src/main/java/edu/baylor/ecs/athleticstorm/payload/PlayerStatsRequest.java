@@ -22,5 +22,6 @@ public class PlayerStatsRequest {
 
     private String firstName;
     private String lastName;
+    private String team;
     private long year;
 }

@@ -63,8 +63,8 @@ public class PlayerService {
      * @param year the year desired
      * @return all available data for indicated year
      */
-    public CompositePlayer getPlayerStats(String firstName, String lastName, Long year) {
-        Optional<Player> playerOpt = playerRepository.findPlayerByFirstAndLastName(firstName, lastName);
+    public CompositePlayer getPlayerStats(String firstName, String lastName, String team, Long year) {
+        Optional<Player> playerOpt = playerRepository.findPlayerByFirstAndLastNameAndTeam(firstName, lastName, team);
         if(playerOpt.isPresent()){
             CompositePlayer compPlayer = new CompositePlayer(playerOpt.get(), year);
             return compPlayer;

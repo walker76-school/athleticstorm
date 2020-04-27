@@ -24,6 +24,7 @@ export default class Content extends Component {
         let statsRequest = {
             firstName: this.props.selectedPlayer.first_name,
             lastName: this.props.selectedPlayer.last_name,
+            team: this.props.selectedPlayer.team,
             year: this.props.selectedPlayer.year
         };
         console.log(statsRequest);

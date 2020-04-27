@@ -31,6 +31,6 @@ public class PlayerController {
      */
     @PostMapping("/getStats/")
     public CompositePlayer getPlayerById(@RequestBody PlayerStatsRequest request){
-        return playerService.getPlayerStats(request.getFirstName(), request.getLastName(), request.getYear());
+        return playerService.getPlayerStats(request.getFirstName(), request.getLastName(), request.getTeam(), request.getYear());
     }
 }
