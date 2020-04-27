@@ -22,12 +22,13 @@ import AppHeader from '../common/AppHeader';
 import AppFooter from '../common/AppFooter';
 import Team from '../pages/home/Team';
 import NotFound from '../common/NotFound';
-import SubscriptionError from "../pages/Subscription_Error";
+import SubscriptionError from "../pages/subscription/SubscriptionError";
 import LoadingIndicator from '../common/LoadingIndicator';
 import {Layout, notification} from 'antd';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
 import PrivateRoute from "../common/PrivateRoute";
+import ChangeSubscriptionForm from "../pages/subscription/ChangeSubscriptionForm";
 const {Content} = Layout;
 const cookies = new Cookies();
 
@@ -131,18 +132,21 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
+
+            // Find the subscription role
+            let subscriptionRole = "";
+            for(let i = 0; i < this.state.currentUser.roleName.length; i++){
+                if(this.state.currentUser.roleName[i] === "ROLE_REDSHIRT" || this.state.currentUser.roleName[i] === "ROLE_STARTER" || this.state.currentUser.roleName[i] === "ROLE_MVP"){
+                    subscriptionRole = this.state.currentUser.roleName[i];
+                }
+            }
+
             //Set subscription values
             let username = this.state.currentUser.username;
-            let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
-            let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
-            let role = this.state.currentUser.roleName[0];
-            //Check if number of teams is 0
-            if(!numTeams) {
-                numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
-                numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
-                role = this.state.currentUser.roleName[1];
-            }
-            console.log(numTeams);
+            let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(subscriptionRole);
+            let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(subscriptionRole);
+            let role = subscriptionRole;
+            
             //Set Cookie values
             cookies.set('Username', username, {path: '/'});
             cookies.set('Num_teams', numTeams, {path: '/'});
@@ -183,7 +187,11 @@ class App extends Component {
                             <Route path="/signup" component={Signup}/>
                             <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/team" component={Team}/>
-                            <Route path="/SubscriptionError" render={(props) => <SubscriptionError {...props}/>}/>
+                            <Route path="/error" render={(props) => <SubscriptionError {...props}/>}/>
+
+                            <PrivateRoute exact path="/changeSubscription">
+                                <ChangeSubscriptionForm/>
+                            </PrivateRoute>
 
                             <PrivateRoute exact path="/ranking">
                                 <Ranking/>

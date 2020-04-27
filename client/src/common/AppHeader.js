@@ -31,7 +31,7 @@ class AppHeader extends Component {
         this.props.onLogout();
       }
       if(key === "subchange") {
-          this.props.history.push("/SubscriptionError");
+          this.props.history.push("/changeSubscription");
       }
     }
 

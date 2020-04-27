@@ -583,7 +583,7 @@ class School extends Component {
                            selectedPlayer={this.state.selectedPlayer}/>
                 </div>
                 }
-                {!unlocked && <Redirect to={{pathname: "/SubscriptionError", state: {sub: false} }} />}
+                {!unlocked && <Redirect to={{pathname: "/error", state: {sub: false} }} />}
             </div>
         );
     }
