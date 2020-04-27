@@ -1,5 +1,5 @@
 /*
-*   Filename: Popup.js
+*   Filename: CoordinatorPopup.jsup.js
 *   Author: Andrew Walker
 *   Date Last Modified: 4/18/2019
 */
@@ -47,7 +47,7 @@ const DialogContent = withStyles((theme) => ({
     },
 }))(MuiDialogContent);
 
-export default class Player extends Component {
+export default class PlayerPopup extends Component {
 
     constructor(props) {
         super(props);

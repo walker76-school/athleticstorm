@@ -1,5 +1,5 @@
 /*
-*   Filename: Content.js
+*   Filename: CoordinatorContent.js
 *   Author: Andrew Walker
 *   Date Last Modified: 4/23/2019
 */
@@ -20,7 +20,7 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
-        //Getting Player Information
+        //Getting CoordinatorPopup Information
         let statsRequest = {
             firstName: this.props.selectedPlayer.first_name,
             lastName: this.props.selectedPlayer.last_name,

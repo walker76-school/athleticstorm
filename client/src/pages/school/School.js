@@ -5,7 +5,6 @@ import {Link, withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import Popup from "../player/Popup";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import Cookies from 'universal-cookie';
 import Paper from "@material-ui/core/Paper";
@@ -15,6 +14,8 @@ import {notification} from 'antd';
 import Redirect from "react-router-dom/Redirect";
 import YouTube from 'react-youtube';
 import {getCoachesByTeamId, getCoordinatorsByTeamId, getRoster, getTeamByName, getVideosByTeamName} from "./API";
+import PlayerPopup from "../player/PlayerPopup";
+import CoordinatorPopup from "../coordinator/CoordinatorPopup";
 
 //Formatting for schools
 const styles = makeStyles(theme => ({
@@ -52,6 +53,7 @@ class School extends Component {
             primaryColor: '',
             year: '2019',
             selectedPlayer: null,
+            selectedCoordinator: null,
             loadedCoaches: false,
             loadedPlayers: false,
             loadedCoordinators: false,
@@ -199,7 +201,8 @@ class School extends Component {
 
     onModalClose(){
         this.setState({
-            selectedPlayer: null
+            selectedPlayer: null,
+            selectedCoordinator: null,
         });
     }
 
@@ -208,6 +211,14 @@ class School extends Component {
             selectedPlayer: player
         })
     }
+
+    setSelectedCoordinator(coordinator){
+        console.log("setting ", coordinator);
+        this.setState({
+            selectedCoordinator: coordinator
+        })
+    }
+
     //Sorting function for coaches
     headCoachSort(sortBy){
         if("Descending" === sortBy){
@@ -487,7 +498,10 @@ class School extends Component {
                                 this.state.OC.map((oc, ndx) => {
                                     return (
                                         <Grid item xs={3} key={ndx}>
-                                            <a style={{color: this.state.primaryColor}}>
+                                            <a style={{color: this.state.primaryColor}}
+                                               onClick={() => {
+                                                   this.setSelectedCoordinator(oc)
+                                               }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>
                                                     <Typography>
@@ -522,7 +536,10 @@ class School extends Component {
                                 this.state.DC.map((dc, ndx) => {
                                     return (
                                         <Grid item xs={3} key={ndx}>
-                                            <a style={{color: this.state.primaryColor}}>
+                                            <a style={{color: this.state.primaryColor}}
+                                               onClick={() => {
+                                                   this.setSelectedCoordinator(dc)
+                                               }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>
                                                     <Typography>
@@ -579,8 +596,8 @@ class School extends Component {
                             })
                         }
                     </Grid>
-                    <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null}
-                           selectedPlayer={this.state.selectedPlayer}/>
+                    <PlayerPopup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
+                    <CoordinatorPopup handleClose={this.onModalClose} open={this.state.selectedCoordinator !== null} selectedCoordinator={this.state.selectedCoordinator}/>
                 </div>
                 }
                 {!unlocked && <Redirect to={{pathname: "/error", state: {sub: false} }} />}

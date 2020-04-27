@@ -215,31 +215,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         teamRepository.flush();
         logger.info("Removed all Teams ... ");
 
-        // get all of the teams
-        teams = getTeams();
-
-        // get all of the coaches
-        coaches = getCoaches();
-
-        // get all of the playres
-        players = getPlayers();
-
-        // get all of the team rosters
-        getTeamRosters();
-
-        // get all of the usage stats for players
-        getPlayerUsage();
-
-        // gets all coorinators
-        getCoordinators();
-
-        // get ratings
-        getRatings();
-
-        logger.info("End Refresh");
-
-        // set this so that this does not run again while the server is running
-        setupComplete = true;
+        setup();
     }
 
     /**
