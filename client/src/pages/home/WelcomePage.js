@@ -37,7 +37,7 @@ export default class WelcomePage extends Component {
                 <h5 style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>The very basis of Athletic Storm is to provide an easier way for anyone to determine the effectiveness of college football coaches based on their rating. This rating process is done by a series of algorithms we call:</h5>
                 <br/>
                 <h2 style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>Comprehensive Review</h2>
-                <h5 style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>a set of finely-tuned algorithms that quantify the progress (or lack thereof) of a certain coach or coordinator. Comprehensive Review is a two-fold system.</h5>
+                <h5 style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>A set of finely-tuned algorithms that quantify the progress (or lack thereof) of a certain coach or coordinator. Comprehensive Review is a two-fold system.</h5>
 
                 <br/>
                 <h6 style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>Part 1: Analysis of weekly games</h6>
