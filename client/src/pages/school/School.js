@@ -506,7 +506,10 @@ class School extends Component {
                                         <Grid item md={3} xs={12} key={ndx}>
                                             <a style={{color: this.state.primaryColor}}
                                                onClick={() => {
-                                                   this.setSelectedCoordinator(oc)
+                                                   this.setSelectedCoordinator({
+                                                       name: oc.name,
+                                                       teamId: this.state.teamId
+                                                   });
                                                }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>
@@ -544,7 +547,10 @@ class School extends Component {
                                         <Grid item md={3} xs={12} key={ndx}>
                                             <a style={{color: this.state.primaryColor}}
                                                onClick={() => {
-                                                   this.setSelectedCoordinator(dc)
+                                                   this.setSelectedCoordinator({
+                                                       name: dc.name,
+                                                       teamId: this.state.teamId
+                                                   });
                                                }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>

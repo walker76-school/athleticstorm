@@ -32,4 +32,6 @@ public interface CoordinatorRepository extends JpaRepository<Coordinator, Coordi
      * @return a coordinator by team id
      */
     List<Coordinator> findCoordinatorsByTeam_Id(long teamId);
+
+    Optional<Coordinator> findCoordinatorByTeam_IdAndNameEquals(long teamId, String name);
 }

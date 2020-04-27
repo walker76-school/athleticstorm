@@ -6,7 +6,7 @@
 import React, {Component} from 'react';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import {notification} from "antd";
-import {getCoordinatorByName} from "./API";
+import {getCoordinatorByNameAndTeam} from "./API";
 import Cookies from 'universal-cookie';
 import LockIcon from "../../common/LockIcon.png";
 
@@ -26,7 +26,7 @@ export default class CoordinatorContent extends Component {
     componentDidMount() {
 
         //Storing coordinator information from API
-        getCoordinatorByName(this.props.selectedCoordinator.name)
+        getCoordinatorByNameAndTeam(this.props.selectedCoordinator)
         .then(result => {
             console.log(result);
             this.setState({

@@ -39,6 +39,17 @@ public class CoordinatorService {
     }
 
     /**
+     * Finds a coordinator by name and teamId
+     * @param name the name of the coordinator
+     * @param teamId the id of the team
+     * @return the coordinator
+     */
+    public CoordinatorDTO getCoordinatorByNameAndTeam(String name, long teamId){
+        Optional<Coordinator> coordinatorOpt = coordinatorRepository.findCoordinatorByTeam_IdAndNameEquals(teamId, name);
+        return coordinatorOpt.map(CoordinatorDTO::new).orElse(null);
+    }
+
+    /**
      * Gets all coordinators for a team
      * @param teamId the team id
      * @return the coordinators
