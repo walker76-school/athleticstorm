@@ -1,3 +1,10 @@
+/*
+*   Filename: App.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/26/2019
+*/
+
+//Import Required Libraries
 import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 import './App.css';
@@ -10,6 +17,7 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import {ACCESS_TOKEN, SUBSCRIPTION_TEAM_MAPPING, SUBSCRIPTION_PLAYER_MAPPING} from '../constants';
 
+//Import All Pages
 import Home from '../pages/home/Home';
 import Coach from '../pages/coach/Coach';
 import Ranking from '../pages/ranking/Ranking';
@@ -20,15 +28,18 @@ import AppHeader from '../common/AppHeader';
 import AppFooter from '../common/AppFooter';
 import Team from '../pages/home/Team';
 import NotFound from '../common/NotFound';
-import SubscriptionError from "../pages/Subscription_Error";
+import SubscriptionError from "../pages/subscription/SubscriptionError";
 import LoadingIndicator from '../common/LoadingIndicator';
 import {Layout, notification} from 'antd';
 import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
 import PrivateRoute from "../common/PrivateRoute";
+import ChangeSubscriptionForm from "../pages/subscription/ChangeSubscriptionForm";
+import AdminRefresh from "../pages/admin/AdminRefresh";
 const {Content} = Layout;
 const cookies = new Cookies();
 
+//Formatting
 const theme = createMuiTheme({
         palette: {
             primary: {
@@ -47,12 +58,12 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: null,
-            isAuthenticated: false,
+            currentUser: null, //Username of logged in
+            isAuthenticated: false, //Are they logged in
             isLoading: false,
-            clickedSchool: null
+            clickedSchool: null //School Selected
         };
-
+        
         this.setSchool = this.setSchool.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
@@ -70,6 +81,7 @@ class App extends Component {
         this.setState({
             isLoading: true
         });
+        //Returns logged in user
         getCurrentUser()
             .then(response => {
                 console.log('getcurr');
@@ -88,10 +100,11 @@ class App extends Component {
     componentDidMount() {
         this.loadCurrentUser();
     }
-
+    //Logout Function
     handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
-
+        //Clear Cookies
+        cookies.set('Username', '', {path: '/'});
         cookies.set('Num_teams', 0,{path: '/'});
         cookies.set('Teams_visited', [],{path: '/'});
         cookies.set('Num_players', 0,{path: '/'});
@@ -118,6 +131,7 @@ class App extends Component {
         this.setState({
             isLoading: true
         });
+
         getCurrentUser().then(response => {
             console.log(response);
             this.setState({
@@ -125,15 +139,23 @@ class App extends Component {
                 isAuthenticated: true,
                 isLoading: false
             });
-            let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[0]);
-            let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[0]);
-            let role = this.state.currentUser.roleName[0];
-            if(!numTeams) {
-                numTeams = SUBSCRIPTION_TEAM_MAPPING.get(this.state.currentUser.roleName[1]);
-                numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(this.state.currentUser.roleName[1]);
-                role = this.state.currentUser.roleName[1];
+
+            // Find the subscription role
+            let subscriptionRole = "";
+            for(let i = 0; i < this.state.currentUser.roleName.length; i++){
+                if(this.state.currentUser.roleName[i] === "ROLE_REDSHIRT" || this.state.currentUser.roleName[i] === "ROLE_STARTER" || this.state.currentUser.roleName[i] === "ROLE_MVP"){
+                    subscriptionRole = this.state.currentUser.roleName[i];
+                }
             }
-            console.log(numTeams);
+
+            //Set subscription values
+            let username = this.state.currentUser.username;
+            let numTeams = SUBSCRIPTION_TEAM_MAPPING.get(subscriptionRole);
+            let numPlayers = SUBSCRIPTION_PLAYER_MAPPING.get(subscriptionRole);
+            let role = subscriptionRole;
+            
+            //Set Cookie values
+            cookies.set('Username', username, {path: '/'});
             cookies.set('Num_teams', numTeams, {path: '/'});
             cookies.set('Teams_visited', [], {path: '/'});
             cookies.set('Num_players', numPlayers,{path: '/'});
@@ -161,16 +183,22 @@ class App extends Component {
                 <Layout className="app-container">
                 <AppHeader isAuthenticated={this.state.isAuthenticated}
                            currentUser={this.state.currentUser}
-                           onLogout={this.handleLogout}/>
+                           onLogout={this.handleLogout}
+                           onSubChange={this.onSubChange}/>
 
                 <Content className="app-content">
                     <div className="container">
+                        {/* Set routes for different pages */}
                         <Switch>
                             <Route exact path="/" render={(props) => <Home isAuthenticated={this.state.isAuthenticated}  {...props} />}/>
                             <Route path="/signup" component={Signup}/>
                             <Route path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}/>
                             <Route path="/team" component={Team}/>
-                            <Route path="/SubscriptionError" render={(props) => <SubscriptionError {...props}/>}/>
+                            <Route path="/error" render={(props) => <SubscriptionError {...props}/>}/>
+
+                            <PrivateRoute exact path="/changeSubscription">
+                                <ChangeSubscriptionForm/>
+                            </PrivateRoute>
 
                             <PrivateRoute exact path="/ranking">
                                 <Ranking/>
@@ -182,6 +210,10 @@ class App extends Component {
 
                             <PrivateRoute exact path="/coach/:coachName">
                                 <Coach/>
+                            </PrivateRoute>
+
+                            <PrivateRoute exact path="/admin/refresh">
+                                <AdminRefresh/>
                             </PrivateRoute>
 
                             <Route component={NotFound}/>

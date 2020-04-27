@@ -1,3 +1,9 @@
+/*
+*   Filename: API.js
+*   Author: Joshua Pane
+*   Date Last Modified: 4/26/2019
+*/
+
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
 import logo from './football.jpeg'
@@ -5,7 +11,6 @@ import {Link, withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {Avatar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import Popup from "../player/Popup";
 import LoadingIndicator from "../../common/LoadingIndicator";
 import Cookies from 'universal-cookie';
 import Paper from "@material-ui/core/Paper";
@@ -15,7 +20,10 @@ import {notification} from 'antd';
 import Redirect from "react-router-dom/Redirect";
 import YouTube from 'react-youtube';
 import {getCoachesByTeamId, getCoordinatorsByTeamId, getRoster, getTeamByName, getVideosByTeamName} from "./API";
+import PlayerPopup from "../player/PlayerPopup";
+import CoordinatorPopup from "../coordinator/CoordinatorPopup";
 
+//Formatting for schools
 const styles = makeStyles(theme => ({
     paper: {
         padding: theme.spacing(2),
@@ -32,7 +40,7 @@ let unlocked = true;
 const cookies = new Cookies();
 
 class School extends Component {
-
+    //Declare needed state variables
     constructor(props){
         super(props);
         this.state = {
@@ -51,6 +59,7 @@ class School extends Component {
             primaryColor: '',
             year: '2019',
             selectedPlayer: null,
+            selectedCoordinator: null,
             loadedCoaches: false,
             loadedPlayers: false,
             loadedCoordinators: false,
@@ -198,7 +207,8 @@ class School extends Component {
 
     onModalClose(){
         this.setState({
-            selectedPlayer: null
+            selectedPlayer: null,
+            selectedCoordinator: null,
         });
     }
 
@@ -208,6 +218,14 @@ class School extends Component {
         })
     }
 
+    setSelectedCoordinator(coordinator){
+        console.log("setting ", coordinator);
+        this.setState({
+            selectedCoordinator: coordinator
+        })
+    }
+
+    //Sorting function for coaches
     headCoachSort(sortBy){
         if("Descending" === sortBy){
             const sortedCoaches = [].concat(this.state.coaches).sort((a, b) => a.last_name < b.last_name ? 1 : -1);
@@ -247,7 +265,7 @@ class School extends Component {
             console.log("Invalid Option " + sortBy);
         }
     }
-
+    //Sorting algorithms for Offensive Coordinators
     OCSort(sortBy){
         if("Descending" === sortBy){
             const sortedOC = [].concat(this.state.OC).sort((a, b) => a.name < b.name ? 1 : -1);
@@ -286,6 +304,7 @@ class School extends Component {
         }
     }
 
+    //Defensive coordinator sorting algorithms
     DCSort(sortBy){
         if("Descending" === sortBy){
             const sortedDC = [].concat(this.state.DC).sort((a, b) => a.name < b.name ? 1 : -1);
@@ -325,6 +344,7 @@ class School extends Component {
         }
     }
 
+    //Search bar functionality
     filter(filter){
         let tempCoaches = [];
         for( let x = 0; x < this.state.allCoaches.length; x++){
@@ -387,13 +407,13 @@ class School extends Component {
                         }}>&nbsp;{this.state.schoolName}</h1>
                     </div>
                     <Grid container>
-                        <Grid item xs={2}>
+                        <Grid item md={2} xs={6}>
                             <img src={this.state.logo} width="100" height="100" alt="Logo"/>
                         </Grid>
                         {
                             this.state.videos.map(videoId => {
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={6}>
                                         <YouTube videoId={videoId} opts={{
                                             height: "125px",
                                             width: "200px"
@@ -445,7 +465,7 @@ class School extends Component {
                                         yearRange = minYear + "-" + maxYear;
                                     }
                                     return (
-                                        <Grid item xs={3} key={ndx}>
+                                        <Grid item md={3} xs={12} key={ndx}>
                                             <Link
                                                 to={"/coach/" + coach.first_name + " " + coach.last_name}
                                                 style={{color: this.state.primaryColor}}
@@ -483,8 +503,11 @@ class School extends Component {
                             {
                                 this.state.OC.map((oc, ndx) => {
                                     return (
-                                        <Grid item xs={3} key={ndx}>
-                                            <a style={{color: this.state.primaryColor}}>
+                                        <Grid item md={3} xs={12} key={ndx}>
+                                            <a style={{color: this.state.primaryColor}}
+                                               onClick={() => {
+                                                   this.setSelectedCoordinator(oc)
+                                               }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>
                                                     <Typography>
@@ -518,8 +541,11 @@ class School extends Component {
                             {
                                 this.state.DC.map((dc, ndx) => {
                                     return (
-                                        <Grid item xs={3} key={ndx}>
-                                            <a style={{color: this.state.primaryColor}}>
+                                        <Grid item md={3} xs={12} key={ndx}>
+                                            <a style={{color: this.state.primaryColor}}
+                                               onClick={() => {
+                                                   this.setSelectedCoordinator(dc)
+                                               }}>
                                                 <StyledPaper classes={this.props.classes}>
                                                     <Avatar src={logo}/>
                                                     <Typography>
@@ -551,7 +577,7 @@ class School extends Component {
                         {
                             this.state.players.slice(0, cookies.get('Num_players')).map((player, ndx) => {
                                 return (
-                                    <Grid item xs={3} key={ndx}>
+                                    <Grid item md={3} xs={12} key={ndx}>
                                         <a
                                             onClick={() => {
                                                 this.setSelectedPlayer({
@@ -576,11 +602,11 @@ class School extends Component {
                             })
                         }
                     </Grid>
-                    <Popup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null}
-                           selectedPlayer={this.state.selectedPlayer}/>
+                    <PlayerPopup handleClose={this.onModalClose} open={this.state.selectedPlayer !== null} selectedPlayer={this.state.selectedPlayer}/>
+                    <CoordinatorPopup handleClose={this.onModalClose} open={this.state.selectedCoordinator !== null} selectedCoordinator={this.state.selectedCoordinator}/>
                 </div>
                 }
-                {!unlocked && <Redirect to={"/SubscriptionError"}/>}
+                {!unlocked && <Redirect to={{pathname: "/error", state: {sub: false} }} />}
             </div>
         );
     }

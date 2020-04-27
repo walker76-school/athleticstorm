@@ -1,3 +1,8 @@
+/*
+*   Filename: SchoolList.js
+*   Author: Joshua Pane
+*   Date Last Modified: 4/23/2019
+*/
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import '../../common/AppHeader.css';
@@ -13,6 +18,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {getFBSTeams} from "./API";
 
+//Create formatting for the schools
 const styles = makeStyles(theme => ({
     paper: {
         padding: theme.spacing(2),
@@ -60,14 +66,14 @@ class SchoolList extends Component {
             });
         });
     }
-
+    //Handle max teams for a subscription are already clicked
     onClickLock() {
         notification.error({
             message: 'Athletic Storm',
             description: 'You must upgrade your subscription to access more teams.'
         });
     }
-
+    //Filter for teams when they are being searched for
     filterTeams(filter){
         var tempTeams = [];
         for( var x = 0; x < this.state.allTeams.length; x++){
@@ -80,7 +86,7 @@ class SchoolList extends Component {
 
     render() {
         const { classes } = this.props;
-
+        //Loading screen
         if(!this.state.loaded){
             return <LoadingIndicator/>
         }
@@ -96,6 +102,7 @@ class SchoolList extends Component {
         return (
             <div style={{flexGrow: 1}} >
                 <br/>
+                {/* Create search bar */}
                 <div style={{ display: 'flex' }}>
                     <input type="text" placeholder="Search" onChange={(event) => {this.filterTeams(event.target.value)}}/>
 
@@ -107,15 +114,15 @@ class SchoolList extends Component {
                         this.state.teams.length > 0 ?
                             this.state.teams.map((team, ndx) => {
 
-                                let unlocked = (cookies.get('Num_teams') > 0 || cookies.get('Teams_visited').find(element => element === team.school));
+                                let unlocked = (cookies.get('Num_teams') > 0 || (cookies.get('Teams_visited') != null && cookies.get('Teams_visited').find(element => element === team.school)));
 
                                 let visited = '';
-                                if (cookies.get('Teams_visited').find(element => element === team.school)) {
+                                if (cookies.get('Teams_visited') != null && cookies.get('Teams_visited').find(element => element === team.school)) {
                                     visited = '*';
                                 }
 
                                 return (
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={12}>
                                         { unlocked &&
                                             <Link
                                                 to={{
@@ -156,6 +163,7 @@ class SchoolList extends Component {
 
 export default withStyles(styles)(SchoolList);
 
+// In depth styling for the list of schools
 class StyledPaper extends Component {
     constructor(props){
         super(props);

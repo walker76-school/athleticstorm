@@ -1,3 +1,8 @@
+/*
+*   Filename: Content.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/23/2019
+*/
 import React, {Component} from 'react';
 import LoadingIndicator from "../../common/LoadingIndicator";
 import {notification} from "antd";
@@ -15,6 +20,7 @@ export default class Content extends Component {
     }
 
     componentDidMount() {
+        //Getting CoordinatorPopup Information
         let statsRequest = {
             firstName: this.props.selectedPlayer.first_name,
             lastName: this.props.selectedPlayer.last_name,
@@ -22,6 +28,7 @@ export default class Content extends Component {
         };
         console.log(statsRequest);
 
+        //Storing player information from API
         getPlayerStats(statsRequest)
         .then(result => {
             console.log(result);
@@ -44,7 +51,7 @@ export default class Content extends Component {
     render() {
 
         if (this.state.completed) {
-
+            // Handle player information not being found
             if(this.state.playerData === null){
                 return (
                     <div style={{"text-align": "center"}}>
@@ -54,6 +61,7 @@ export default class Content extends Component {
             }
 
             return (
+                // Create player popup
                 <div style={{"textAlign": "center"}}>
                     <div>
                         <h2> Weight: {this.state.playerData.player.weight} pounds</h2>

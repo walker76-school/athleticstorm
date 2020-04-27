@@ -1,3 +1,8 @@
+/*
+*   Filename: index.js
+*   Author: Andrew Walker
+*   Date Last Modified: 2/24/2019
+*/
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

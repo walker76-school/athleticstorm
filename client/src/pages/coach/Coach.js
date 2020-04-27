@@ -1,3 +1,8 @@
+/*
+*   Filename: Coach.js
+*   Author: John Eyre
+*   Date Last Modified: 4/23/2019
+*/
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import Grid from "@material-ui/core/Grid";
@@ -47,7 +52,7 @@ class Coach extends Component {
                 });
             })
     }
-
+    //Conversion to get hash of color
     perc2color(perc) {
         var r, g, b = 0;
         if(perc < 50) {
@@ -64,7 +69,7 @@ class Coach extends Component {
 
     render() {
         if (!this.state.loading) {
-
+            //Error Page Creation
             if(this.state.record === null){
                 return (
                   <div style={{"text-align": "center"}}>
@@ -77,7 +82,7 @@ class Coach extends Component {
                   </div>
                 );
             }
-
+            //Handling insufficient subscription
             let ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<span style={{color: this.state.record.rating === -1 ? "#000000" : this.perc2color(this.state.record.rating)}}>{this.state.record.rating === -1 ? "--" : this.state.record.rating.toFixed(2)}</span>)</h1>;
             if(cookies.get('Role') === 'ROLE_REDSHIRT') {
                 ratingContent = <h1 style={{marginTop: 14, fontSize: 80}}>{this.state.name} (<img alt="Lock" style={{maxHeight: "75px"}} src={LockIcon} onClick={() => {
@@ -91,16 +96,18 @@ class Coach extends Component {
             // Name successfully found
             return (
                 <div>
+                    {/* Get overall wins and losses for coaches */}
                     <div style={{"text-align": "center"}}>
                         {ratingContent}
                         <h2>All time record: {this.state.record.wins}-{this.state.record.losses}</h2>
                     </div>
                     <br/>
+                    {/* Get all season records with their teams */}
                     {this.state.record.terms.map(term => (
                         <div>
                             <Paper style={{paddingRight: '10px', marginBottom: '15px'}}>
                                 <Grid container align="center" justify="left" spacing={3}>
-                                    <Grid item xs={2}>
+                                    <Grid item md={2} xs={12}>
                                         <Link
                                             to={{
                                                 pathname: "/school/" + term.team.school,
@@ -113,15 +120,15 @@ class Coach extends Component {
                                             <img style={{ marginLeft: 10 }} src={term.team.logos[0]} height="100" width="100" alt={term.team.school}/>
                                         </Link>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item md={3} xs={12}>
                                         <span style={{ marginLeft: 30, color: term.team.color}}>
                                             {term.team.school} ({term.start_year}{term.end_year !== -1 && term.end_year !== term.start_year ? "-" + term.end_year : ""})
                                         </span>
                                     </Grid>
-                                    <Grid item xs={7}>
+                                    <Grid item md={7} xs={12}>
                                         <Grid container align="center" justify="left" spacing={3}>
                                             {term.seasons.map(season => (
-                                                <Grid item xs={3}>
+                                                <Grid item md={3} xs={6}>
                                                     <Paper>
                                                         <ReactMinimalPieChart
                                                             animate={true}

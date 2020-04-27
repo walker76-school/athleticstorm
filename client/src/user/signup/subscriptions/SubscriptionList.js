@@ -1,3 +1,8 @@
+/*
+*   Filename: SubscriptionList.js
+*   Author: Evan Baker
+*   Date Last Modified: 4/23/2019
+*/
 import React from 'react'
 import Subscription from './Subscription'
 import './styles/comparisons.css'
@@ -6,6 +11,7 @@ import tier2 from './images/tier2.jpg'
 import tier3 from './images/tier3.jpg'
 import {Button} from "antd";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {withRouter} from "react-router-dom";
 
 class SubscriptionList extends React.Component {
 
@@ -16,7 +22,7 @@ class SubscriptionList extends React.Component {
             tiers: [{image: tier1, name: 'Redshirt', price: '$4.99/month', id: 'ROLE_REDSHIRT', numTeams: 10, numPlayers: 5, years: 'Current Year', adv: false},
                 {image: tier2, name: 'Starter', price: '$7.49/month', id: 'ROLE_STARTER', numTeams: 20, numPlayers: 10, years: 'All', adv: true},
                 {image: tier3, name: 'MVP', price: '$9.99/month', id: 'ROLE_MVP', numTeams: 'All', numPlayers: 'All', years: 'All', adv: true}],
-            selectedTier: 'None'
+            selectedTier: this.props.tier
         };
 
         this.select = this.select.bind(this);
@@ -115,4 +121,4 @@ class SubscriptionList extends React.Component {
     }
 }
 
-export default SubscriptionList;
+export default withRouter(SubscriptionList);

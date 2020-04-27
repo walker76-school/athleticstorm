@@ -1,3 +1,8 @@
+/*
+*   Filename: CoordinatorPopup.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/26/2019
+*/
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,8 +11,9 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import Content from "./Content";
+import CoordinatorContent from "./CoordinatorContent";
 
+//Formatting for dialog
 const styles = (theme) => ({
     root: {
         margin: 0,
@@ -41,22 +47,23 @@ const DialogContent = withStyles((theme) => ({
     },
 }))(MuiDialogContent);
 
-export default class Player extends Component {
+export default class CoordinatorPopup extends Component {
 
     constructor(props) {
         super(props);
+        console.log(this.props.selectedCoordinator);
 
         this.state = {
             completed: false,
-            playerData: null
+            coordinatorData: null
         };
 
-        this.setPlayerData = this.setPlayerData.bind(this);
+        this.setCoordinatorData = this.setCoordinatorData.bind(this);
     }
 
-    setPlayerData(playerData){
+    setCoordinatorData(coordinatorData){
         this.setState({
-            playerData: playerData
+            coordinatorData: coordinatorData
         })
     }
 
@@ -64,8 +71,9 @@ export default class Player extends Component {
     render() {
 
         let name = "";
-        if(this.props.selectedPlayer !== null){
-            name = this.props.selectedPlayer.first_name + " " + this.props.selectedPlayer.last_name + " (" + this.props.selectedPlayer.year + ")";
+        //Check that player data is there
+        if(this.props.selectedCoordinator !== null){
+            name = this.props.selectedCoordinator.name;
         }
 
         return (
@@ -74,7 +82,7 @@ export default class Player extends Component {
                     {name}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Content selectedPlayer={this.props.selectedPlayer} setPlayerData={this.setPlayerData} onClose={this.props.handleClose}/>
+                    <CoordinatorContent selectedCoordinator={this.props.selectedCoordinator} setCoordinatorData={this.setCoordinatorData} onClose={this.props.handleClose}/>
                 </DialogContent>
             </Dialog>
         );

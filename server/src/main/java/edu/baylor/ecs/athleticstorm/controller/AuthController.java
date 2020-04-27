@@ -33,9 +33,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller for Auth data
@@ -102,7 +100,6 @@ public class AuthController {
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set."));
 
-
         Role newRole = roleRepository.findByName(signUpRequest.getRoleName())
                 .orElseThrow(() -> new AppException("User Role not set."));
 
@@ -119,5 +116,37 @@ public class AuthController {
                 .buildAndExpand(result.getUsername()).toUri();
 
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+    }
+
+    @PostMapping("/subchange")
+    public ResponseEntity<?> changeSubscription(@Valid @RequestBody SignUpRequest signUpRequest) {
+
+         if(!userRepository.findByUsername(signUpRequest.getUsername()).isPresent()) {
+             return new ResponseEntity(new ApiResponse(false, "Your username is not registered. Please log out and try again."),
+                     HttpStatus.BAD_REQUEST);
+         } else{
+
+             User user = userRepository.findByUsername(signUpRequest.getUsername()).get();
+
+             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                     .orElseThrow(() -> new AppException("User Role not set."));
+
+             Role newRole = roleRepository.findByName(signUpRequest.getRoleName())
+                     .orElseThrow(() -> new AppException("User Role not set."));
+
+             Set<Role> roleSet = new HashSet<>();
+             roleSet.add(newRole);
+             roleSet.add(userRole);
+
+             user.setRoles(roleSet);
+
+             User result = userRepository.save(user);
+
+             URI location = ServletUriComponentsBuilder
+                     .fromCurrentContextPath().path("/users/{username}")
+                     .buildAndExpand(result.getUsername()).toUri();
+
+             return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+         }
     }
 }

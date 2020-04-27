@@ -6,10 +6,10 @@
 import {request} from './../../util/APIUtils';
 import {API_BASE_URL} from "../../constants";
 
-//Function to get the endpoint for all FBS teams
-export function getFBSTeams() {
+//Function for player stats API
+export function getCoordinatorByName(coordinatorName) {
     return request({
-        url: API_BASE_URL + "/teams/fbs",
-        method: 'GET'
+        url: API_BASE_URL + "/coordinators/byName/" + coordinatorName,
+        method: 'GET',
     });
 }

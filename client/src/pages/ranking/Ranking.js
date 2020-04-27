@@ -1,3 +1,8 @@
+/*
+*   Filename: Ranking.js
+*   Author: Joshua Pane
+*   Date Last Modified: 4/23/2019
+*/
 import React, { Component } from 'react';
 import '../../common/AppHeader.css';
 import Typography from '@material-ui/core/Typography';
@@ -42,7 +47,7 @@ class Ranking extends Component {
         };
         this.headcoachSort = this.headcoachSort.bind(this);
     }
-
+    //Sort Ranking types
     headcoachSort(event){
         let sortBy = event.target.value;
         if("Alphabetical" === sortBy){
@@ -86,7 +91,7 @@ class Ranking extends Component {
             });
         });
     }
-
+    //Convert to hash color
     perc2color(perc) {
         var r, g, b = 0;
         if(perc < 50) {
@@ -108,7 +113,7 @@ class Ranking extends Component {
         if(!this.state.loaded){
             return <LoadingIndicator/>
         }
-
+        // Error checking for coach records
         if(this.state.allRecords.length === 0){
             return (
                 <div style={{"text-align": "center"}}>
@@ -125,6 +130,7 @@ class Ranking extends Component {
         return (
             <div style={{flexGrow: 1}} >
                 <br />
+                {/* Sorting options */}
                 <h1 style={{ backgroundColor: "#3773B0", color: "#ffffff" }}>&nbsp;Rankings
                         <select style={{ float: 'right', color: "#3773B0" }} onChange={this.headcoachSort}>
                             <option value="Alphabetical">Alphabetical</option>
@@ -135,6 +141,7 @@ class Ranking extends Component {
                     </h1>
                 <Grid container align="center" justify="center" alignItems="center" spacing={3} >
                     {
+                        // Listing all coaches to be ranked
                         this.state.allRecords.length > 0 ?
                             this.state.allRecords.map((record, ndx) => {
 
@@ -144,7 +151,7 @@ class Ranking extends Component {
                                 }
 
                                 return (
-                                    <Grid item xs={3} key={ndx}>
+                                    <Grid item md={3} xs={6} key={ndx}>
                                         <Link to={"/coach/" + record.first_name + " " + record.last_name}>
                                             <StyledPaper classes={this.props.classes}>
                                                 <Typography>#{ndx+1}</Typography>
@@ -168,6 +175,7 @@ class Ranking extends Component {
 
 export default withStyles(styles)(Ranking);
 
+//Formatting for coach display
 class StyledPaper extends Component {
     constructor(props){
         super(props);

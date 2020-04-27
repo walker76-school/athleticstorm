@@ -1,3 +1,9 @@
+/*
+*   Filename: APIUtils.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/23/2019
+*/
+
 import { API_BASE_URL, ACCESS_TOKEN } from '../constants';
 
 export const request = (options) => {
@@ -36,6 +42,14 @@ export function signup(signupRequest) {
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
+    });
+}
+
+export function changeSubscription(subchange) {
+    return request({
+        url: API_BASE_URL + "/auth/subchange",
+        method: 'POST',
+        body: JSON.stringify(subchange)
     });
 }
 

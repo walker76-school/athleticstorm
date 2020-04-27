@@ -1,3 +1,9 @@
+/*
+*   Filename: LoadingIndicator.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/13/2019
+*/
+
 import React from 'react';
 import { Spin, Icon } from 'antd';
 

@@ -1,3 +1,8 @@
+/*
+*   Filename: Login.js
+*   Author: Andrew Walker
+*   Date Last Modified: 4/20/2019
+*/
 import React, { Component } from 'react';
 import { login } from '../../util/APIUtils';
 import './Login.css';
@@ -26,7 +31,7 @@ class LoginForm extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
+    //Call endpoint with login credentials written
     handleSubmit(event) {
         event.preventDefault();   
         this.props.form.validateFields((err, values) => {
