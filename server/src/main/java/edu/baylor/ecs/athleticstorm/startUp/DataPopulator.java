@@ -98,6 +98,9 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
     @Autowired
     private ResourceLoader resourceLoader;
 
+    @Autowired
+    private SeasonRepository seasonRepository;
+
     // all teams
     private Set<Team> teams = null;
 
@@ -158,7 +161,7 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
         // get all of the usage stats for players
         getPlayerUsage();
 
-        // gets all coorinators
+        // gets all coordinators
         getCoordinators();
 
         // get ratings
@@ -180,13 +183,37 @@ public class DataPopulator implements ApplicationListener<ContextRefreshedEvent>
 
         setupComplete = false;
 
-        teamRepository.deleteAll();
-        playerRepository.deleteAll();
-        coachRepository.deleteAll();
-        rosterPlayerRepository.deleteAll();
-        usageRepository.deleteAll();
         ratingRepository.deleteAll();
+        ratingRepository.flush();
+        logger.info("Removed all Ratings ... ");
+
+        rosterPlayerRepository.deleteAll();
+        rosterPlayerRepository.flush();
+        logger.info("Removed all Roster Players ... ");
+
+        usageRepository.deleteAll();
+        usageRepository.flush();
+        logger.info("Removed all Usage ... ");
+
+        playerRepository.deleteAll();
+        playerRepository.flush();
+        logger.info("Removed all Players ... ");
+
+        coachRepository.deleteAll();
+        coachRepository.flush();
+        logger.info("Removed all Coaches ... ");
+
+        seasonRepository.deleteAll();
+        seasonRepository.flush();
+        logger.info("Removed all Seasons ... ");
+
         coordinatorRepository.deleteAll();
+        coordinatorRepository.flush();
+        logger.info("Removed all Coordinators ... ");
+
+        teamRepository.deleteAll();
+        teamRepository.flush();
+        logger.info("Removed all Teams ... ");
 
         // get all of the teams
         teams = getTeams();

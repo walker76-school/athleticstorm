@@ -29,6 +29,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import {ThemeProvider} from "@material-ui/styles";
 import PrivateRoute from "../common/PrivateRoute";
 import ChangeSubscriptionForm from "../pages/subscription/ChangeSubscriptionForm";
+import AdminRefresh from "../pages/admin/AdminRefresh";
 const {Content} = Layout;
 const cookies = new Cookies();
 
@@ -203,6 +204,10 @@ class App extends Component {
 
                             <PrivateRoute exact path="/coach/:coachName">
                                 <Coach/>
+                            </PrivateRoute>
+
+                            <PrivateRoute exact path="/admin/refresh">
+                                <AdminRefresh/>
                             </PrivateRoute>
 
                             <Route component={NotFound}/>
