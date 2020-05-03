@@ -24,9 +24,9 @@ _Note: According to various formats and configurations of MySQL, the apostrophe 
 
 To run the API, you will need to have the MySQL server running and configured using the steps above. The Java version Athletic Storm was designed on is [Java 8.](https://openjdk.java.net/install/) You will also need to have [Maven](https://maven.apache.org/index.html) installed to properly run this application. Navigate to the root folder of the back-end and execute the Maven build commands to build and test the application.
 
-\&gt; mvn clean install
+>mvn clean install
 
-\&gt; mvn spring-boot:run
+>mvn spring-boot:run
 
 After doing this, you are able to run Athletic Storm from the command line.
 
@@ -34,9 +34,9 @@ After doing this, you are able to run Athletic Storm from the command line.
 
 The last thing to deploy Athletic Storm is the front-end application. You will need to install [NodeJS](https://nodejs.org/en/). After it is properly installed, navigate to the root of the front-end application and execute the NodeJS commands below to build and run the application:
 
-\&gt; npm install
+>npm install
 
-\&gt; npm start
+>npm start
 
 Once the application is running using the above commands, you are able to access it at [localhost:3000](https://localhost:3000/) in a web browser.
 
@@ -46,7 +46,7 @@ Instead of using the manual configuration as detailed above, you are able to use
 
 First, you will need to install [Docker](https://www.docker.com/) and [Docker Compose.](https://docs.docker.com/compose/) Once you have both of those installed, you can run the application from the root of the entire project using the following command in the command line:
 
-\&gt; docker-compose up
+>docker-compose up
 
 # **Server Deployment and Configuration Instructions**
 
@@ -60,7 +60,7 @@ The first step in deploying the Athletic Storm on a server is to install Docker.
 
 In a terminal In a terminal window, type the following command:
 
-\&gt; sudo yum check-update
+>sudo yum check-update
 
 Allow the operation to complete.
 
@@ -68,7 +68,7 @@ Allow the operation to complete.
 
 The next step is to download the dependencies required for installing Docker. This is done by executing the following command:
 
-\&gt; sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+>sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
 _Note: The –y switch indicates to the yum installer to answer &quot;yes&quot; to any prompts that may come up. The yum-utils switch adds the yum-config-manager. Docker uses a device mapper storage driver, and the device-mapperpersistent-data and lvm2 packages are required for it to run correctly._
 
@@ -76,7 +76,7 @@ _Note: The –y switch indicates to the yum installer to answer &quot;yes&quot; 
 
 To install the edge or test versions of Docker, you need to add the Docker CE stable repository to your system. To do this, execute the following command:
 
-\&gt; sudo yum-config-manager --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo
+>sudo yum-config-manager --add-repo \ https://download.docker.com/linux/centos/docker-ce.repo
 
 This command is used for adding the Docker CE stable repository to CentOS 7. A stable release is tested more thoroughly and has a slower update cycle. On the other hand, Edge release updates are more frequent but aren&#39;t subject to as many stability tests.
 
@@ -84,7 +84,7 @@ This command is used for adding the Docker CE stable repository to CentOS 7. A s
 
 With everything set, you can finally move on to installing Docker on CentOS 7 by running the following command:
 
-\&gt; sudo yum install docker
+>sudo yum install docker
 
 The system should begin the installation. Once it finishes, it will notify you the installation is complete and which version of Docker is now running on your system
 
@@ -94,15 +94,15 @@ Although you have installed Docker on CentOS, the service is still not running. 
 
 (1) Start Docker:
 
-\&gt; sudo systemctl start docker
+>sudo systemctl start docker
 
 (2) Enable Docker:
 
-\&gt; sudo systemctl enable docker
+>sudo systemctl enable docker
 
 (3) Check the status of the service with:
 
-\&gt; sudo systemctl status docker
+>sudo systemctl status docker
 
 Install Kubernetes
 
@@ -128,11 +128,11 @@ repo\_gpgcheck=1 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg \ 
 
 These 3 basic packages are required to be able to use Kubernetes. Install these packages using the following commands:
 
-\&gt; sudo yum install -y kubelet kubeadm kubectl
+>sudo yum install -y kubelet kubeadm kubectl
 
-\&gt; systemctl enable kubelet
+>systemctl enable kubelet
 
-\&gt; systemctl start kubelet
+>systemctl start kubelet
 
 You have now successfully installed Kubernetes including its tools and basic packages.
 
@@ -140,25 +140,25 @@ You have now successfully installed Kubernetes including its tools and basic pac
 
 To give a unique hostname to your node, use the following command:
 
-\&gt; sudo hostnamectl set-hostname athleticstorm
+>sudo hostnamectl set-hostname athleticstorm
 
 **Configure Firewall**
 
 The nodes, containers, and pods need to be able to communicate across the cluster to perform their functions. Firewalld is enabled in CentOS by default on the front-end. Add the following ports by entering the listed commands.
 
-\&gt; sudo firewall-cmd --permanent --add-port=6443/tcp
+>sudo firewall-cmd --permanent --add-port=6443/tcp
 
-\&gt; sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+>sudo firewall-cmd --permanent --add-port=2379-2380/tcp
 
-\&gt; sudo firewall-cmd --permanent --add-port=10250/tcp
+>sudo firewall-cmd --permanent --add-port=10250/tcp
 
-\&gt; sudo firewall-cmd --permanent --add-port=10251/tcp
+>sudo firewall-cmd --permanent --add-port=10251/tcp
 
-\&gt; sudo firewall-cmd --permanent --add-port=10252/tcp
+>sudo firewall-cmd --permanent --add-port=10252/tcp
 
-\&gt; sudo firewall-cmd --permanent --add-port=10255/tcp
+>sudo firewall-cmd --permanent --add-port=10255/tcp
 
-\&gt; sudo firewall-cmd –-reload
+>sudo firewall-cmd –-reload
 
 **Update Iptables Settings**
 
@@ -178,29 +178,29 @@ sysctl --system
 
 The containers need to access the host filesystem. SELinux needs to be set to permissive mode, which effectively disables its security functions. Use following commands to disable SELinux:
 
-\&gt; sudo setenforce 0
+>sudo setenforce 0
 
-\&gt; sudo sed -i &#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39; /etc/selinux/config
+>sudo sed -i &#39;s/^SELINUX=enforcing$/SELINUX=permissive/&#39; /etc/selinux/config
 
 **Disable SWAP**
 
 Lastly, we need to disable SWAP to enable the kubelet to work properly using the following commands:
 
-\&gt; sudo sed -i &#39;/swap/d&#39; /etc/fstab
+>sudo sed -i &#39;/swap/d&#39; /etc/fstab
 
-\&gt; sudo swapoff -a
+>sudo swapoff -a
 
 **Setup Pod Network**
 
 A Pod Network allows nodes within the cluster to communicate. This tutorial uses the flannel virtual network add-on for this purpose. Install flannel with the command:
 
-\&gt; sudo kubectl apply -f https://raw.githubusercontent.com/ \ coreos/flannel/master/Documentation/kube-flannel.yml
+>sudo kubectl apply -f https://raw.githubusercontent.com/ \ coreos/flannel/master/Documentation/kube-flannel.yml
 
 **Create Cluster with kubeadm**
 
 For flannel to work correctly initialize a cluster by executing the following command:
 
-\&gt; sudo kubeadm init –pod-network-cidr=10.244.0.0/16
+>sudo kubeadm init –pod-network-cidr=10.244.0.0/16
 
 _Note: This process might take several minutes to completed based on network speed. Once this command finishes, it displays a kubeadm join message._
 
@@ -208,29 +208,29 @@ _Note: This process might take several minutes to completed based on network spe
 
 Once a pod network has been installed, you can confirm that it is working by checking that the CoreDNS pod is running by executing the following command:
 
-\&gt; sudo kubectl get pods --all-namespaces
+>sudo kubectl get pods --all-namespaces
 
 **Manage Cluster as Regular User**
 
 Start using the cluster you need to run it as a regular user by entering the following commands:
 
-\&gt; mkdir -p $HOME/.kube
+>mkdir -p $HOME/.kube
 
-\&gt; sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+>sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 
-\&gt; sudo chown $(id -u):$(id -g) $HOME/.kube/config
+>sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 Deploying the Application
 
 First you will need to get the project onto the production server using [Git](https://git-scm.com/) by executing the following commands:
 
-\&gt; sudo yum install -y git
+>sudo yum install -y git
 
-\&gt; git clone https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm.git
+>git clone https://gitlab.ecs.baylor.edu/aars/20200143c9-athleticstorm.git
 
 You can then deploy the application using the Kustomization script in the deployments folder using the following command:
 
-\&gt; kubectl apply -k \&lt;install-of-athleticstorm\&gt;/deployments
+>kubectl apply -k \&lt;install-of-athleticstorm\&gt;/deployments
 
 Configuring A Reverse Proxy With Nginx
 
@@ -238,13 +238,13 @@ Configuring A Reverse Proxy With Nginx
 
 To add the CentOS 7 EPEL repository, open terminal and use the following command:
 
-\&gt; sudo yum install epel-release
+>sudo yum install epel-release
 
 **Install Nginx**
 
 Now that the Nginx repository is installed on your server, install Nginx using the following yum command:
 
-\&gt; sudo yum install nginx
+>sudo yum install nginx
 
 After you answer yes to the prompt, Nginx will finish installing on your VPS (virtual private server).
 
@@ -252,14 +252,14 @@ After you answer yes to the prompt, Nginx will finish installing on your VPS (vi
 
 Nginx does not start on its own. To get Nginx running and configured as a service, execute the following commands:
 
-\&gt; sudo systemctl enable nginx
+>sudo systemctl enable nginx
 
-\&gt; sudo systemctl start nginx
+>sudo systemctl start nginx
 
 If you are running a firewall, run the following commands to allow HTTP and HTTPS traffic:
 
-\&gt; sudo firewall-cmd --permanent --zone=public --add-service=http
+>sudo firewall-cmd --permanent --zone=public --add-service=http
 
-\&gt; sudo firewall-cmd --permanent --zone=public --add-service=https
+>sudo firewall-cmd --permanent --zone=public --add-service=https
 
-\&gt; sudo firewall-cmd --reload
+>sudo firewall-cmd --reload
