@@ -38,6 +38,21 @@ The last thing to deploy Athletic Storm is the front-end application. You will n
 
 Once the application is running using the above commands, you are able to access it at [localhost:3000](https://localhost:3000/) in a web browser.
 
+**SSL**
+
+There are two places where SSL is used. The first is in the frontend. To start, you will need to generate a certificate using OpenSSL. You may configure this however you wish although these are the values we chose to use.
+
+> req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout athleticstorm.key -out athleticstorm.crt
+
+Move the .key file into the /ssl/keys folder and the .crt to the /ssl/certs folder. You can configure these names and locations in the nginx.conf in the client folder.
+
+Next you need to configure SSL for the backend. To start, generate a PKCS12 certificate using Java's keytool.
+
+> keytool -genkeypair -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore athleticstorm.p12 -validity 365
+
+Move the .p12 file into the resources folder of the server. You may then configure the application.properties file for the correct filename (if it was changed from athleticstorm.p12) as well as the password (server.ssl.key-store-password).
+
+
 # **Docker Instructions**
 
 Instead of using the manual configuration as detailed above, you are able to use Docker.
