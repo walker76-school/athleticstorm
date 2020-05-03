@@ -12,7 +12,7 @@
 -[ ] Sequence Diagrams & Description of Design Patterns (John)
 -[X] Glossary of Terms (Michael)
 -[X] Local Dev Setup / Configuration Instructions (Schaeffer)
--[ ] Sample Data Imports (Josh)
+-[X] Sample Data Imports (Josh)
 -[X] Gotchas / Lessons Learned (Andrew)
 -[X] Admin Guide (Andrew)
 -[X] End User Documentation (Evan)
