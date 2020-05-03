@@ -18,7 +18,7 @@ Click on the home icon at the top bar of the application to be taken to the list
 
  
 
-![A picture containing map, white, computer, laptop  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image001.png)
+![A picture containing map, white, computer, laptop  Description automatically generated](../FinalDocumentation/End_User_Screenshots/AccessingHome.png)
 
  
 
@@ -36,7 +36,7 @@ While on the list of teams page, click on the desired team’s card to be taken 
 
  
 
-![A close up of a map  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image002.png)
+![A close up of a map  Description automatically generated](../FinalDocumentation/End_User_Screenshots/AccessingTeam.png)
 
  
 
@@ -80,7 +80,7 @@ While on the list of teams page, click on the search bar at the top left of the 
 
  
 
-![A screenshot of a computer  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image003.png)
+![A screenshot of a computer  Description automatically generated](../FinalDocumentation/End_User_Screenshots/SearchingTeam.png)
 
  
 
@@ -100,7 +100,7 @@ While on a team page, find the desired player, and click on their card. That pla
 
  
 
-![A screenshot of a cell phone  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image004.png)
+![A screenshot of a cell phone  Description automatically generated](../FinalDocumentation/End_User_Screenshots/SelectingPlayer.png)
 
 
 
@@ -116,7 +116,7 @@ While on a team page, find the dropdown menu on the bar that says “Players” 
 
  
 
-![A screenshot of a cell phone  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image005.png)
+![A screenshot of a cell phone  Description automatically generated](../FinalDocumentation/End_User_Screenshots/SelectingPlayerYears.png)
 
  
 
@@ -140,7 +140,7 @@ While on a team page or the rankings page, find the desired coach and click on t
 
  
 
-![A screenshot of a social media post  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image006.png)
+![A screenshot of a social media post  Description automatically generated](../FinalDocumentation/End_User_Screenshots/SelectingCoach.png)
 
  
 
@@ -164,7 +164,7 @@ While on a team page, click on the search bar at the top left of the screen. Ent
 
  
 
-![A screenshot of a social media post  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image007.png)
+![A screenshot of a social media post  Description automatically generated](../FinalDocumentation/End_User_Screenshots/SearchPlayer.png)
 
  
 
@@ -182,7 +182,7 @@ Click on the icon containing the 3 blue bars in the top left corner. This will t
 
  
 
-![A screenshot of a social media post  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image008.png)
+![A screenshot of a social media post  Description automatically generated](../FinalDocumentation/End_User_Screenshots/RankingsSelect.png)
 
  
 
@@ -192,7 +192,7 @@ The ratings of all of the coaches will be displayed on that coach’s card.
 
  
 
-![A screenshot of a cell phone  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image009.png)
+![A screenshot of a cell phone  Description automatically generated](../FinalDocumentation/End_User_Screenshots/CoachGrade.png)
 
  
 
@@ -214,4 +214,4 @@ While on the rankings page, find the dropdown menu at the top right of the page.
 
  
 
-![A screenshot of a cell phone  Description automatically generated](file:////Users/evanbaker/Library/Group%20Containers/UBF8T346G9.Office/TemporaryItems/msohtmlclip/clip_image010.png)
+![A screenshot of a cell phone  Description automatically generated](../FinalDocumentation/End_User_Screenshots/CoachSort.png)
