@@ -1,4 +1,4 @@
-#End User Documentation
+# End User Documentation
 
  
 
@@ -8,7 +8,7 @@ This section will describe how different types of end users will user Athletic s
 
 
 
-##**Accessing List of Available teams** 
+## **Accessing List of Available teams** 
 
  
 
@@ -26,7 +26,7 @@ Click on the home icon at the top bar of the application to be taken to the list
 
   
 
-##**Accessing Team Page** 
+## **Accessing Team Page** 
 
  
 
@@ -70,7 +70,7 @@ If the user has exceeded their maximum number of allowed teams (Redshirt: 10, St
 
  
 
-##**Searching for Specific Team** 
+## **Searching for Specific Team** 
 
  
 
@@ -90,7 +90,7 @@ While on the list of teams page, click on the search bar at the top left of the 
 
    
 
-##**Accessing Player Statistics** 
+## **Accessing Player Statistics** 
 
  
 
@@ -106,7 +106,7 @@ While on a team page, find the desired player, and click on their card. That pla
 
 
 
-##**Accessing Team’s Players for a Non-Current Year**
+## **Accessing Team’s Players for a Non-Current Year**
 
  
 
@@ -132,7 +132,7 @@ User clicks on the dropdown as described above, and is given an error instead of
 
 
 
-##**Accessing coach page** 
+## **Accessing coach page** 
 
 While on a team page or the rankings page, find the desired coach and click on the card of that coach. User will then be taken to that coach’s page, and be able to see the coach’s current and previous teams, as well as statistics for each of those teams. In the picture below, “Troy Calhoun” is selected.
 
@@ -152,7 +152,7 @@ Once on the coach page, the user will be able to see the coach’s rating at the
 
 
 
-##**Searching for specific coach or player** 
+## **Searching for specific coach or player** 
 
  
 
@@ -172,7 +172,7 @@ While on a team page, click on the search bar at the top left of the screen. Ent
 
  
 
-##**Accessing rankings page** 
+## **Accessing rankings page** 
 
  
 
@@ -200,7 +200,7 @@ The ratings of all of the coaches will be displayed on that coach’s card.
 
 
 
-##**Sorting Rankings** 
+## **Sorting Rankings** 
 
  
 
