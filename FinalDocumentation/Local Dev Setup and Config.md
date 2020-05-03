@@ -44,4 +44,6 @@ Instead of using the manual configuration as detailed above, you are able to use
 
 First, you will need to install [Docker](https://www.docker.com/) and [Docker Compose.](https://docs.docker.com/compose/) Once you have both of those installed, you can run the application from the root of the entire project using the following command in the command line:
 
+>docker-compose build
+
 >docker-compose up
