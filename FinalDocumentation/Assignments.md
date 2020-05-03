@@ -1,0 +1,18 @@
+## Assignments
+
+- Group Overview (Andrew)
+- Vision (Michael)
+- GitLab Issues (Andrew)
+- Burndowns (Schaeffer)
+- Conceptual Solution (Ian)
+- Network Topology Diagram (Ian)
+- Domain Diagram (Ian)
+- Data Flow Diagram (Michael)
+- Authentication and Authorization Documentation (Evan)
+- Sequence Diagrams & Description of Design Patterns (John)
+- Glossary of Terms (Michael)
+- Local Dev Setup / Configuration Instructions (Schaeffer)
+- Sample Data Imports (Josh)
+- Gotchas / Lessons Learned (Andrew)
+- Admin Guide (Andrew)
+- End User Documentation (Evan)
